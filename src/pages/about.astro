@@ -18,77 +18,131 @@ import Layout from '../layouts/BlogPost.astro';
 
 	<hr />
 
-	<h3>Tech Stack</h3>
-	<div class="badges">
-		<img src="https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white" alt="Java" />
-		<img src="https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white" alt="Spring Boot" />
-		<img src="https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54" alt="Python" />
-		<img src="https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white" alt="AWS" />
-		<img src="https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white" alt="Kubernetes" />
-		<img src="https://img.shields.io/badge/terraform-%235835CC.svg?style=for-the-badge&logo=terraform&logoColor=white" alt="Terraform" />
-		<img src="https://img.shields.io/badge/Apache%20Kafka-000?style=for-the-badge&logo=apachekafka" alt="Kafka" />
-		<img src="https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white" alt="Redis" />
-		<img src="https://img.shields.io/badge/Neo4j-008CC1?style=for-the-badge&logo=neo4j&logoColor=white" alt="Neo4j" />
-		<img src="https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white" alt="Git" />
-	</div>
+	<section class="tech-ecosystem">
+		<h3>Advanced Tech Ecosystem</h3>
+		<p class="section-desc">단순한 도구 사용을 넘어, 비즈니스 가치를 극대화하기 위해 최적화된 기술 스택입니다.</p>
+
+		<div class="tech-category">
+			<h4>Cloud & Platform Engineering</h4>
+			<div class="badges">
+				<img src="https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white" alt="AWS" />
+				<img src="https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white" alt="Kubernetes" />
+				<img src="https://img.shields.io/badge/Karpenter-%2324292e.svg?style=for-the-badge&logo=amazonaws&logoColor=white" alt="Karpenter" />
+			</div>
+			<ul>
+				<li><strong>Self-Managed K8S:</strong> 외부 도움 없이 직접 클러스터를 구축하고 운영한 실전적 깊이 보유.</li>
+				<li><strong>Cost Optimization:</strong> Spot Instance와 Karpenter를 결합한 지능형 프로비저닝으로 인프라 비용 극최소화.</li>
+			</ul>
+		</div>
+
+		<div class="tech-category">
+			<h4>Infrastructure as Code & Automation</h4>
+			<div class="badges">
+				<img src="https://img.shields.io/badge/terraform-%235835CC.svg?style=for-the-badge&logo=terraform&logoColor=white" alt="Terraform" />
+				<img src="https://img.shields.io/badge/ansible-%23EE0000.svg?style=for-the-badge&logo=ansible&logoColor=white" alt="Ansible" />
+			</div>
+			<ul>
+				<li><strong>IaC Master:</strong> VPC, EKS, RDS 등 AWS 전 영역의 자산화 및 이원화 테라포밍 체계 수립.</li>
+				<li><strong>Ansible Automation:</strong> 하이브리드 클라우드 환경의 시스템 구성 및 관리 자동화.</li>
+			</ul>
+		</div>
+
+		<div class="tech-category">
+			<h4>Backend & Data Architecture</h4>
+			<div class="badges">
+				<img src="https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white" alt="Java" />
+				<img src="https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white" alt="Spring Boot" />
+				<img src="https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54" alt="Python" />
+				<img src="https://img.shields.io/badge/Apache%20Kafka-000?style=for-the-badge&logo=apachekafka" alt="Kafka" />
+				<img src="https://img.shields.io/badge/Neo4j-008CC1?style=for-the-badge&logo=neo4j&logoColor=white" alt="Neo4j" />
+				<img src="https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white" alt="Redis" />
+			</div>
+			<ul>
+				<li><strong>Performance Engineering:</strong> 9,000만 건 데이터 환경에서 Redis 기반의 증분 병합(Incremental Merge)을 통한 O(1) 성능 달성.</li>
+				<li><strong>Relationship Engineering:</strong> Neo4j를 활용한 대규모 노드/엣지 기반 그래프 데이터 모델링 및 동기화 파이프라인 운영.</li>
+			</ul>
+		</div>
+
+		<div class="tech-category">
+			<h4>Observability & Reliability</h4>
+			<div class="badges">
+				<img src="https://img.shields.io/badge/Grafana-F46800?style=for-the-badge&logo=grafana&logoColor=white" alt="Grafana" />
+				<img src="https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=prometheus&logoColor=white" alt="Prometheus" />
+				<img src="https://img.shields.io/badge/Loki-white?style=for-the-badge&logo=grafanaloki&logoColor=black" alt="Loki" />
+			</div>
+			<ul>
+				<li><strong>Zero-Instruction Logging:</strong> Loki & Grafana 통합 보드 구축으로 MTTR 90% 단축 및 개발자 자율 진단 환경 실현.</li>
+				<li><strong>Predictable Reliability:</strong> 리소스 산출 공식 표준화를 통해 팟 축출 장애 0% 달성.</li>
+			</ul>
+		</div>
+	</section>
 
 	<hr />
 
-	<h3>Key Achievements</h3>
+	<h3>Key Case Studies</h3>
+	<div class="case-study">
+		<h4>Case A: 수천만 건 데이터 집계 아키텍처 혁신</h4>
+		<p>데이터가 늘어날수록 느려지는 기존 쿼리의 한계를 '수학적 최적화'로 돌파했습니다.</p>
+		<ul>
+			<li><strong>PK Subtraction:</strong> Auto Increment PK 차이값을 활용한 초고속 카운팅.</li>
+			<li><strong>Trend Inverse Calculation:</strong> $P&#123;i-1&#125; = P_i - D_i$ 수식을 적용하여 DB 부하 80% 절감.</li>
+		</ul>
+	</div>
 
-	<h4>1. 대규모 데이터 집계 최적화 (O(1) 연산)</h4>
-	<ul>
-		<li>9,000만 건 이상의 데이터 환경에서 대시보드 응답 속도를 1초 미만으로 고정.</li>
-		<li>수학적 역산 알고리즘($P&#123;i-1&#125; = P_i - D_i$)을 통해 DB I/O 부하를 80% 이상 절감.</li>
-	</ul>
-
-	<h4>2. 인프라 비용 최적화 및 표준화 (K8S & Karpenter)</h4>
-	<ul>
-		<li>Karpenter와 Spot Instance를 결합하여 극강의 비용 효율화 달성.</li>
-		<li><code>K8S_STORAGE_CALCULATION_GUIDE</code> 수립을 통해 팟 축출 장애 0% 달성 및 수용량 30% 향상.</li>
-	</ul>
-
-	<h4>3. 로깅 환경 혁신 (Zero-Instruction MTTR 단축)</h4>
-	<ul>
-		<li>Loki & Grafana 기반의 통합 로그 보드를 구축하여 장애 원인 파악 시간(MTTR) 90% 단축.</li>
-		<li>개발자가 CLI 명령어 없이 웹에서 즉시 장애를 진단할 수 있는 환경 제공.</li>
-	</ul>
+	<div class="case-study">
+		<h4>Case B: 인프라 현대화 및 비용 절감 (Hybrid Strategy)</h4>
+		<p>레거시 서버 구조를 해체하고 서비스 특성에 맞는 배포 전략을 수립했습니다.</p>
+		<ul>
+			<li><strong>API:</strong> Kubernetes 통합 및 N:1 제어 구조로 컴퓨팅 자원 효율 극대화.</li>
+			<li><strong>Web:</strong> AWS Amplify 이관으로 운영 오버헤드 Zero 달성.</li>
+		</ul>
+	</div>
 
 	<hr />
 
 	<h3>Engineering Journey</h3>
 	<p>
-		2021년부터 지금까지 저의 여정은 '어떻게 하면 더 똑똑하고 저렴하게 시스템을 운영할 수 있을까?'라는 질문에 답하는 과정이었습니다. 
-		직접 Kubernetes를 구축(Self-Managed)하고 CloudFormation/Terraform으로 인프라를 자산화하며, 
-		비즈니스 도메인 지식을 바탕으로 아키텍처를 혁신해왔습니다.
+		2021년부터 시작된 저의 여정은 단순히 서버를 띄우는 것이 아니라, <strong>인프라를 코드로 통제하고 비즈니스의 생존을 기술로 책임지는 과정</strong>이었습니다. 
+		산자부 대규모 프로젝트를 수임하며 습득한 깊은 비즈니스 도메인 지식은 데이터의 특성을 고려한 아키텍처 혁신의 원동력이 되었습니다.
 	</p>
 </Layout>
 
 <style>
-	.intro {
-		margin-bottom: 2rem;
-	}
 	.intro h2 {
 		border: none;
-		margin-top: 0;
 		font-size: 1.8rem;
 		line-height: 1.4;
+		margin-bottom: 1rem;
+	}
+	.section-desc {
+		color: #656d76;
+		margin-bottom: 2rem;
+	}
+	.tech-category {
+		margin-bottom: 2.5rem;
+	}
+	.tech-category h4 {
+		margin-bottom: 0.8rem;
+		border-left: 4px solid var(--link);
+		padding-left: 0.8rem;
+		font-size: 1.1rem;
 	}
 	.badges {
 		display: flex;
 		flex-wrap: wrap;
 		gap: 0.5rem;
-		margin-bottom: 1rem;
+		margin: 1rem 0;
 	}
 	.badges img {
-		height: 28px;
-		border: none;
+		height: 24px;
 		filter: none;
-		border-radius: 4px;
+		border: none;
 	}
-	h4 {
-		margin-top: 1.5rem;
-		margin-bottom: 0.5rem;
+	.tech-category ul {
+		margin-top: 0.5rem;
+	}
+	.case-study h4 {
 		color: var(--link);
+		margin-bottom: 0.5rem;
 	}
 </style>
