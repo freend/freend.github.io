@@ -4,7 +4,7 @@ description: "AWS EKS 환경에서 Grafana Alloy를 사용하여 로그 수집 �
 pubDate: "Aug 19 2026"
 ---
 
-안녕하세요. 이 문서는 AWS EKS 환경에서 **Grafana Alloy**를 사용하여 로그 수집 시스템을 구축하려는 모든 엔지니어를 위한 **'실전 가이드'**입니다. 
+안녕하세요. 이 문서는 AWS EKS 환경에서 **Grafana Alloy**를 사용하여 로그 수집 시스템을 구축하려는 모든 엔지니어를 위한 '실전 가이드'입니다. 
 
 우리가 겪었던 Regex 경로 조립의 고통과 Loki 인증 오류를 모두 해결한 **최종 구성 가이드**를 공개합니다.
 
@@ -126,7 +126,7 @@ discovery.relabel "failed_path_logic" {
 ```
 
 ### [해결책: 공식 문서에서 정답을 찾다]
-이런 무의미한 Regex 사투를 멈추기 위해 **Grafana Alloy 공식 문서(Configure Alloy on Kubernetes)**를 정밀 분석했습니다. 그 결과, 파일을 직접 읽는 대신 **Kubernetes API 서버로부터 직접 스트림을 가져오는 `loki.source.kubernetes` 컴포넌트**가 해답임을 찾아냈고, 이를 적용하여 즉시 로그 수집을 성공시켰습니다.
+이런 무의미한 Regex 사투를 멈추기 위해 Grafana Alloy 공식 문서(Configure Alloy on Kubernetes)를 분석했습니다. 그 결과, 파일을 직접 읽는 대신 **Kubernetes API 서버로부터 직접 스트림을 가져오는 `loki.source.kubernetes` 컴포넌트**가 해답임을 찾아냈고, 이를 적용하여 즉시 로그 수집을 성공시켰습니다.
 
 ---
 
