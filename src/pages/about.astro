@@ -63,13 +63,22 @@ resources:
 				<h5>PoE: O(1) Counting & Delta Merge Strategy</h5>
 				<p>9,000만 건 데이터 환경에서 DB I/O 부하를 80% 이상 절감한 핵심 로직입니다.</p>
 				<pre><code>-- SQL: PK 차이값을 활용한 초고속 카운팅
-SELECT MAX(id) - :yesterday_last_id FROM large_table;
+SELECT MAX(id) - :yesterday_last_id FROM large_table;</code></pre>
 
-# Python: 전일 누적값에 오늘치 증분만 병합
-stats = &#123;
-    "total": cached_yesterday_total + today_delta,
-    "today": today_delta
-&#125;</code></pre>
+				<h5>PoE: Recursive Inverse Calculation (누적 추이 역산)</h5>
+				<p>과거의 모든 시점을 DB에서 매번 누적 합산하는 대신, 현재 총계에서 시점별 증분(Delta)을 차감하며 과거 상태를 단 수 밀리초(ms) 내에 복원하는 알고리즘을 설계했습니다.</p>
+				<p><strong>수식:</strong> $P&#123;i-1&#125; = P_i - D_i$ (현재 총계에서 증분을 빼며 과거 누적치 산출)</p>
+				<pre><code># Python: 누적 트렌드 역산 로직
+def calculate_cumulative_trends(type_data, total_counts):
+    result_map = &#123;&#125;
+    for cat in target_categories:
+        current_total = total_counts.get(cat, 0)
+        # 최신순(역순)으로 탐색하며 역산 수행
+        for label in reversed(labels):
+            delta = find_delta(label, cat)
+            result_map[(label, cat)] = current_total
+            current_total -= delta # 현재 합계에서 증분을 차감하여 과거값 복원
+    return result_map</code></pre>
 			</div>
 		</div>
 
