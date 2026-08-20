@@ -20,8 +20,24 @@ EKS의 로그 경로는 네임스페이스, 팟 이름, UID, 컨테이너 이름
 ### 에이전트의 무한 루핑 오류
 가장 곤혹스러웠던 점은 **에이전트와의 협업 과정**이었습니다. 참고한 블로그 2곳에서 동일하게 Filesystem 방식을 다루고 있다 보니, 코딩 에이전트가 이 정보만을 학습하여 계속해서 실패하는 2가지 패턴의 코드만 무한 반복해서 생성하는 루핑에 빠졌습니다.
 
-*   **실패 패턴 1:** 단순 경로 조립 시도 → 변수 매핑 오류로 `///*.log`와 같은 깨진 경로 생성.
-*   **실패 패턴 2:** 정밀 Regex 시도 → 경로는 조립되나, EKS의 동적 파일 생성 타이밍을 잡지 못해 `no such file` 에러 남발.
+#### [실패했던 Filesystem 설정 예시]
+```hcl
+discovery.relabel "failed_path_logic" {
+  targets = discovery.kubernetes.pods.targets
+  rule {
+    source_labels = ["__meta_kubernetes_namespace", "__meta_kubernetes_pod_name", "__meta_kubernetes_pod_uid", "__meta_kubernetes_pod_container_name"]
+    
+    # 실패 사례 1: 단순 조립 시도 (변수 매핑 오류)
+    # replacement = "/var/log/pods/$1_$2_$3/$4/*.log" 
+
+    # 실패 사례 2: 구분자(;)와 정밀 Regex 사용 시도 (타이밍 이슈)
+    # separator = ";"
+    # regex = "(.+);(.+);(.+);(.+)"
+    # replacement = "/var/log/pods/${1}_${2}_${3}/${4}/*.log"
+  }
+}
+```
+결과적으로 경로는 조립되더라도 EKS의 동적 파일 생성 타이밍을 잡지 못해 `no such file` 에러가 남발되었습니다.
 
 ---
 
@@ -37,7 +53,7 @@ EKS의 로그 경로는 네임스페이스, 팟 이름, UID, 컨테이너 이름
 
 최종적으로 완성된 설정입니다. 이 구성으로 전환한 즉시 모든 로그 수집이 100% 성공했습니다.
 
-### 수집기 설정: `alloy-official-values.yaml`
+### 3.1. 수집기 설정: `alloy-official-values.yaml`
 ```hcl
 alloy:
   configMap:
@@ -67,6 +83,22 @@ alloy:
         endpoint { url = "http://loki-gateway.monitoring.svc.cluster.local/loki/api/v1/push" }
         external_labels = { collector = "alloy-official" }
       }
+```
+
+### 3.2. 저장소 설정: `loki-values.yaml`
+Loki에서 로그를 받아들이기 위해 필요한 최소한의 필수 설정입니다.
+
+```yaml
+loki:
+  # 💡 트러블슈팅 포인트: "no org id" 에러 해결
+  # 프라이빗 클러스터라면 인증(Multi-tenancy)을 끄는 것이 효율적입니다.
+  auth_enabled: false 
+  
+  resources:
+    requests:
+      ephemeral-storage: 5Gi
+    limits:
+      ephemeral-storage: 15Gi
 ```
 
 ---
