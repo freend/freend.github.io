@@ -39,6 +39,21 @@ const { title, description, pubDate, updatedDate } = Astro.props;
 		<Footer />
 	</body>
 </html>
+
+<script>
+	const articleLinks = document.querySelectorAll('article a[href]');
+
+	for (const link of articleLinks) {
+		const url = new URL(link.href, window.location.href);
+
+		if (!['http:', 'https:'].includes(url.protocol) || url.origin === window.location.origin) {
+			continue;
+		}
+
+		link.setAttribute('target', '_blank');
+		link.setAttribute('rel', 'noopener noreferrer');
+	}
+</script>
 <style>
 	.title {
 		margin-bottom: 2rem;
