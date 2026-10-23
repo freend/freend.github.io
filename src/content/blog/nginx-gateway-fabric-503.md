@@ -1,5 +1,5 @@
 ---
-title: "[Cloud Native] 정상인 Kubernetes에서 503을 반환한 NGINX Gateway Fabric"
+title: "[Cloud Native] 정상인 Kubernetes에서 503을 반환한 NGINX Gateway Fabric (후속 업데이트 포함)"
 description: "Pod와 EndpointSlice가 모두 정상인데도 NGINX Gateway Fabric이 503 fallback upstream을 사용한 장애를 계층별 관측으로 추적한 기록입니다."
 pubDate: "Sep 7 2026"
 heroImage: "/src/assets/blog-placeholder-4.jpg"
