@@ -197,6 +197,12 @@ NGINX Gateway Fabric 공개 이슈 [#5658](https://github.com/nginx/nginx-gatewa
 
 이 조사 결과를 바탕으로 [NGINX Gateway Fabric Issue #5869](https://github.com/nginx/nginx-gateway-fabric/issues/5869)를 등록했습니다. 이슈에는 내부 IP와 계정 정보는 제외하고, 환경 버전·상태·설정 형태·복구 로그·확인 질문만 담았습니다.
 
+### 후속 업데이트 (2026-10-23)
+
+GitHub 알림을 통해 Issue #5869가 PR [#6093](https://github.com/nginx/nginx-gateway-fabric/pull/6093)을 통해 완료 처리된 것을 확인했습니다. 이 PR은 HTTPRoute와 GRPCRoute의 backend upstream에 endpoint가 없을 때 `gateway.nginx.org/NoReadyEndpoints` 상태 조건을 표시합니다. `ResolvedRefs=True`는 참조가 유효하다는 기존 의미를 유지합니다.
+
+이 변경은 빈 upstream으로 인한 503 상태를 더 잘 드러내는 진단 개선입니다. 당시처럼 Kubernetes에 Ready endpoint가 있었는데 data plane이 503 fallback upstream을 유지한 현상의 근본 원인을 밝혔거나, stale upstream을 자동 복구한다고 확인된 것은 아닙니다. 따라서 이 글의 장애 관측과 복구 기록은 그대로 유효하며, 해당 변경이 포함된 버전에서는 Route 상태의 `NoReadyEndpoints` 조건도 함께 확인해야 합니다.
+
 ## 8. 장애 대응 순서
 
 유사한 503이 발생하면 다음 순서로 확인하는 것이 효율적입니다.
@@ -268,7 +274,8 @@ Kubernetes status
 ### 참고 자료
 
 - [NGINX Gateway Fabric Issue #5658](https://github.com/nginx/nginx-gateway-fabric/issues/5658)
-- [이번 장애 문의 Issue #5869](https://github.com/nginx/nginx-gateway-fabric/issues/5869)
+- [이번 장애 문의 Issue #5869 (PR #6093으로 완료 처리)](https://github.com/nginx/nginx-gateway-fabric/issues/5869)
+- [PR #6093: NoReadyEndpoints 상태 조건 추가](https://github.com/nginx/nginx-gateway-fabric/pull/6093)
 - [NGINX Gateway Fabric Troubleshooting](https://docs.nginx.com/nginx-gateway-fabric/troubleshooting/)
 - [Amazon EKS control plane logging](https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html)
 - [Amazon EKS auditing and logging best practices](https://docs.aws.amazon.com/eks/latest/best-practices/auditing-and-logging.html)
