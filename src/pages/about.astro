@@ -18,6 +18,46 @@ import Layout from '../layouts/BlogPost.astro';
 
 	<hr />
 
+	<section class="ai-engineering">
+		<h3>AI 에이전트 활용과 멀티모달 AI</h3>
+		<p class="section-desc">
+			낯선 기술을 빠르게 익히고, AI 에이전트와 Python으로 동작하는 시스템을 구현한 뒤 실행 결과로 검증합니다.
+		</p>
+		<div class="ai-work-grid">
+			<div class="ai-work-card">
+				<h4>AI 에이전트를 개발 과정에 연결</h4>
+				<p>
+					문제와 완료 조건을 정리하고 조사·구현·검증 단계로 나눠 AI 에이전트와 작업합니다.
+					에이전트가 제안한 코드와 설명을 기존 코드 구조에 맞춰 검토하고, 실행 로그와 데이터 비교로 동작을 확인합니다.
+					바이브 코딩의 빠른 반복을 활용하면서 변경 결과를 직접 확인하고 책임집니다.
+				</p>
+			</div>
+			<div class="ai-work-card">
+				<h4>처음 다룬 비전 LLM을 Python 추론 파이프라인으로</h4>
+				<p>
+					비전 LLM을 처음 다루며 27B급 로컬 멀티모달 모델을 Apple Silicon의 MLX-VLM과
+					NVIDIA GPU Linux의 llama.cpp CUDA에서 실행했습니다. Python으로 영상을 프레임으로 구성하고,
+					로컬 추론 API 호출과 JSON 결과 검증까지 연결했습니다.
+				</p>
+			</div>
+		</div>
+		<p class="ai-evidence">
+			<strong>검증 결과:</strong> 두 환경의 출력 36개를 일대일로 대응시켰고,
+			전처리 영상의 대응 프레임 76개에서 픽셀 차이 0을 확인했습니다.
+			출력 간 비교와 프레임 보존 검증을 통해 모델 실행 결과를 수치로 점검했습니다.
+		</p>
+		<nav class="ai-series-links" aria-label="멀티모달 AI 관련 글">
+			<strong>관련 글</strong>
+			<ol>
+				<li><a href="/blog/local-vlm-python-video-pipeline/">Python 영상 분석 파이프라인</a></li>
+				<li><a href="/blog/local-vlm-mac-m5-vs-rtx3090ti/">Mac M5와 RTX 3090 Ti 성능 비교</a></li>
+				<li><a href="/blog/local-vlm-output-consistency-and-frame-validation/">같은 영상, 다른 결과: 출력 일관성 검증</a></li>
+			</ol>
+		</nav>
+	</section>
+
+	<hr />
+
 	<section class="tech-ecosystem">
 		<h3>Advanced Tech Ecosystem</h3>
 		<p class="section-desc">단순한 도구 사용을 넘어, 비즈니스 가치를 극대화하기 위해 최적화된 기술 생태계입니다.</p>
@@ -447,6 +487,52 @@ def calculate_cumulative_trends(type_data, total_counts):
 	.section-desc {
 		color: #656d76;
 		margin-bottom: 2rem;
+	}
+	.ai-engineering {
+		margin: 2rem 0;
+	}
+	.ai-work-grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 1rem;
+		margin-bottom: 1.25rem;
+	}
+	.ai-work-card {
+		padding: 1.25rem;
+		border: 1px solid var(--border);
+		border-radius: 8px;
+		background: var(--code-bg);
+	}
+	.ai-work-card h4 {
+		margin: 0 0 0.75rem;
+		font-size: 1rem;
+	}
+	.ai-work-card p {
+		margin: 0;
+	}
+	.ai-evidence {
+		margin: 0;
+		padding: 0.75rem 1rem;
+		border-left: 2px solid var(--link);
+		background: var(--code-bg);
+	}
+	.ai-series-links {
+		margin-top: 1.25rem;
+		padding: 1rem 1.25rem;
+		border: 1px solid var(--border);
+		border-radius: 8px;
+	}
+	.ai-series-links ol {
+		margin: 0.75rem 0;
+		padding-left: 1.25rem;
+	}
+	.ai-series-links li + li {
+		margin-top: 0.35rem;
+	}
+	@media (max-width: 700px) {
+		.ai-work-grid {
+			grid-template-columns: 1fr;
+		}
 	}
 	.tech-category {
 		margin-bottom: 3.5rem;
