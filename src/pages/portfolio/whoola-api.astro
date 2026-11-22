@@ -3,51 +3,44 @@ import PortfolioProjectDetail from '../../components/PortfolioProjectDetail.astr
 
 const sections = [
 	{
-		eyebrow: '개요와 해결하려던 문제',
-		title: 'Renderer와 분리된 Java API 서버',
-		paragraphs: [
-			'Whoola API는 Java와 Spring Boot로 구성한 백엔드 서버입니다. 화면 HTML을 렌더링하는 Renderer와 별도 애플리케이션으로 실행되며, 서비스 도메인의 API와 데이터 처리를 담당합니다.',
-			'코드에는 회원, 상품, 구매 등 도메인 단위의 패키지가 있으며, 이 페이지는 공개 저장소에서 확인되는 서버 구조와 책임 분리를 중심으로 소개합니다.',
-		],
-	},
-	{
-		eyebrow: '주요 기능',
-		title: '도메인별 API와 데이터 처리',
+		eyebrow: 'Domain API',
+		title: '회원·상품·구매 흐름을 API로 구현',
+		paragraphs: ['Whoola API는 회원 인증과 정보, 상품 조회, 구매 처리를 담당하는 Java 백엔드입니다. 저는 화면 렌더링 서버와 분리된 REST API와 도메인별 서비스 로직을 구현했습니다.'],
 		bullets: [
-			'회원 가입·인증 및 회원 정보 관련 API가 있습니다.',
-			'상품, 구매 등 도메인별 컨트롤러와 서비스 코드가 있습니다.',
-			'JPA 엔티티와 저장소를 통해 도메인 데이터를 다룹니다.',
-			'Spring Security와 JWT 라이브러리를 사용하는 인증 구성이 있습니다.',
+			'회원 가입·로그인·정보 조회와 비밀번호 변경',
+			'상품 목록·상세 조회와 서비스별 상품 탐색',
+			'구매 생성, 구매 내역과 사용자별 구매 조회',
+			'페이지 단위로 나누어 제공하는 회원·상품·구매 목록',
 		],
 	},
 	{
-		eyebrow: '아키텍처와 핵심 구현',
-		title: '도메인 패키지와 계층 분리',
+		eyebrow: '서비스 계층',
+		title: '도메인 규칙과 영속성의 경계를 분리',
 		cards: [
-			{ title: '도메인별 모듈', body: '회원, 상품, 구매 등 기능별 패키지로 코드를 나누고 해당 영역의 API와 서비스 로직을 배치합니다.' },
-			{ title: '컨트롤러·서비스·저장소', body: '회원 영역에는 컨트롤러, 서비스, 저장소가 각각 확인됩니다. 구매 영역도 관련 서비스 및 저장소 클래스로 구성됩니다.' },
-			{ title: 'Renderer와 역할 분리', body: 'Renderer 코드가 HTTP 요청으로 별도 API를 호출합니다. 화면 템플릿 렌더링과 서비스 데이터/API 처리를 애플리케이션 단위로 구분합니다.' },
+			{ title: 'Controller', body: 'Spring Web 컨트롤러가 도메인별 HTTP 요청과 응답을 맡습니다.' },
+			{ title: 'Service', body: '서비스 계층이 회원·상품·구매 흐름을 조정하며 쓰기 작업은 트랜잭션 경계 안에서 처리합니다.' },
+			{ title: 'JPA Data Access', body: '엔티티와 데이터 접근 계층으로 조회 및 변경을 분리하고, 목록 API에는 pageable 결과를 사용합니다.' },
 		],
 	},
 	{
-		eyebrow: '기술적 의사결정',
-		title: '웹 API, 영속성, 인증을 Spring 계층으로 구성',
-		paragraphs: ['Gradle 설정에서 Spring Web, Spring Data JPA, Spring Security와 JWT 의존성을 확인했습니다. 이 조합이 보여주는 구현 범위를 설명하며, 확인되지 않은 보안 수준이나 운영 성과를 주장하지 않습니다.'],
+		eyebrow: '인증과 연결 구조',
+		title: '자격 확인부터 Renderer 연동까지',
+		flow: ['Renderer HTTP request', 'Spring Web Controller', 'Domain Service', 'JPA Repository'],
+		paragraphs: ['로그인 과정에서 password encoder로 비밀번호를 확인하고, 인증에 성공하면 사용자 권한을 담은 JWT를 발급합니다. Renderer는 별도 HTTP 요청으로 API 결과를 받아 EJS 화면을 완성합니다.'],
 	},
 	{
-		eyebrow: '검증 결과와 한계',
-		title: '테스트 구성은 있으나 이번 작업에서는 실행하지 않음',
-		paragraphs: ['Gradle에는 Spring Boot 테스트와 Spring Security 테스트 의존성이 있고 저장소에 모듈별 테스트 코드가 있습니다. 이번 Portfolio 작업에서는 Whoola API 빌드나 테스트를 실행하지 않았으므로 통과 결과는 제시하지 않습니다.'],
-		note: '공개 소스에서 확인할 수 있는 기능과 구조만 요약했습니다. 운영 데이터, 계정, 자격 증명은 포함하지 않습니다.',
+		eyebrow: '기술적 경험',
+		title: '요청 처리와 도메인 쓰기를 하나의 흐름으로',
+		paragraphs: ['구매 처리는 회원과 상품을 확인하고 결과를 남기는 서비스 작업으로 구성했습니다. 트랜잭션 경계를 서비스 계층에 두고, 컨트롤러·서비스·데이터 접근 계층의 책임을 나눠 HTTP 처리와 도메인 변경을 분리했습니다. Java 8 기반 Spring Boot에서 REST, JPA 영속성, Spring Security/JWT 인증을 함께 다룬 프로젝트입니다.'],
 	},
 ];
 ---
 
 <PortfolioProjectDetail
 	title="Whoola API"
-	eyebrow="백엔드 API 개발"
-	subtitle="Spring Boot와 JPA를 이용한 도메인 API 서버"
-	description="도메인별 API와 서비스·저장소 계층을 구성하고 Renderer와 분리한 Java 백엔드 프로젝트입니다."
+	eyebrow="Backend Engineering · Java"
+	subtitle="Spring Boot로 회원·상품·구매 도메인을 구현한 API"
+	description="저는 Whoola Renderer와 분리된 REST API를 만들고, Spring 서비스 계층에서 도메인 로직과 데이터 접근을 연결했습니다."
 	stack={['Java', 'Spring Boot', 'Spring Web', 'Spring Data JPA', 'Spring Security', 'JWT', 'Gradle']}
 	sections={sections}
 />

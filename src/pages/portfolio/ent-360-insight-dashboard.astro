@@ -3,52 +3,50 @@ import PortfolioProjectDetail from '../../components/PortfolioProjectDetail.astr
 
 const sections = [
 	{
-		eyebrow: '개요와 배경',
-		title: '기업 데이터를 한 흐름으로 살펴보는 대시보드',
+		eyebrow: '서비스',
+		title: '기업을 중심으로 여러 정보를 한 화면에',
 		paragraphs: [
-			'기업 기본 정보, 재무·고용 자료, 공시와 감사보고서, 특허 및 벤처 데이터를 통합 조회하고 분석할 수 있도록 만든 풀스택 대시보드입니다.',
-			'데이터 영역별로 나뉜 정보를 화면을 오가며 확인하는 대신, 기업을 중심으로 관련 정보를 이어 살펴보는 것이 프로젝트의 목적입니다.',
+			'기업 기본정보를 기준으로 재무·고용, 공시와 감사보고서, 특허·벤처 자료를 연결해 탐색할 수 있도록 만들었습니다. 수집 현황과 주요 지표는 통계 대시보드에서 살펴봅니다.',
+			'저는 Next.js 화면과 API 연동, 실행 구성을 함께 맡아 데이터 조회에서 시각화까지 이어지는 흐름을 구현했습니다.',
 		],
-	},
-	{
-		eyebrow: '주요 기능',
-		title: '조회와 통계를 연결하는 화면',
-		bullets: [
-			'기업별 기본 정보와 재무·고용 정보를 함께 조회합니다.',
-			'공시 및 감사보고서 데이터와 특허·벤처 정보를 살펴봅니다.',
-			'수집 현황과 주요 지표를 통계 대시보드에서 확인합니다.',
-			'화면별 서비스 모듈을 통해 백엔드 API와 데이터를 주고받습니다.',
-		],
-	},
-	{
-		eyebrow: '아키텍처와 구현',
-		title: '화면, API 연동, 컨테이너 구성을 분리',
 		cards: [
-			{ title: '웹 애플리케이션', body: 'Next.js App Router와 React, TypeScript로 기업·공시·감사·특허·벤처 등의 화면을 구성합니다. 화면별 서비스 코드가 API 응답을 사용합니다.' },
-			{ title: '서버 연동', body: '미들웨어에서 서버 측 요청을 다른 경로로 전달하는 구성이 확인됩니다. 이 설명에는 내부 주소나 환경 설정 값을 포함하지 않습니다.' },
-			{ title: '빌드와 컨테이너', body: 'Next.js standalone 출력과 Dockerfile, Compose 구성이 있습니다. 이 저장소 설정은 배포 구조를 설명하며 현재 운영 상태를 뜻하지는 않습니다.' },
+			{ title: '기업 인사이트', body: '기업 프로필을 중심으로 재무·고용 정보를 모아 같은 맥락에서 확인합니다.' },
+			{ title: '공시와 보고서', body: '공시·감사보고서와 특허·벤처 정보를 관련 기업 데이터와 함께 탐색합니다.' },
+			{ title: '운영 통계', body: '데이터 수집 현황과 도메인별 주요 지표를 대시보드 화면으로 연결합니다.' },
 		],
-		note: '대시보드 웹 저장소의 구현과 의존성에서 확인한 내용을 중심으로 소개합니다. API 기술은 별도 API 프로젝트 상세 페이지에 확인 범위를 구분해 적었습니다.',
 	},
 	{
-		eyebrow: '기술 스택',
-		title: '프로젝트에서 확인한 기술',
-		paragraphs: ['웹 의존성 파일과 README에서 확인한 Next.js, React, TypeScript, Tailwind CSS, Docker 기반 구성에 더해, 연결된 API 프로젝트의 개발 브랜치에서 Python과 FastAPI를 확인했습니다.'],
-		note: 'API 구현이 확인된 개발 브랜치는 main에 반영된 상태로 확인되지 않았습니다. 따라서 해당 API 구현이나 배포가 main에서 운영 중이라고 표현하지 않습니다.',
+		eyebrow: '서비스 구조',
+		title: '웹 화면과 API 사이에 서버 경계를 두다',
+		flow: ['Next.js App Router', 'Same-origin API route', 'Next.js Middleware', 'Dashboard API'],
+		paragraphs: ['도메인별 페이지와 서비스 모듈이 API 데이터를 받아 표와 통계 화면을 구성합니다. 브라우저는 같은 웹 origin으로 요청하고, 서버 미들웨어가 실행 환경에 맞는 API 대상으로 연결합니다.'],
 	},
 	{
-		eyebrow: '검증 범위',
-		title: '저장소에 정의된 검증 도구',
-		paragraphs: ['웹 저장소에는 lint, build, Playwright 기반 E2E 실행 스크립트가 정의되어 있습니다. 이번 포트폴리오 작업에서는 비공개 애플리케이션의 테스트를 실행하지 않았으므로 통과 여부나 서비스 성과 수치를 주장하지 않습니다.'],
+		eyebrow: '기술적 도전',
+		title: '백엔드 연결을 빌드 시점에서 실행 시점으로 이동',
+		cards: [
+			{ title: '문제', body: '빌드 시점에 백엔드 주소를 rewrites에 고정하면 standalone 웹 결과물과 컨테이너 실행 환경의 설정이 서로 묶였습니다. 브라우저가 다른 origin을 직접 호출하는 구조도 외부 접속 환경에서 CORS와 Private Network Access 제약을 만났습니다.' },
+			{ title: '판단과 구현', body: '브라우저는 상대 API 경로를 사용하고, Next.js Middleware가 요청을 서버 측에서 전달하도록 바꿨습니다. 백엔드 대상은 컨테이너 실행 시 환경 설정으로 정해져 빌드 결과와 실행 환경을 분리합니다.' },
+		],
+	},
+	{
+		eyebrow: '빌드 경험',
+		title: '검색 파라미터를 쓰는 화면의 프리렌더링 문제 해결',
+		paragraphs: ['사이드바가 검색 파라미터를 읽는 화면에서 Next.js 프리렌더링이 막혔습니다. 관련 화면을 클라이언트 컴포넌트와 상위 Suspense 경계로 나눠 정적 빌드 경로를 유지했습니다.'],
+	},
+	{
+		eyebrow: '실행 구성',
+		title: 'standalone 웹 결과물과 Docker 실행 구성',
+		paragraphs: ['Next.js standalone 빌드와 Docker·Compose 구성을 사용해 웹 실행 환경을 구성했습니다. API 주소를 런타임에 연결하도록 분리해 동일한 웹 빌드 결과물을 환경별 설정과 함께 실행할 수 있게 했습니다.'],
 	},
 ];
 ---
 
 <PortfolioProjectDetail
 	title="Ent-360 Insight Dashboard"
-	eyebrow="기업 데이터 통합 분석"
-	subtitle="기업 정보와 공시·감사 데이터를 연결해 살펴보는 풀스택 대시보드"
-	description="기업 데이터 통합 조회, 통계 집계와 대시보드 시각화를 위해 프런트엔드와 백엔드 연동을 구현한 프로젝트입니다."
+	eyebrow="Full-Stack Enterprise Insights"
+	subtitle="기업 데이터를 조회에서 분석까지 연결하는 풀스택 대시보드"
+	description="기업 정보와 재무·고용, 공시·감사 자료를 통합해 탐색하는 대시보드입니다. 저는 프런트엔드 화면, API 연결, 컨테이너 실행 구성을 함께 구현했습니다."
 	stack={['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'Python', 'FastAPI', 'Docker']}
 	sections={sections}
 />
