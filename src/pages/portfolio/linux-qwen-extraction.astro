@@ -1,0 +1,51 @@
+---
+import PortfolioProjectDetail from '../../components/PortfolioProjectDetail.astro';
+
+const sections = [
+	{
+		eyebrow: '개요와 해결하려던 문제',
+		title: 'Linux GPU에서 반복 가능한 추론 환경을 구성하는 실험',
+		paragraphs: [
+			'Linux와 NVIDIA GPU 환경에서 Qwen GGUF 모델을 실행하기 위한 추론 인프라를 구성한 프로젝트입니다. 모델 파일, CUDA 기반 llama.cpp 실행기, 컨테이너와 추론 서버를 하나의 실행 흐름으로 다룹니다.',
+			'초점은 애플리케이션 기능이 아니라 GPU 추론 환경을 구성하고 모델 파일과 실행 조건을 확인하는 데 있습니다.',
+		],
+	},
+	{
+		eyebrow: '주요 기능과 구성',
+		title: '모델부터 서버 실행까지',
+		bullets: [
+			'CUDA 개발 이미지를 바탕으로 llama.cpp 서버 실행 파일을 빌드하는 Docker 구성이 있습니다.',
+			'GGUF 형식의 Qwen 모델을 읽어 llama-server를 실행하는 런타임 구성이 있습니다.',
+			'Python 표준 라이브러리 기반 HTTP 어댑터가 추론 서버 프로세스를 구동합니다.',
+			'벤치마크 및 GPU·시스템 자원 모니터링 스크립트가 포함되어 있습니다.',
+		],
+	},
+	{
+		eyebrow: '아키텍처와 기술적 판단',
+		title: '실행 환경과 모델 검증을 분리',
+		cards: [
+			{ title: '빌드와 런타임', body: 'CUDA 기반 빌드 단계와 실행 단계를 Docker 이미지 구성으로 나누고 llama.cpp 서버 실행 파일을 런타임에 사용합니다.' },
+			{ title: '모델 무결성 확인', body: '어댑터 시작 전에 모델 파일의 기대 크기와 SHA-256을 확인하고, 조건이 맞지 않으면 실행을 중단하도록 구현되어 있습니다.' },
+			{ title: '측정 도구', body: '실행 시간과 시스템·GPU 자원 관찰을 위한 스크립트가 저장소에 있습니다. 기록된 도구의 존재를 재현 검증 완료로 간주하지 않습니다.' },
+		],
+	},
+	{
+		eyebrow: '검증 결과와 한계',
+		title: '재현 빌드와 모델 식별은 미해결 상태',
+		paragraphs: [
+			'저장소의 검증 기록에서 로컬 GGUF 파일의 SHA-256이 고정된 기대 리비전 값과 일치하지 않는 상태가 확인됩니다. 이 불일치만으로 파일 손상을 단정할 수는 없지만 현재 파일의 기준 리비전은 확정되지 않았습니다.',
+			'과거 CUDA 이미지 실행 기록은 있으나, 이후 깨끗한 환경에서의 CUDA 빌드가 컴파일 중 실패한 기록도 있고 원인은 해결되지 않았습니다. 따라서 재현 가능한 빌드나 성능 결과가 확립됐다고 설명하지 않습니다.',
+		],
+		note: '이 페이지는 Linux GPU 추론 인프라만 다룹니다. 저장소 안의 다른 실험과 애플리케이션 기능은 이 프로젝트 소개에 포함하지 않습니다.',
+	},
+];
+---
+
+<PortfolioProjectDetail
+	title="Linux Qwen Extraction"
+	eyebrow="Linux GPU LLM 추론 인프라"
+	subtitle="CUDA와 llama.cpp를 이용한 Qwen GGUF 추론 환경"
+	description="Linux의 NVIDIA GPU에서 컨테이너 기반 추론 서버를 구성하고 모델 실행 및 무결성 검증을 다룬 독립적인 인프라 프로젝트입니다."
+	stack={['Linux', 'NVIDIA GPU', 'CUDA', 'llama.cpp', 'GGUF', 'Qwen', 'Docker', 'Python']}
+	sections={sections}
+/>

@@ -1,0 +1,103 @@
+---
+import BaseHead from './BaseHead.astro';
+import Footer from './Footer.astro';
+import Header from './Header.astro';
+import { SITE_TITLE } from '../consts';
+
+interface DetailCard {
+	title: string;
+	body: string;
+}
+
+interface DetailSection {
+	eyebrow?: string;
+	title: string;
+	paragraphs?: string[];
+	bullets?: string[];
+	flow?: string[];
+	cards?: DetailCard[];
+	note?: string;
+}
+
+interface Props {
+	title: string;
+	eyebrow: string;
+	subtitle: string;
+	description: string;
+	stack: string[];
+	sections: DetailSection[];
+	demoUrl?: string;
+}
+
+const { title, eyebrow, subtitle, description, stack, sections, demoUrl } = Astro.props;
+---
+
+<!doctype html>
+<html lang="ko">
+	<head>
+		<BaseHead title={`${title} | 포트폴리오 | ${SITE_TITLE}`} description={description} />
+	</head>
+	<body>
+		<Header />
+		<main class="project-detail">
+			<nav class="breadcrumbs" aria-label="현재 위치"><a href="/portfolio">Portfolio</a><span aria-hidden="true"> / </span><span>{title}</span></nav>
+			<header class="project-hero">
+				<p class="eyebrow">{eyebrow}</p>
+				<h1>{title}</h1>
+				<p class="project-subtitle">{subtitle}</p>
+				<p>{description}</p>
+				<ul class="tag-list" aria-label="주요 기술">{stack.map((item) => <li>{item}</li>)}</ul>
+				<div class="hero-actions">
+					{demoUrl && <a class="button button-primary" href={demoUrl} target="_blank" rel="noopener noreferrer">공개 데모 <span aria-hidden="true">↗</span></a>}
+					<a class="button button-secondary" href="/portfolio">Portfolio로 돌아가기</a>
+				</div>
+			</header>
+
+			{sections.map((section, index) => (
+				<section class="content-section" aria-labelledby={`section-${index}-title`}>
+					{section.eyebrow && <p class="eyebrow">{section.eyebrow}</p>}
+					<h2 id={`section-${index}-title`}>{section.title}</h2>
+					{section.paragraphs?.map((paragraph) => <p>{paragraph}</p>)}
+					{section.flow && <p class="flow">{section.flow.map((item, itemIndex) => <>{itemIndex > 0 && <span aria-hidden="true"> → </span>}{item}</>)}</p>}
+					{section.bullets && <ul class="feature-list">{section.bullets.map((item) => <li>{item}</li>)}</ul>}
+					{section.cards && (
+						<div class="detail-grid">
+							{section.cards.map((card) => <article><h3>{card.title}</h3><p>{card.body}</p></article>)}
+						</div>
+					)}
+					{section.note && <p class="scope-note">{section.note}</p>}
+				</section>
+			))}
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.project-detail { line-height: 1.75; }
+	.breadcrumbs { margin: 1.5rem 0 1rem; color: #656d76; font-size: 0.9rem; }
+	.project-hero { padding: 1rem 0 2.25rem; border-bottom: 1px solid var(--border); }
+	.eyebrow { margin: 0 0 0.65rem; color: var(--link); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.1em; }
+	.project-hero h1 { margin: 0; border: 0; padding: 0; font-size: clamp(2.5rem, 8vw, 4rem); letter-spacing: -0.04em; }
+	.project-subtitle { margin: 0.75rem 0 1rem; font-size: 1.25rem; font-weight: 600; }
+	.project-hero > p:not(.eyebrow):not(.project-subtitle) { max-width: 680px; color: #656d76; }
+	.tag-list { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 1rem 0 0; padding: 0; list-style: none; }
+	.tag-list li { margin: 0; padding: 0.2rem 0.55rem; border: 1px solid var(--border); border-radius: 999px; color: #656d76; font-size: 0.82rem; }
+	.hero-actions { display: flex; flex-wrap: wrap; gap: 0.65rem; margin-top: 1.35rem; }
+	.button { display: inline-flex; align-items: center; gap: 0.55rem; padding: 0.65rem 0.95rem; border: 1px solid var(--border); border-radius: 6px; font-weight: 600; }
+	.button-primary { border-color: var(--link); background: var(--link); color: #fff; }
+	.button-secondary { background: var(--bg); }
+	.content-section { margin: 3.5rem 0; }
+	.content-section h2 { margin: 0 0 1rem; }
+	.detail-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin: 1.25rem 0; }
+	.detail-grid article { padding: 1.1rem; border: 1px solid var(--border); border-radius: 8px; }
+	.detail-grid h3 { margin: 0 0 0.5rem; font-size: 1rem; }
+	.detail-grid p { margin-bottom: 0; }
+	.flow { color: var(--link); font-weight: 650; overflow-wrap: anywhere; }
+	.flow span { padding: 0 0.2rem; color: #656d76; }
+	.scope-note { padding: 0.9rem 1rem; border-left: 3px solid var(--link); background: var(--code-bg); }
+	@media (max-width: 600px) {
+		.detail-grid { grid-template-columns: 1fr; }
+		.project-subtitle { font-size: 1.1rem; }
+	}
+</style>
