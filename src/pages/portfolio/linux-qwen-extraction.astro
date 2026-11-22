@@ -60,11 +60,28 @@ const sections = [
 ---
 
 <PortfolioProjectDetail
-	title="Linux Qwen Extraction"
-	eyebrow="Local AI · Linux GPU · Inference Engineering"
-	subtitle="이미지와 영상의 시각정보를 구조화하는 로컬 추론 시스템"
-	description="Linux NVIDIA GPU에서 Qwen GGUF 추론 서버와 FastAPI 미디어 추출 API를 연결해 입력 전처리부터 구조화 응답까지 구성했습니다."
+	title="Local AI Extraction"
+	eyebrow="Local AI · Vision Extraction"
+	subtitle="Linux GPU 환경에서 이미지와 영상의 시각정보를 구조화하는 로컬 VLM 시스템"
+	description="Linux GPU 환경에서 로컬 비전 언어 모델(VLM)을 실행하고, 이미지와 영상의 시각정보를 구조화된 데이터로 추출하는 시스템입니다."
 	stack={stack}
 	stackBadges={stackBadges}
 	sections={sections}
+	relatedPosts={[
+		{
+			title: '[Local VLM] Python으로 구축한 로컬 멀티모달 LLM 영상 분석 파이프라인',
+			description: 'FFmpeg 프레임 샘플링부터 로컬 추론 API 연결과 JSON 결과 검증까지 이어지는 처리 흐름을 정리했습니다.',
+			href: '/blog/local-vlm-python-video-pipeline/',
+		},
+		{
+			title: '[Local VLM] 같은 영상, 다른 결과 — 멀티모달 LLM 출력 일관성 검증',
+			description: '동일 영상의 추론 결과를 항목별로 비교하고, 전처리 프레임 보존 여부를 검증한 기록입니다.',
+			href: '/blog/local-vlm-output-consistency-and-frame-validation/',
+		},
+		{
+			title: '[Local VLM] Mac M5 vs RTX 3090 Ti — 27B급 로컬 비전 모델 영상 추론 성능 비교',
+			description: '서로 다른 로컬 추론 환경의 실행 시간과 모델 입력 경로를 구분해 비교했습니다.',
+			href: '/blog/local-vlm-mac-m5-vs-rtx3090ti/',
+		},
+	]}
 />

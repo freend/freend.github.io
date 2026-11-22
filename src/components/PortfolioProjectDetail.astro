@@ -29,6 +29,12 @@ interface RelatedLink {
 	href: string;
 }
 
+interface RelatedPost {
+	title: string;
+	description: string;
+	href: string;
+}
+
 interface Props {
 	title: string;
 	eyebrow: string;
@@ -37,11 +43,12 @@ interface Props {
 	stack: string[];
 	stackBadges?: StackBadge[];
 	relatedLinks?: RelatedLink[];
+	relatedPosts?: RelatedPost[];
 	sections: DetailSection[];
 	demoUrl?: string;
 }
 
-const { title, eyebrow, subtitle, description, stack, stackBadges, relatedLinks, sections, demoUrl } = Astro.props;
+const { title, eyebrow, subtitle, description, stack, stackBadges, relatedLinks, relatedPosts, sections, demoUrl } = Astro.props;
 ---
 
 <!doctype html>
@@ -87,6 +94,24 @@ const { title, eyebrow, subtitle, description, stack, stackBadges, relatedLinks,
 				</section>
 			))}
 
+			{relatedPosts?.length && (
+				<section class="related-posts" aria-labelledby="related-posts-title">
+					<p class="eyebrow">RELATED NOTES</p>
+					<h2 id="related-posts-title">관련 기술 기록</h2>
+					<p class="related-posts-intro">로컬 AI 추론 환경을 구축하고 이미지·영상 추출 파이프라인을 실험하며 정리한 기술 기록입니다.</p>
+					<ul class="related-post-list">
+						{relatedPosts.map((post) => (
+							<li>
+								<a href={post.href}>
+									<strong>{post.title}</strong>
+									<span>{post.description}</span>
+								</a>
+							</li>
+						))}
+					</ul>
+				</section>
+			)}
+
 			{relatedLinks?.length && (
 				<nav class="related-projects" aria-label="연결된 프로젝트 상세 페이지">
 					<p class="eyebrow">RELATED PROJECTS</p>
@@ -119,6 +144,16 @@ const { title, eyebrow, subtitle, description, stack, stackBadges, relatedLinks,
 	.button-secondary { background: var(--bg); }
 	.content-section { margin: 3.5rem 0; }
 	.content-section h2 { margin: 0 0 1rem; }
+	.related-posts { margin: 3rem 0; padding-top: 1.4rem; border-top: 1px solid var(--border); }
+	.related-posts .eyebrow { margin-bottom: 0.35rem; }
+	.related-posts h2 { margin: 0 0 0.5rem; border: 0; padding: 0; font-size: 1.25rem; }
+	.related-posts-intro { max-width: 700px; margin: 0 0 1rem; color: #656d76; }
+	.related-post-list { display: grid; gap: 0.45rem; margin: 0; padding: 0; list-style: none; }
+	.related-post-list li { margin: 0; }
+	.related-post-list a { display: block; max-width: 820px; padding: 0.3rem 0; overflow-wrap: anywhere; }
+	.related-post-list strong, .related-post-list span { display: block; }
+	.related-post-list strong { font-weight: 600; }
+	.related-post-list span { margin-top: 0.12rem; color: #656d76; font-size: 0.9rem; }
 	.detail-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin: 1.25rem 0; }
 	.detail-grid article { padding: 1.1rem; border: 1px solid var(--border); border-radius: 8px; }
 	.detail-grid h3 { margin: 0 0 0.5rem; font-size: 1rem; }

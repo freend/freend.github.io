@@ -22,6 +22,7 @@ const projects = [
 			badge('AI Agent', 'https://img.shields.io/badge/AI_Agent-4B32C3?style=for-the-badge'),
 		],
 		links: [{ label: 'CloudAtlas 상세 페이지', description: '인프라 관계 탐색과 그래프 시각화', href: '/portfolio/cloudatlas' }],
+		blogLink: null,
 	},
 	{
 		name: 'Collect Dashboard',
@@ -42,13 +43,14 @@ const projects = [
 			{ label: 'Collect Dashboard API', description: '데이터 집계 및 통계 API', href: '/portfolio/collect-dashboard-api' },
 			{ label: 'Ent-360 Insight Dashboard', description: '수집 현황 시각화 웹 대시보드', href: '/portfolio/ent-360-insight-dashboard' },
 		],
+		blogLink: null,
 	},
 	{
-		name: 'Linux Qwen Extraction',
-		tagline: 'Local AI · GPU Inference',
+		name: 'Local AI Extraction',
+		tagline: 'Local AI · Vision Extraction',
 		participation: '개발 100%',
-		description: '이미지와 영상의 시각 정보를 로컬 AI로 추론해 애플리케이션에서 사용할 구조화 데이터로 변환하는 시스템입니다.',
-		features: ['Linux GPU 기반 Qwen 로컬 추론', '이미지 입력 검증과 영상 프레임 전처리', '추론 응답 파싱 및 JSON 구조화'],
+		description: 'Linux GPU 환경에서 로컬 비전 언어 모델을 실행하고, 이미지와 영상의 시각정보를 구조화된 데이터로 추출하는 시스템입니다.',
+		features: ['Linux GPU 기반 로컬 VLM 추론', '이미지 입력 검증과 영상 프레임 전처리', '추론 응답 파싱 및 JSON 구조화'],
 		badges: [
 			badge('Linux', 'https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black'),
 			badge('NVIDIA GPU', 'https://img.shields.io/badge/NVIDIA_GPU-76B900?style=for-the-badge&logo=nvidia&logoColor=white'),
@@ -58,7 +60,8 @@ const projects = [
 			badge('Qwen', 'https://img.shields.io/badge/Qwen-615EFF?style=for-the-badge&logo=alibabacloud&logoColor=white'),
 			badge('Docker', 'https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white'),
 		],
-		links: [{ label: 'Linux Qwen Extraction 상세 페이지', description: '미디어 처리와 로컬 GPU 추론 파이프라인', href: '/portfolio/linux-qwen-extraction' }],
+		links: [{ label: 'Local AI Extraction 상세 페이지', description: 'Linux GPU 기반 미디어 추출과 로컬 VLM 추론', href: '/portfolio/linux-qwen-extraction' }],
+		blogLink: { title: '[Local VLM] Python으로 구축한 로컬 멀티모달 LLM 영상 분석 파이프라인', href: '/blog/local-vlm-python-video-pipeline/' },
 	},
 	{
 		name: 'Whoola',
@@ -79,6 +82,7 @@ const projects = [
 			{ label: 'Whoola API', description: '상품·회원·결제·주문 처리 백엔드', href: '/portfolio/whoola-api' },
 			{ label: 'Whoola Renderer', description: '사용자 화면 및 API 연동', href: '/portfolio/whoola-renderer' },
 		],
+		blogLink: null,
 	},
 ];
 ---
@@ -108,6 +112,8 @@ const projects = [
 			.project-detail-link { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.1rem 0.65rem; width: fit-content; max-width: 100%; padding: 0.2rem 0; }
 			.project-detail-link strong { font-size: 0.92rem; }
 			.project-detail-link span { color: #656d76; font-size: 0.85rem; }
+			.project-blog-link { margin: 0.35rem 0 0; font-size: 0.86rem; overflow-wrap: anywhere; }
+			.project-blog-link span { margin-right: 0.4rem; color: #656d76; }
 			@media (max-width: 600px) {
 				.project-card { padding: 1rem; }
 				.project-heading { align-items: flex-start; }
@@ -151,6 +157,7 @@ const projects = [
 								</a>
 							))}
 						</nav>
+						{project.blogLink && <p class="project-blog-link"><span>관련 기술 기록</span><a href={project.blogLink.href}>{project.blogLink.title} <span aria-hidden="true">↗</span></a></p>}
 					</article>
 				))}
 			</section>
