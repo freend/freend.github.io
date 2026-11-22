@@ -24,6 +24,11 @@ interface StackBadge {
 	url: string;
 }
 
+interface RelatedLink {
+	label: string;
+	href: string;
+}
+
 interface Props {
 	title: string;
 	eyebrow: string;
@@ -31,11 +36,12 @@ interface Props {
 	description: string;
 	stack: string[];
 	stackBadges?: StackBadge[];
+	relatedLinks?: RelatedLink[];
 	sections: DetailSection[];
 	demoUrl?: string;
 }
 
-const { title, eyebrow, subtitle, description, stack, stackBadges, sections, demoUrl } = Astro.props;
+const { title, eyebrow, subtitle, description, stack, stackBadges, relatedLinks, sections, demoUrl } = Astro.props;
 ---
 
 <!doctype html>
@@ -80,6 +86,13 @@ const { title, eyebrow, subtitle, description, stack, stackBadges, sections, dem
 					{section.note && <p class="scope-note">{section.note}</p>}
 				</section>
 			))}
+
+			{relatedLinks?.length && (
+				<nav class="related-projects" aria-label="연결된 프로젝트 상세 페이지">
+					<p class="eyebrow">RELATED PROJECTS</p>
+					{relatedLinks.map((link) => <a class="button button-secondary" href={link.href}>{link.label}<span aria-hidden="true"> →</span></a>)}
+				</nav>
+			)}
 		</main>
 		<Footer />
 	</body>
@@ -99,6 +112,8 @@ const { title, eyebrow, subtitle, description, stack, stackBadges, sections, dem
 	.stack-badges li { max-width: 100%; margin: 0; }
 	.stack-badges img { display: block; max-width: 100%; height: 24px; border: 0; filter: none; }
 	.hero-actions { display: flex; flex-wrap: wrap; gap: 0.65rem; margin-top: 1.35rem; }
+	.related-projects { display: flex; flex-wrap: wrap; align-items: center; gap: 0.65rem; margin: 3rem 0; padding-top: 1.25rem; border-top: 1px solid var(--border); }
+	.related-projects .eyebrow { flex-basis: 100%; margin-bottom: 0; }
 	.button { display: inline-flex; align-items: center; gap: 0.55rem; padding: 0.65rem 0.95rem; border: 1px solid var(--border); border-radius: 6px; font-weight: 600; }
 	.button-primary { border-color: var(--link); background: var(--link); color: #fff; }
 	.button-secondary { background: var(--bg); }
