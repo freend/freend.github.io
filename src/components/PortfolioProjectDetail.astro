@@ -19,17 +19,23 @@ interface DetailSection {
 	note?: string;
 }
 
+interface StackBadge {
+	name: string;
+	url: string;
+}
+
 interface Props {
 	title: string;
 	eyebrow: string;
 	subtitle: string;
 	description: string;
 	stack: string[];
+	stackBadges?: StackBadge[];
 	sections: DetailSection[];
 	demoUrl?: string;
 }
 
-const { title, eyebrow, subtitle, description, stack, sections, demoUrl } = Astro.props;
+const { title, eyebrow, subtitle, description, stack, stackBadges, sections, demoUrl } = Astro.props;
 ---
 
 <!doctype html>
@@ -46,7 +52,13 @@ const { title, eyebrow, subtitle, description, stack, sections, demoUrl } = Astr
 				<h1>{title}</h1>
 				<p class="project-subtitle">{subtitle}</p>
 				<p>{description}</p>
-				<ul class="tag-list" aria-label="주요 기술">{stack.map((item) => <li>{item}</li>)}</ul>
+				{stackBadges ? (
+					<ul class="stack-badges" aria-label="주요 기술">
+						{stackBadges.map((badge) => <li><img src={badge.url} alt={badge.name} /></li>)}
+					</ul>
+				) : (
+					<ul class="tag-list" aria-label="주요 기술">{stack.map((item) => <li>{item}</li>)}</ul>
+				)}
 				<div class="hero-actions">
 					{demoUrl && <a class="button button-primary" href={demoUrl} target="_blank" rel="noopener noreferrer">공개 데모 <span aria-hidden="true">↗</span></a>}
 					<a class="button button-secondary" href="/portfolio">Portfolio로 돌아가기</a>
@@ -83,6 +95,9 @@ const { title, eyebrow, subtitle, description, stack, sections, demoUrl } = Astr
 	.project-hero > p:not(.eyebrow):not(.project-subtitle) { max-width: 680px; color: #656d76; }
 	.tag-list { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 1rem 0 0; padding: 0; list-style: none; }
 	.tag-list li { margin: 0; padding: 0.2rem 0.55rem; border: 1px solid var(--border); border-radius: 999px; color: #656d76; font-size: 0.82rem; }
+	.stack-badges { display: flex; flex-wrap: wrap; gap: 0.5rem; max-width: 100%; margin: 1rem 0 0; padding: 0; list-style: none; }
+	.stack-badges li { max-width: 100%; margin: 0; }
+	.stack-badges img { display: block; max-width: 100%; height: 24px; border: 0; filter: none; }
 	.hero-actions { display: flex; flex-wrap: wrap; gap: 0.65rem; margin-top: 1.35rem; }
 	.button { display: inline-flex; align-items: center; gap: 0.55rem; padding: 0.65rem 0.95rem; border: 1px solid var(--border); border-radius: 6px; font-weight: 600; }
 	.button-primary { border-color: var(--link); background: var(--link); color: #fff; }
