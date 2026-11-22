@@ -84,6 +84,106 @@ const projects = [
 		],
 		blogLink: null,
 	},
+	{
+		name: 'AWS Infrastructure as Code',
+		tagline: 'Cloud Infrastructure · IaC · CI/CD',
+		participation: '직접 설계·구축·관리',
+		description: '회사의 서비스와 배포 정책에 맞춰 AWS 리소스와 CI/CD 기반을 Terraform 코드로 설계하고 적용·관리했습니다.',
+		features: ['CodePipeline·CodeBuild·ECR 빌드 및 이미지 관리 리소스', 'S3·IAM·컴퓨트·서버리스 등 AWS 서비스 구성', 'Terraform 변경과 State 변화를 확인하며 인프라 관리'],
+		badges: [
+			badge('Terraform', 'https://img.shields.io/badge/Terraform-7B42BC?style=for-the-badge&logo=terraform&logoColor=white'),
+			badge('AWS', 'https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white'),
+			badge('CodePipeline', 'https://img.shields.io/badge/CodePipeline-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white'),
+			badge('CodeBuild', 'https://img.shields.io/badge/CodeBuild-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white'),
+			badge('Amazon ECR', 'https://img.shields.io/badge/Amazon_ECR-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white'),
+			badge('IAM', 'https://img.shields.io/badge/IAM-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white'),
+		],
+		links: [{ label: 'AWS Infrastructure as Code 상세 페이지', description: 'Terraform 기반 AWS·CI/CD 인프라 관리', href: '/portfolio/aws-infrastructure-as-code' }],
+		blogLink: null,
+	},
+	{
+		name: 'Kubernetes Platform Engineering',
+		tagline: 'Kubernetes · Container Platform',
+		participation: '직접 설계·구축·관리',
+		description: '회사의 배포·운영 정책에 맞춰 Kubernetes 애플리케이션의 실행, 서비스 노출, 리소스 기준을 직접 구성하고 관리했습니다.',
+		features: ['Deployment와 Service 기반 애플리케이션 배포', 'Gateway API·HTTPRoute를 활용한 서비스 라우팅', 'Probe, 리소스 요청·제한, 설정 참조 구성'],
+		badges: [
+			badge('Kubernetes', 'https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white'),
+			badge('Helm', 'https://img.shields.io/badge/Helm-0F1689?style=for-the-badge&logo=helm&logoColor=white'),
+			badge('Gateway API', 'https://img.shields.io/badge/Gateway_API-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white'),
+			badge('Deployment', 'https://img.shields.io/badge/Deployment-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white'),
+			badge('Service', 'https://img.shields.io/badge/Service-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white'),
+			badge('HTTPRoute', 'https://img.shields.io/badge/HTTPRoute-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white'),
+		],
+		links: [{ label: 'Kubernetes Platform Engineering 상세 페이지', description: '애플리케이션 배포와 서비스 노출 구조', href: '/portfolio/kubernetes-platform-engineering' }],
+		blogLink: null,
+	},
+	{
+		name: 'Kubernetes Autoscaling',
+		tagline: 'Kubernetes · Node Lifecycle Management',
+		participation: '직접 설계·구축·관리',
+		description: '워크로드 자원 요구에 대응하도록 Karpenter 노드 관리 설정과 AWS 중단 이벤트 처리 관련 인프라를 구성하고 관리했습니다.',
+		features: ['Karpenter Helm values와 노드 관리 설정', 'AWS SQS·EventBridge 기반 중단 처리 관련 구성', 'Helm 적용 및 변경 후 노드·배포 상태 관리'],
+		badges: [
+			badge('Karpenter', 'https://img.shields.io/badge/Karpenter-7B42BC?style=for-the-badge'),
+			badge('Kubernetes', 'https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white'),
+			badge('Helm', 'https://img.shields.io/badge/Helm-0F1689?style=for-the-badge&logo=helm&logoColor=white'),
+			badge('AWS', 'https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white'),
+			badge('Amazon SQS', 'https://img.shields.io/badge/Amazon_SQS-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white'),
+			badge('EventBridge', 'https://img.shields.io/badge/EventBridge-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white'),
+		],
+		links: [{ label: 'Kubernetes Autoscaling 상세 페이지', description: 'Karpenter 노드 정책과 중단 처리 구성', href: '/portfolio/kubernetes-autoscaling' }],
+		blogLink: null,
+	},
+	{
+		name: 'Kubernetes Observability',
+		tagline: 'Monitoring · Logging · Platform Operations',
+		participation: '직접 설계·구축·관리',
+		description: 'Kubernetes 서비스와 플랫폼 상태를 파악할 수 있도록 Prometheus 메트릭과 Loki·Alloy 로그 수집 구성을 Helm으로 관리했습니다.',
+		features: ['Prometheus 기반 메트릭 관측 구성', 'Alloy·Loki를 활용한 로그 수집 구성', 'Helm values 변경과 업그레이드 관리'],
+		badges: [
+			badge('Prometheus', 'https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=prometheus&logoColor=white'),
+			badge('Grafana Loki', 'https://img.shields.io/badge/Grafana_Loki-F46800?style=for-the-badge&logo=grafana&logoColor=white'),
+			badge('Grafana Alloy', 'https://img.shields.io/badge/Grafana_Alloy-F46800?style=for-the-badge&logo=grafana&logoColor=white'),
+			badge('Helm', 'https://img.shields.io/badge/Helm-0F1689?style=for-the-badge&logo=helm&logoColor=white'),
+			badge('Kubernetes', 'https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white'),
+		],
+		links: [{ label: 'Kubernetes Observability 상세 페이지', description: '메트릭·로그 기반 플랫폼 가시성 구성', href: '/portfolio/kubernetes-observability' }],
+		blogLink: null,
+	},
+	{
+		name: 'Cross-Database Data Synchronization',
+		tagline: 'Data Engineering · Event Streaming',
+		participation: '직접 설계·구축·관리',
+		description: '서로 다른 데이터베이스 간 데이터를 주고받을 수 있도록 Kafka와 Avro 기반 동기화 시스템을 설계·구축·관리했습니다.',
+		features: ['Kafka를 데이터 교환 계층으로 활용', 'Avro를 이용한 데이터 표현과 교환', 'Kafka Connect·Schema Registry를 포함한 Confluent 환경 구성'],
+		badges: [
+			badge('Apache Kafka', 'https://img.shields.io/badge/Apache_Kafka-231F20?style=for-the-badge&logo=apachekafka&logoColor=white'),
+			badge('Confluent', 'https://img.shields.io/badge/Confluent-1C1C1C?style=for-the-badge&logo=confluent&logoColor=white'),
+			badge('Apache Avro', 'https://img.shields.io/badge/Apache_Avro-4B32C3?style=for-the-badge&logo=apache&logoColor=white'),
+			badge('Kafka Connect', 'https://img.shields.io/badge/Kafka_Connect-231F20?style=for-the-badge&logo=apachekafka&logoColor=white'),
+			badge('Schema Registry', 'https://img.shields.io/badge/Schema_Registry-1C1C1C?style=for-the-badge&logo=confluent&logoColor=white'),
+		],
+		links: [{ label: 'Cross-Database Data Synchronization 상세 페이지', description: 'Kafka·Avro 기반 이기종 DB 데이터 동기화', href: '/portfolio/cross-database-data-synchronization' }],
+		blogLink: null,
+	},
+	{
+		name: 'Server Configuration Automation',
+		tagline: 'Ansible · Multi-Cloud Operations',
+		participation: '직접 설계·구축·관리',
+		description: 'AWS와 GCP의 서버를 동적으로 찾아 에이전트 설치와 런타임 설정을 관리하는 Ansible 자동화 구성을 만들었습니다.',
+		features: ['AWS·GCP Dynamic Inventory 구성', 'CloudWatch·SSM·Ops Agent 설치 Playbook', 'Python 환경과 IAM 관련 서버 설정 자동화'],
+		badges: [
+			badge('Ansible', 'https://img.shields.io/badge/Ansible-EE0000?style=for-the-badge&logo=ansible&logoColor=white'),
+			badge('AWS', 'https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white'),
+			badge('Google Cloud', 'https://img.shields.io/badge/Google_Cloud-4285F4?style=for-the-badge&logo=googlecloud&logoColor=white'),
+			badge('Python', 'https://img.shields.io/badge/Python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54'),
+			badge('Amazon CloudWatch', 'https://img.shields.io/badge/CloudWatch-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white'),
+			badge('AWS Systems Manager', 'https://img.shields.io/badge/Systems_Manager-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white'),
+		],
+		links: [{ label: 'Server Configuration Automation 상세 페이지', description: '멀티클라우드 Dynamic Inventory와 서버 구성', href: '/portfolio/server-configuration-automation' }],
+		blogLink: null,
+	},
 ];
 ---
 
@@ -97,6 +197,7 @@ const projects = [
 			.page-intro p { max-width: 620px; color: #656d76; line-height: 1.75; }
 			.project-list { display: grid; gap: 1rem; margin: 2rem 0; }
 			.project-card { min-width: 0; padding: 1.25rem; border: 1px solid var(--border); border-radius: 8px; }
+			.project-group-heading { margin: 2rem 0 0; border: 0; padding: 1.4rem 0 0.2rem; border-top: 1px solid var(--border); font-size: 1.25rem; }
 			.project-heading { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.2rem 1rem; }
 			.project-card h2 { margin: 0; border: 0; padding: 0; font-size: 1.45rem; }
 			.project-tagline { margin: 0.25rem 0 0; color: #656d76; font-weight: 600; }
@@ -130,10 +231,12 @@ const projects = [
 			<header class="page-intro">
 				<p class="eyebrow">SELECTED WORK</p>
 				<h1>Portfolio</h1>
-				<p>서비스 개발부터 백엔드, 클라우드, GPU 추론 인프라까지 문제의 전체 흐름을 설계하고 구현한 프로젝트를 소개합니다.</p>
+				<p>서비스 개발, 데이터 엔지니어링, 클라우드·플랫폼, GPU 추론 인프라까지 문제의 전체 흐름을 설계하고 구현한 프로젝트를 소개합니다.</p>
 			</header>
 			<section class="project-list" aria-label="프로젝트 목록">
-				{projects.map((project) => (
+				{projects.map((project, index) => (
+					<>
+					{index === 4 && <h2 class="project-group-heading">Infrastructure &amp; Data Engineering</h2>}
 					<article class="project-card">
 						<div class="project-heading">
 							<div>
@@ -159,6 +262,7 @@ const projects = [
 						</nav>
 						{project.blogLink && <p class="project-blog-link"><span>관련 기술 기록</span><a href={project.blogLink.href}>{project.blogLink.title} <span aria-hidden="true">↗</span></a></p>}
 					</article>
+					</>
 				))}
 			</section>
 		</main>

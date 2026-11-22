@@ -1,0 +1,63 @@
+---
+import PortfolioProjectDetail from '../../components/PortfolioProjectDetail.astro';
+
+const stack = ['Ansible', 'AWS', 'Google Cloud', 'Python', 'CloudWatch', 'Systems Manager'];
+const stackBadges = [
+	{ name: 'Ansible', url: 'https://img.shields.io/badge/Ansible-EE0000?style=for-the-badge&logo=ansible&logoColor=white' },
+	{ name: 'AWS', url: 'https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white' },
+	{ name: 'Google Cloud', url: 'https://img.shields.io/badge/Google_Cloud-4285F4?style=for-the-badge&logo=googlecloud&logoColor=white' },
+	{ name: 'Python', url: 'https://img.shields.io/badge/Python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54' },
+	{ name: 'Amazon CloudWatch', url: 'https://img.shields.io/badge/CloudWatch-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white' },
+	{ name: 'AWS Systems Manager', url: 'https://img.shields.io/badge/Systems_Manager-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white' },
+];
+
+const sections = [
+	{
+		eyebrow: '01 · WHY',
+		title: '여러 클라우드의 서버 설정을 반복 가능하게 관리하기 위해',
+		paragraphs: [
+			'AWS와 GCP에서 관리하는 서버의 구성 작업을 일관되게 수행할 필요가 있었습니다. 서버 목록을 수동으로 관리하는 대신 Dynamic Inventory로 대상을 찾고, 공통 운영 작업을 Ansible Playbook으로 관리했습니다.',
+		],
+	},
+	{
+		eyebrow: '02 · HOW',
+		title: '동적 인벤토리와 Playbook으로 서버 작업을 구성',
+		paragraphs: [
+			'AWS·GCP Dynamic Inventory를 사용해 클라우드 환경의 서버를 대상으로 삼고, Playbook에 에이전트 설치와 런타임 설정 작업을 구성했습니다. CloudWatch·SSM·Ops Agent 등 운영 에이전트 설치와 Python 환경, IAM 관련 서버 작업을 다뤘습니다.',
+		],
+		flow: ['AWS · GCP Dynamic Inventory', 'Ansible Playbook', '서버 에이전트 · 런타임 설정'],
+		cards: [
+			{ title: '운영 에이전트', body: 'CloudWatch, SSM, Ops Agent 설치 Playbook으로 모니터링·관리 구성요소를 서버에 적용했습니다.' },
+			{ title: '서버 런타임과 권한', body: 'Python 환경 설정과 IAM 관련 Playbook을 구성해 서버 운영에 필요한 작업을 자동화했습니다.' },
+		],
+		note: '공개용 개념도입니다. 실제 Inventory 결과, 서버 이름, 계정, 네트워크와 자격 증명은 포함하지 않았습니다.',
+	},
+	{
+		eyebrow: '03 · WHAT',
+		title: '멀티클라우드 서버의 공통 구성 작업을 자동화',
+		bullets: [
+			'AWS·GCP Dynamic Inventory 구성',
+			'CloudWatch·SSM·Ops Agent 설치 Playbook 작성',
+			'Python 런타임과 IAM 관련 서버 구성 작업',
+		],
+	},
+	{
+		eyebrow: '04 · ENGINEERING DECISIONS',
+		title: '클라우드별 대상 탐색과 서버 설정 작업을 분리',
+		paragraphs: [
+			'서버 목록을 고정해 두지 않고 클라우드 Dynamic Inventory로 작업 대상을 찾도록 구성했습니다. Inventory는 대상 선택을, Playbook은 서버에서 수행할 설치·설정 작업을 맡겨 여러 클라우드 환경의 운영 구성을 관리했습니다.',
+		],
+	},
+];
+---
+
+<PortfolioProjectDetail
+	title="Server Configuration Automation"
+	eyebrow="직접 설계·구축·관리 · Multi-Cloud Operations"
+	subtitle="Ansible Dynamic Inventory 기반 멀티클라우드 서버 구성 자동화"
+	description="AWS와 GCP 서버를 동적으로 찾아 에이전트 설치와 런타임 설정을 자동화하는 Ansible 구성을 설계하고 관리했습니다."
+	stack={stack}
+	stackBadges={stackBadges}
+	sections={sections}
+	relatedLinks={[{ label: 'AWS Infrastructure as Code', href: '/portfolio/aws-infrastructure-as-code' }]}
+/>

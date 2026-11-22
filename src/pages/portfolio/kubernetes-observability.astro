@@ -1,0 +1,62 @@
+---
+import PortfolioProjectDetail from '../../components/PortfolioProjectDetail.astro';
+
+const stack = ['Prometheus', 'Grafana Loki', 'Grafana Alloy', 'Helm', 'Kubernetes'];
+const stackBadges = [
+	{ name: 'Prometheus', url: 'https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=prometheus&logoColor=white' },
+	{ name: 'Grafana Loki', url: 'https://img.shields.io/badge/Grafana_Loki-F46800?style=for-the-badge&logo=grafana&logoColor=white' },
+	{ name: 'Grafana Alloy', url: 'https://img.shields.io/badge/Grafana_Alloy-F46800?style=for-the-badge&logo=grafana&logoColor=white' },
+	{ name: 'Helm', url: 'https://img.shields.io/badge/Helm-0F1689?style=for-the-badge&logo=helm&logoColor=white' },
+	{ name: 'Kubernetes', url: 'https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white' },
+];
+
+const sections = [
+	{
+		eyebrow: '01 · WHY',
+		title: 'Kubernetes 서비스와 플랫폼 상태를 관측하기 위해',
+		paragraphs: [
+			'클러스터에서 실행되는 서비스와 플랫폼 구성요소의 상태를 파악하려면 메트릭과 로그를 지속적으로 수집할 기반이 필요했습니다. Prometheus, Loki, Alloy를 Kubernetes 환경에 맞춰 구성하고 관리했습니다.',
+		],
+	},
+	{
+		eyebrow: '02 · HOW',
+		title: '메트릭과 로그 수집 구성을 분리해 관리',
+		cards: [
+			{ title: '메트릭 · Prometheus', body: 'Prometheus Helm values를 관리해 Kubernetes 환경의 메트릭 수집 기반을 구성했습니다.' },
+			{ title: '로그 · Alloy와 Loki', body: 'Alloy 설정과 Loki Helm values를 다뤄 클러스터 로그 수집 구성을 관리했습니다.' },
+		],
+		paragraphs: [
+			'각 구성요소의 배포 값과 수집 설정을 Helm 및 Alloy 설정으로 관리했습니다. 설정 변경은 Helm upgrade 적용 과정과 함께 다뤘습니다.',
+		],
+	},
+	{
+		eyebrow: '03 · WHAT',
+		title: '메트릭·로그 기반 운영 가시성을 위한 구성 요소를 관리',
+		flow: ['Kubernetes 서비스와 플랫폼', 'Prometheus 메트릭 · Alloy 로그 수집', '관측 데이터 구성'],
+		bullets: [
+			'Prometheus 및 Loki Helm values 관리',
+			'Alloy 로그 수집 설정 구성',
+			'Helm upgrade로 설정 변경 적용 및 관리',
+		],
+		note: '공개용 개념도입니다. 실제 클러스터 이름, 내부 주소, 대시보드와 알림 설정은 포함하지 않았습니다.',
+	},
+	{
+		eyebrow: '04 · ENGINEERING DECISIONS',
+		title: '플랫폼 운영에 필요한 관측 구성과 배포 설정을 함께 관리',
+		paragraphs: [
+			'메트릭과 로그를 각각의 도구 설정으로 다루고, Helm values와 Alloy 구성을 통해 Kubernetes 배포에 반영했습니다. 관측성 구성의 변경도 플랫폼 설정 변경의 일부로 관리해 클러스터 운영 흐름 안에서 다룰 수 있도록 했습니다.',
+		],
+	},
+];
+---
+
+<PortfolioProjectDetail
+	title="Kubernetes Observability"
+	eyebrow="직접 설계·구축·관리 · Monitoring & Logging"
+	subtitle="Prometheus·Loki·Alloy 기반 Kubernetes 관측성 구성"
+	description="Kubernetes 서비스와 플랫폼 상태를 파악할 수 있도록 메트릭 및 로그 수집 기반을 구성하고 Helm으로 관리했습니다."
+	stack={stack}
+	stackBadges={stackBadges}
+	sections={sections}
+	relatedLinks={[{ label: 'Kubernetes Platform Engineering', href: '/portfolio/kubernetes-platform-engineering' }]}
+/>
