@@ -1,0 +1,309 @@
+---
+const categories = [
+	{
+		id: 'cloud-platform',
+		name: 'Cloud & Platform Engineering',
+		technologies: [
+			{
+				name: 'AWS',
+				badge: 'https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white',
+			},
+			{
+				name: 'Kubernetes',
+				badge: 'https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white',
+			},
+			{
+				name: 'Karpenter',
+				badge: 'https://img.shields.io/badge/Karpenter-%2324292e.svg?style=for-the-badge&logo=amazonaws&logoColor=white',
+			},
+			{
+				name: 'Helm',
+				badge: 'https://img.shields.io/badge/Helm-0F1689?style=for-the-badge&logo=helm&logoColor=white',
+			},
+		],
+		details: [
+			{
+				title: 'Amazon EKS 서비스 운영과 노드 확장',
+				text: '여러 API와 웹 애플리케이션을 EKS에서 운영하며 서비스별 Namespace에 Deployment와 Service를 구성합니다. 리소스 요청량, 상태 확인, 롤링 업데이트를 조정하고, Karpenter의 NodePool과 EC2NodeClass로 노드 확장을 관리합니다.',
+			},
+			{
+				title: '온디맨드 안정성과 Spot 비용 효율',
+				text: '핵심 플랫폼 구성 요소와 안정성이 중요한 워크로드는 온디맨드 노드 풀에 두고, 일반 서비스와 배치 작업은 다양한 인스턴스 유형을 허용하는 Spot 노드 풀에서 실행하도록 분리합니다. Spot 회수 이벤트는 EventBridge와 SQS를 거쳐 Karpenter에 전달해 파드 이동과 대체 노드 준비로 이어지게 구성했습니다.',
+			},
+			{
+				title: '매니페스트와 Helm 기반 배포',
+				text: '서비스별 Kubernetes YAML에 Deployment, Service, HTTPRoute를 정의하고 NGINX Gateway와 Gateway API로 외부 요청을 연결합니다. Karpenter, NGINX Gateway, ExternalDNS, Prometheus, Loki, Grafana Alloy 등 플랫폼 구성 요소는 Helm chart와 values로 관리합니다. CPU·메모리·임시 저장소 요청량과 한도는 서비스 특성과 관측된 사용량을 바탕으로 조정합니다.',
+			},
+		],
+	},
+	{
+		id: 'backend-data',
+		name: 'Backend & Data Architecture',
+		technologies: [
+			{
+				name: 'Java',
+				badge: 'https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white',
+			},
+			{
+				name: 'Spring',
+				badge: 'https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white',
+			},
+			{
+				name: 'Python',
+				badge: 'https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54',
+			},
+			{
+				name: 'FastAPI',
+				badge: 'https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white',
+			},
+			{
+				name: 'Gradle',
+				badge: 'https://img.shields.io/badge/Gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white',
+			},
+			{
+				name: 'Jupyter',
+				badge: 'https://img.shields.io/badge/Jupyter-F37626?style=for-the-badge&logo=jupyter&logoColor=white',
+			},
+			{
+				name: 'Redis',
+				badge: 'https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white',
+			},
+			{
+				name: 'Neo4j',
+				badge: 'https://img.shields.io/badge/Neo4j-008CC1?style=for-the-badge&logo=neo4j&logoColor=white',
+			},
+		],
+		details: [
+			{
+				title: 'Java · Spring Boot — 업무 API와 권한',
+				text: 'Java 17, Spring Boot, Gradle로 REST API를 개발하고 Controller–Service–Repository 계층으로 회원, 모듈 권한, QA 체크리스트와 결과 기능을 나눕니다. JPA와 MariaDB를 사용하며 Spring Security, JWT, OAuth2 Client를 연결해 로그인과 모듈별 역할·권한을 처리합니다. 파일 저장은 S3, 이메일은 SES, Excel 처리는 Apache POI와 연동했습니다.',
+			},
+			{
+				title: 'Python · FastAPI — 분산 데이터 통합',
+				text: 'AWS, IDC, GCP에 분산된 데이터베이스를 읽기 전용으로 연결하는 데이터 통합 API를 구성했습니다. 기업 기본 정보와 재무·공시·감사·특허·벤처 데이터를 요청 맥락에 따라 조회하고, AWS와 GCP 데이터베이스 연결에는 SSH 터널을 사용합니다. FastAPI 라우터와 Pydantic 스키마, 비즈니스 서비스, SQLAlchemy 데이터 접근 계층을 분리했으며 APScheduler로 통계와 모니터링 데이터를 갱신합니다.',
+			},
+			{
+				title: 'Jupyter — 데이터 분석과 검색 구조',
+				text: 'Jupyter Notebook에서 Pandas·NumPy·SQLAlchemy로 기업·재무·특허 데이터를 정리하고, 특허·연구 데이터 유사도 분석, Elasticsearch 색인, Neo4j 기업 관계망 생성에 활용합니다. 데이터 영역에는 기업 정보, 특허, 논문, 전자공시, 벤처, 주식·시장, 뉴스, 고용, 재무가 포함됩니다.',
+			},
+			{
+				title: '집계 및 캐시 계측 사례',
+				text: '9천만 건 데이터 집계에서는 매번 전체 COUNT를 반복하지 않고 전일까지의 누적량에 신규 수집량을 더하는 방식으로 갱신했습니다. 기존 기록에는 해당 사례의 DB I/O 감소가 80% 이상으로 적혀 있으나 비교 조건은 명시되지 않아 일반적인 성과로 확장하지 않습니다. 별도로 동일 서버 프로세스에서 Summary API의 캐시 miss와 hit를 연속 비교했을 때 기업 요약은 1.545초에서 0.001초, 감사·재무 요약은 7.674초에서 0.002초로 측정됐습니다. 첫 호출은 DB COUNT를 수행하고 두 번째는 같은 total을 메모리 캐시에서 반환한 두 요청의 결과입니다.',
+			},
+			{
+				title: '누적 추이 계산',
+				text: '과거 시점의 누적값은 DB에서 매번 전체 기간을 다시 합산하는 대신, 현재 총계에서 각 시점의 증분을 역으로 차감해 복원하는 방식으로 계산합니다.',
+			},
+		],
+	},
+	{
+		id: 'web-frontend',
+		name: 'Web & Frontend Engineering',
+		technologies: [
+			{
+				name: 'Next.js',
+				badge: 'https://img.shields.io/badge/Next.js-black?style=for-the-badge&logo=next.js&logoColor=white',
+			},
+			{
+				name: 'React',
+				badge: 'https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB',
+			},
+			{
+				name: 'TypeScript',
+				badge: 'https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white',
+			},
+			{
+				name: 'Tailwind CSS',
+				badge: 'https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white',
+			},
+			{
+				name: 'Node.js',
+				badge: 'https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white',
+			},
+			{
+				name: 'Express',
+				badge: 'https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white',
+			},
+			{
+				name: 'EJS',
+				badge: 'https://img.shields.io/badge/EJS-B4CA65?style=for-the-badge&logo=ejs&logoColor=black',
+			},
+		],
+		details: [
+			{
+				title: 'Next.js · React · TypeScript 대시보드',
+				text: 'Next.js App Router와 React, TypeScript로 기업 데이터를 탐색하는 대시보드를 구성했습니다. 기업 개요와 재무·고용·공시·감사·벤처·특허 정보를 영역별로 나누고 표, 차트, 페이지 단위 탐색으로 비교할 수 있게 했으며 Tailwind CSS로 반응형 레이아웃을 관리합니다.',
+			},
+			{
+				title: 'API 경계와 서버 렌더링',
+				text: 'Next.js 미들웨어와 서버 런타임에서 API 요청을 전달해 브라우저가 내부 주소나 환경별 엔드포인트에 직접 의존하지 않도록 구성하고, Docker standalone 모드의 실행 결과를 준비했습니다. 별도 애플리케이션에서는 Express와 EJS, Bootstrap으로 서버 렌더링 화면과 다국어 메시지를 구성하고 Docker 컨테이너를 NGINX 뒤에서 실행했습니다.',
+			},
+		],
+	},
+	{
+		id: 'observability-reliability',
+		name: 'Observability & Reliability',
+		technologies: [
+			{
+				name: 'Prometheus',
+				badge: 'https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=prometheus&logoColor=white',
+			},
+			{
+				name: 'Grafana',
+				badge: 'https://img.shields.io/badge/Grafana-F46800?style=for-the-badge&logo=grafana&logoColor=white',
+			},
+			{
+				name: 'Loki',
+				badge: 'https://img.shields.io/badge/Loki-white?style=for-the-badge&logo=grafanaloki&logoColor=black',
+			},
+			{
+				name: 'Grafana Alloy',
+				badge: 'https://img.shields.io/badge/Grafana_Alloy-FF6B00?style=for-the-badge&logo=grafana&logoColor=white',
+			},
+		],
+		details: [
+			{
+				title: 'Prometheus · ServiceMonitor · Actuator',
+				text: 'ServiceMonitor로 Spring Actuator 메트릭의 스크랩 경로와 주기를 선언해 Prometheus가 서비스 상태와 JVM·HTTP 지표를 15초 간격으로 수집하도록 구성합니다.',
+			},
+			{
+				title: 'Grafana Alloy · Loki · LogQL',
+				text: 'Grafana Alloy가 로그를 Loki로 전달하고, Grafana에서 네임스페이스와 컨테이너 라벨로 범위를 좁힌 뒤 JSON 파싱과 오류 문자열 필터를 조합해 서비스 로그를 확인합니다.',
+			},
+		],
+	},
+	{
+		id: 'iac-automation',
+		name: 'IaC & Infrastructure Automation',
+		technologies: [
+			{
+				name: 'Terraform',
+				badge: 'https://img.shields.io/badge/terraform-%235835CC.svg?style=for-the-badge&logo=terraform&logoColor=white',
+			},
+			{
+				name: 'Ansible',
+				badge: 'https://img.shields.io/badge/ansible-%23EE0000.svg?style=for-the-badge&logo=ansible&logoColor=white',
+			},
+		],
+		details: [
+			{
+				title: 'Terraform으로 관리하는 AWS 인프라',
+				text: 'EC2, Lambda, API Gateway 같은 컴퓨팅 자원부터 DocumentDB, ElastiCache for Redis, DynamoDB, RDS for MariaDB, S3, SQS 데이터 계층과 CodePipeline·CodeBuild·ECR 배포 구성까지 Terraform으로 관리합니다. Route 53, 보안 그룹, IAM, EventBridge, Amplify, Parameter Store 등도 인프라 범위에 포함됩니다. Terraform이 클라우드 자원의 생성과 변경을 관리하고, Ansible은 서버 구성처럼 반복되는 작업을 자동화합니다.',
+			},
+			{
+				title: '반복 구성을 코드화하고 변경 범위 확인',
+				text: '서비스를 추가할 때 반복되던 CodeBuild와 CodePipeline 정의를 공통 규칙과 서비스별 값으로 나눠 코드화했습니다. 적용 전 terraform plan으로 변경 범위를 확인하며 AWS 자원과 접근 권한, 서비스 연결 및 변경 영향을 함께 살핍니다.',
+			},
+			{
+				title: 'Terraform 상태 복구 운영 사례',
+				text: '코드와 실제 AWS 환경 사이에 차이가 있던 Terraform 상태를 복구하며 기존 AWS 자원 320여 개를 관리 대상으로 편입했습니다. 자원을 가져온 뒤 최종 계획에서 추가·변경·삭제가 없는 상태를 확인해 코드와 실제 인프라를 일치시켰습니다.',
+			},
+		],
+	},
+];
+---
+
+<section class="experience-section" id="experience" aria-labelledby="experience-title">
+	<div class="section-heading">
+		<p class="eyebrow">WHAT I WORK ON</p>
+		<h2 id="experience-title">Technical Experience</h2>
+		<p>클라우드 운영을 중심으로 백엔드와 데이터, 웹 화면, 관측과 자동화까지 서비스가 전달되는 흐름을 다뤄 왔습니다.</p>
+	</div>
+
+	<div class="technology-categories">
+		{categories.map((category) => (
+			<section class="technology-category" aria-labelledby={`category-${category.id}`}>
+				<h3 id={`category-${category.id}`}>{category.name}</h3>
+				<ul class="badges" aria-label={`${category.name} 기술 스택`}>
+					{category.technologies.map((technology) => (
+						<li>
+							<img src={technology.badge} alt={technology.name} loading="lazy" decoding="async" />
+						</li>
+					))}
+				</ul>
+				<div class="category-details">
+					{category.details.map((detail) => (
+						<article>
+							<h4>{detail.title}</h4>
+							<p>{detail.text}</p>
+						</article>
+					))}
+				</div>
+			</section>
+		))}
+	</div>
+</section>
+
+<style>
+	.experience-section {
+		margin: 4rem 0;
+	}
+	.section-heading {
+		margin-bottom: 1.5rem;
+	}
+	.section-heading h2 {
+		margin-top: 0;
+	}
+	.eyebrow {
+		margin: 0 0 0.5rem;
+		color: var(--link);
+		font-size: 0.78rem;
+		font-weight: 700;
+		letter-spacing: 0.1em;
+	}
+	.technology-categories {
+		display: grid;
+		gap: 1.4rem;
+	}
+	.technology-category {
+		min-width: 0;
+	}
+	.technology-category + .technology-category {
+		padding-top: 1.25rem;
+		border-top: 1px solid var(--border);
+	}
+	.technology-category h3 {
+		margin: 0 0 0.85rem;
+		color: var(--link);
+		font-size: clamp(1.1rem, 3vw, 1.35rem);
+		line-height: 1.35;
+	}
+	.badges {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.55rem;
+		min-width: 0;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	.badges li {
+		display: flex;
+		min-width: 0;
+		max-width: 100%;
+		margin: 0;
+	}
+	.badges img {
+		display: block;
+		max-width: 100%;
+		height: auto;
+	}
+	.category-details {
+		max-width: 76ch;
+		margin-top: 1.35rem;
+	}
+	.category-details article + article {
+		margin-top: 1.1rem;
+	}
+	.category-details h4 {
+		margin: 0 0 0.35rem;
+		font-size: 0.98rem;
+		font-weight: 650;
+	}
+	.category-details p {
+		margin: 0;
+		color: var(--text);
+		line-height: 1.75;
+		opacity: 0.86;
+	}
+</style>
