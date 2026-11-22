@@ -1,0 +1,64 @@
+---
+import PortfolioProjectDetail from '../../components/PortfolioProjectDetail.astro';
+
+const stack = ['Karpenter', 'Kubernetes', 'Helm', 'AWS', 'Amazon SQS', 'EventBridge'];
+const stackBadges = [
+	{ name: 'Karpenter', url: 'https://img.shields.io/badge/Karpenter-7B42BC?style=for-the-badge' },
+	{ name: 'Kubernetes', url: 'https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white' },
+	{ name: 'Helm', url: 'https://img.shields.io/badge/Helm-0F1689?style=for-the-badge&logo=helm&logoColor=white' },
+	{ name: 'AWS', url: 'https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white' },
+	{ name: 'Amazon SQS', url: 'https://img.shields.io/badge/Amazon_SQS-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white' },
+	{ name: 'EventBridge', url: 'https://img.shields.io/badge/EventBridge-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white' },
+];
+
+const sections = [
+	{
+		eyebrow: '01 · WHY',
+		title: '워크로드 요구에 대응할 노드 관리 체계가 필요했습니다',
+		paragraphs: [
+			'Kubernetes 워크로드의 자원 요구와 노드 수명주기를 함께 관리할 수 있도록 Karpenter 기반 노드 설정을 구성했습니다. 클러스터 노드 관리와 AWS 중단 이벤트 처리에 필요한 설정을 운영 범위에 맞춰 다뤘습니다.',
+		],
+	},
+	{
+		eyebrow: '02 · HOW',
+		title: 'Karpenter 설정과 AWS 이벤트 인프라를 역할에 맞춰 관리',
+		paragraphs: [
+			'Karpenter Helm values와 Node 관련 설정을 통해 Kubernetes 노드 관리 정책을 구성했습니다. Terraform으로는 SQS와 EventBridge 관련 AWS 리소스를 관리하고, Karpenter 설정에는 interruptionQueue 항목을 두었습니다.',
+			'공개 설명은 노드 관리와 중단 이벤트 처리라는 역할 수준으로 제한했습니다. 내부 큐 이름이나 계정별 설정은 노출하지 않습니다.',
+		],
+		cards: [
+			{ title: 'Kubernetes 노드 관리', body: 'Karpenter 설정과 Node 관련 값을 Helm으로 관리하고, 변경 시 적용 상태를 확인했습니다.' },
+			{ title: 'AWS 이벤트 처리 기반', body: 'SQS·EventBridge 관련 리소스를 함께 구성해 노드 중단 처리에 필요한 AWS 측 인프라를 다뤘습니다.' },
+		],
+	},
+	{
+		eyebrow: '03 · WHAT',
+		title: '노드 수명주기와 클라우드 이벤트 처리 설정을 구성했습니다',
+		flow: ['워크로드 자원 요구', 'Karpenter 노드 관리 설정', 'Kubernetes 노드 수명주기'],
+		bullets: [
+			'Karpenter Helm values와 Node 관련 설정 관리',
+			'Terraform 기반 SQS·EventBridge 리소스 구성',
+			'Helm 변경 적용 이력과 노드·배포 상태 확인',
+		],
+		note: '이 흐름은 노드 관리 경험을 설명하는 개념도입니다. Terraform의 큐 이름과 Karpenter의 interruptionQueue 값이 동일하다고 표현하지 않습니다.',
+	},
+	{
+		eyebrow: '04 · ENGINEERING DECISIONS',
+		title: '노드 정책과 중단 이벤트 대응을 함께 고려',
+		paragraphs: [
+			'노드 관리 설정만 다루지 않고, 클라우드 인프라에서 발생하는 중단 이벤트와 관련된 구성도 함께 관리했습니다. Kubernetes의 노드 정책과 AWS 이벤트 리소스를 각각의 설정 계층에서 다루며 변경 사항을 Helm과 Terraform 적용 이력으로 확인했습니다.',
+		],
+	},
+];
+---
+
+<PortfolioProjectDetail
+	title="Kubernetes Autoscaling"
+	eyebrow="직접 설계·구축·관리 · Node Lifecycle Management"
+	subtitle="Karpenter와 AWS 이벤트 인프라를 활용한 Kubernetes 노드 관리"
+	description="워크로드 자원 요구에 대응하도록 Karpenter 노드 설정과 AWS 중단 이벤트 처리 관련 인프라를 구성하고 관리했습니다."
+	stack={stack}
+	stackBadges={stackBadges}
+	sections={sections}
+	relatedLinks={[{ label: 'Kubernetes Platform Engineering', href: '/portfolio/kubernetes-platform-engineering' }]}
+/>

@@ -1,0 +1,59 @@
+---
+import PortfolioProjectDetail from '../../components/PortfolioProjectDetail.astro';
+
+const stack = ['Apache Kafka', 'Confluent Platform', 'Apache Avro', 'Kafka Connect', 'Schema Registry'];
+const stackBadges = [
+	{ name: 'Apache Kafka', url: 'https://img.shields.io/badge/Apache_Kafka-231F20?style=for-the-badge&logo=apachekafka&logoColor=white' },
+	{ name: 'Confluent', url: 'https://img.shields.io/badge/Confluent-1C1C1C?style=for-the-badge&logo=confluent&logoColor=white' },
+	{ name: 'Apache Avro', url: 'https://img.shields.io/badge/Apache_Avro-4B32C3?style=for-the-badge&logo=apache&logoColor=white' },
+	{ name: 'Kafka Connect', url: 'https://img.shields.io/badge/Kafka_Connect-231F20?style=for-the-badge&logo=apachekafka&logoColor=white' },
+	{ name: 'Schema Registry', url: 'https://img.shields.io/badge/Schema_Registry-1C1C1C?style=for-the-badge&logo=confluent&logoColor=white' },
+];
+
+const sections = [
+	{
+		eyebrow: '01 · WHY',
+		title: '서로 다른 데이터베이스 사이의 데이터 동기화가 필요했습니다',
+		paragraphs: [
+			'회사 내 기술 요구사항에 따라 이기종 데이터베이스 간 데이터를 동기화할 시스템이 필요했습니다. 데이터베이스마다 다른 접근 방식과 구조를 고려하면서도 시스템 간 데이터 교환을 안정적으로 관리할 공통 경로를 설계했습니다.',
+		],
+	},
+	{
+		eyebrow: '02 · HOW',
+		title: 'Kafka를 데이터 교환 계층으로 두고 Avro를 활용',
+		paragraphs: [
+			'Kafka를 서로 다른 저장소 사이의 데이터 전달 계층으로 사용하고, 데이터는 Avro 형식으로 교환하도록 시스템을 설계했습니다. 생산 측과 소비 측을 Kafka를 중심으로 연결해 데이터베이스 간 통합 흐름을 구성했습니다.',
+			'Kafka Connect와 Schema Registry를 포함한 Confluent Platform 구성요소도 함께 다뤘습니다. 이를 통해 커넥터 실행 환경과 메시지 스키마를 다루는 플랫폼 범위까지 관리했습니다.',
+		],
+		flow: ['원천 데이터베이스', 'Kafka · Avro 데이터', '대상 데이터베이스'],
+		note: '공개용 개념도입니다. 실제 DB 제품명, 토픽, 스키마 필드, 내부 주소와 계정 정보는 표시하지 않았습니다.',
+	},
+	{
+		eyebrow: '03 · WHAT',
+		title: '데이터베이스 사이의 교환·동기화 시스템을 직접 구축하고 관리',
+		bullets: [
+			'Kafka 기반 이기종 데이터베이스 데이터 동기화 시스템 설계·구축·관리',
+			'Avro를 활용한 데이터 직렬화와 교환 구조 적용',
+			'Kafka Connect, Schema Registry 등을 포함한 Confluent 환경 구성',
+		],
+	},
+	{
+		eyebrow: '04 · ENGINEERING DECISIONS',
+		title: '데이터 전달과 데이터 표현을 각각의 기술로 다뤘습니다',
+		paragraphs: [
+			'Kafka는 데이터가 시스템 사이를 이동하는 경로로, Avro는 교환할 레코드의 표현 형식으로 활용했습니다. 두 역할을 나눠 여러 데이터베이스를 연결하는 시스템을 구성하고, 메시징과 스키마를 포함한 운영 요소를 함께 관리했습니다.',
+			'실제 업무 DB, 회사 고유 스키마와 토픽, 접속 정보는 공개하지 않습니다. 이 페이지는 직접 설계·구축·관리한 경험과 공개 가능한 기술 구성을 중심으로 소개합니다.',
+		],
+	},
+];
+---
+
+<PortfolioProjectDetail
+	title="Cross-Database Data Synchronization"
+	eyebrow="직접 설계·구축·관리 · Data Engineering"
+	subtitle="Kafka와 Avro를 활용한 이기종 데이터베이스 동기화"
+	description="회사 기술 요구사항에 맞춰 Kafka와 Avro로 이기종 데이터베이스 간 데이터 동기화 시스템을 직접 설계·구축·관리한 경험입니다."
+	stack={stack}
+	stackBadges={stackBadges}
+	sections={sections}
+/>

@@ -1,0 +1,79 @@
+---
+import PortfolioProjectDetail from '../../components/PortfolioProjectDetail.astro';
+
+const stack = ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'Python', 'FastAPI', 'Docker'];
+const stackBadges = [
+	{ name: 'Next.js', url: 'https://img.shields.io/badge/Next.js-black?style=for-the-badge&logo=next.js&logoColor=white' },
+	{ name: 'React', url: 'https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB' },
+	{ name: 'TypeScript', url: 'https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white' },
+	{ name: 'Tailwind CSS', url: 'https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white' },
+	{ name: 'Python', url: 'https://img.shields.io/badge/Python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54' },
+	{ name: 'FastAPI', url: 'https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white' },
+	{ name: 'Docker', url: 'https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white' },
+];
+
+const sections = [
+	{
+		eyebrow: '01 · 시작한 이유',
+		title: '분산된 데이터 수집 현황을 한눈에 파악할 수 있도록',
+		paragraphs: [
+			'여러 수집 시스템이 각자 데이터를 모으고, 백엔드에는 그 수집 결과를 통합한 통계 API가 있었습니다. 운영자가 전체 수집량과 도메인별 현황, 기간별 변화를 쉽게 파악하려면 API 응답을 실제 화면으로 연결해야 했습니다.',
+			'Collect Dashboard API와 연동하는 Ent-360 웹 대시보드를 만들고, 요약 지표에서 상세 수집 통계까지 화면에서 탐색할 수 있도록 구현했습니다. 이 시스템은 기업·특허·공시·벤처 정보를 다루는 화면도 함께 제공합니다.',
+		],
+		cards: [
+			{ title: 'BEFORE · API 중심 확인', body: '수집 시스템별 저장소와 통계 응답을 개별적으로 확인' },
+			{ title: 'AFTER · 화면에서 통합 탐색', body: '각 저장소의 통계를 제공하는 API를 조회해 요약 지표, 추이, 상세 화면으로 표시' },
+		],
+		note: '각 원천 저장소의 통계를 화면에 연결합니다. 프런트엔드가 원천 데이터를 한곳으로 옮기거나 저장하지 않습니다.',
+	},
+	{
+		eyebrow: '02 · 데이터와 요청 흐름',
+		title: '원천별 통계 API를 대시보드 화면으로 연결',
+		paragraphs: [
+			'브라우저는 Next.js 화면에서 상대 경로 `/api/v1`을 호출합니다. Next.js Middleware가 요청을 서버에서 전달하고, 실행 시점의 `BACKEND_URL`로 Collect Dashboard API를 연결합니다. 백엔드 주소를 빌드 결과에 고정하지 않아 웹 이미지와 실행 환경 설정을 분리했습니다.',
+			'DashboardMain은 기업·특허·공시·벤처 지표를 각각 요청하고 개별 로딩 상태를 관리합니다. statsService는 API 응답을 화면에서 쓰는 통계 모델로 정리하고, 여러 값이 필요한 영역은 Promise.all로 조회해 한 묶음으로 구성합니다.',
+		],
+		flow: ['수집 시스템별 저장소', 'Collect Dashboard API 통계 조회', 'Next.js Middleware 프록시', '요약 지표와 통계 화면'],
+	},
+	{
+		eyebrow: '03 · 운영자가 보는 화면',
+		title: '요약 숫자에서 도메인별 상세 추이까지 이어지도록',
+		paragraphs: [
+			'기업·재무·고용, 특허, 공시, 외감, 벤처 모듈을 화면의 지표 카드로 나누고, 카드를 선택하면 해당 통계 모달을 열도록 구성했습니다. 요약만 보는 데 그치지 않고 분포와 연도별·기간별 값을 이어서 확인할 수 있습니다.',
+			'기업·특허·공시·벤처 요청은 독립적으로 시작하고 각각 로딩 상태를 갱신합니다. 한 도메인의 응답을 기다리느라 다른 카드의 표시가 함께 멈추지 않도록 화면 상태를 도메인 단위로 나눴습니다. API 오류가 발생하면 서비스 함수의 fallback을 적용하거나 해당 영역의 로딩을 마무리합니다.',
+		],
+		bullets: [
+			'기업 수집 요약과 재무·고용 상세 통계',
+			'특허, 공시·외감, 벤처 도메인별 수집 지표',
+			'요약 카드 선택에서 상세 통계 모달로 이어지는 탐색',
+		],
+	},
+	{
+		eyebrow: '04 · 실행 환경 설계',
+		title: '한 번 빌드한 웹 결과물을 실행 설정과 분리',
+		paragraphs: [
+			'Next.js standalone 출력을 사용하고 Docker multi-stage 빌드에서 의존성 설치, 애플리케이션 빌드, 실행 이미지를 나눴습니다. 실행 이미지는 standalone 서버와 정적 산출물만 포함하고 비특권 사용자로 구동합니다.',
+			'API 대상은 미들웨어가 런타임 환경 변수에서 읽습니다. 따라서 백엔드 연결 설정을 바꿀 때 웹을 다시 빌드하지 않고 실행 환경에서 연결 대상을 지정할 수 있습니다.',
+		],
+		flow: ['Next.js standalone build', 'Docker runner image', 'Runtime BACKEND_URL', 'Collect Dashboard API'],
+	},
+	{
+		eyebrow: '05 · 화면 검증',
+		title: '대시보드 모듈과 API 데이터 표시를 E2E 시나리오로 확인',
+		paragraphs: [
+			'Playwright 테스트는 대시보드 주요 모듈 렌더링, 기업 API 연결, 기업·특허·공시·벤처 데이터 표시와 통계 응답 스키마를 다룹니다. 웹 프로젝트에는 이 시나리오를 실행하는 `test:e2e` 명령이 있습니다.',
+		],
+	},
+];
+---
+
+<PortfolioProjectDetail
+	title="Ent-360 Insight Dashboard"
+	eyebrow="Data Platform · Frontend Engineering"
+	subtitle="분산된 수집 현황을 운영자가 읽을 수 있는 대시보드로"
+	description="Collect Dashboard API의 통계와 기업 데이터를 요약 지표, 도메인별 상세 화면으로 연결한 Next.js 웹 대시보드입니다."
+	stack={stack}
+	stackBadges={stackBadges}
+	sections={sections}
+	relatedLinks={[{ label: 'Collect Dashboard API 백엔드 상세', href: '/portfolio/collect-dashboard-api' }]}
+/>

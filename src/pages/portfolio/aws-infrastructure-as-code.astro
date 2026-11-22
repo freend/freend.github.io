@@ -1,0 +1,64 @@
+---
+import PortfolioProjectDetail from '../../components/PortfolioProjectDetail.astro';
+
+const stack = ['Terraform', 'AWS', 'CodePipeline', 'CodeBuild', 'Amazon ECR', 'IAM'];
+const stackBadges = [
+	{ name: 'Terraform', url: 'https://img.shields.io/badge/Terraform-7B42BC?style=for-the-badge&logo=terraform&logoColor=white' },
+	{ name: 'AWS', url: 'https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white' },
+	{ name: 'CodePipeline', url: 'https://img.shields.io/badge/CodePipeline-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white' },
+	{ name: 'CodeBuild', url: 'https://img.shields.io/badge/CodeBuild-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white' },
+	{ name: 'Amazon ECR', url: 'https://img.shields.io/badge/Amazon_ECR-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white' },
+	{ name: 'IAM', url: 'https://img.shields.io/badge/IAM-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white' },
+];
+
+const sections = [
+	{
+		eyebrow: '01 · WHY',
+		title: '서비스와 배포 정책을 AWS 인프라에 일관되게 반영하기 위해',
+		paragraphs: [
+			'회사의 서비스 개발·배포 정책과 기술 요구사항에 맞춰 AWS 리소스를 일관되게 구성하고 변경할 방법이 필요했습니다. 인프라를 Terraform 코드로 선언해 서비스 구성과 배포 기반을 함께 관리했습니다.',
+		],
+	},
+	{
+		eyebrow: '02 · HOW',
+		title: 'AWS 서비스 리소스와 빌드·이미지 기반을 코드로 관리',
+		paragraphs: [
+			'Terraform으로 AWS 리소스를 정의하고 적용하면서, 변경 내용을 코드와 State의 변화로 추적했습니다. CodePipeline과 CodeBuild는 빌드 파이프라인에, ECR은 컨테이너 이미지 관리에 필요한 리소스로 구성했습니다.',
+			'서비스 구성에는 S3, IAM, EC2, Lambda, API Gateway, DocumentDB, SQS, EventBridge 등 여러 AWS 리소스 유형을 다뤘습니다.',
+		],
+		cards: [
+			{ title: '빌드 및 이미지 관리', body: 'CodePipeline·CodeBuild·ECR을 Terraform으로 선언해 배포에 필요한 AWS 리소스를 관리했습니다.' },
+			{ title: '서비스 인프라', body: '컴퓨트, 스토리지, 서버리스, 데이터베이스, 메시징 및 접근 제어 리소스를 서비스 요구에 맞춰 구성했습니다.' },
+		],
+	},
+	{
+		eyebrow: '03 · WHAT',
+		title: '변경 가능한 AWS 리소스를 코드로 구성하고 관리했습니다',
+		bullets: [
+			'Terraform으로 AWS 서비스와 CI/CD 지원 리소스 정의',
+			'CodePipeline·CodeBuild·ECR 기반의 빌드 및 이미지 관리 구성',
+			'인프라 변경 적용과 Terraform State 변화 관리',
+		],
+		flow: ['Terraform 구성', 'AWS 리소스 정의', '서비스·빌드 인프라 변경 관리'],
+		note: '이 흐름은 IaC 관리 범위를 설명하는 개념도이며, 회사의 실제 서비스 토폴로지나 계정 구조를 나타내지 않습니다.',
+	},
+	{
+		eyebrow: '04 · ENGINEERING DECISIONS',
+		title: '인프라 변경을 코드에서 검토하고 추적할 수 있게 관리',
+		paragraphs: [
+			'서비스 정책에 필요한 AWS 리소스를 코드로 표현해 변경 내용을 선언과 적용 결과로 다뤘습니다. CI/CD와 서비스 인프라를 함께 관리하면서 각 리소스가 맡는 역할을 파악하고, 변경 시 Terraform State의 차이도 확인했습니다.',
+		],
+	},
+];
+---
+
+<PortfolioProjectDetail
+	title="AWS Infrastructure as Code"
+	eyebrow="직접 설계·구축·관리 · Cloud Infrastructure"
+	subtitle="Terraform으로 AWS 서비스와 CI/CD 인프라를 관리한 경험"
+	description="회사 서비스의 기술 요구사항과 배포 정책에 맞춰 AWS 리소스를 Terraform으로 선언하고 적용·관리했습니다."
+	stack={stack}
+	stackBadges={stackBadges}
+	sections={sections}
+	relatedLinks={[{ label: 'Kubernetes Platform Engineering', href: '/portfolio/kubernetes-platform-engineering' }]}
+/>

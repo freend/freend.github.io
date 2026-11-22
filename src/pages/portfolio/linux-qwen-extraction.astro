@@ -1,0 +1,87 @@
+---
+import PortfolioProjectDetail from '../../components/PortfolioProjectDetail.astro';
+
+const stack = ['Linux', 'NVIDIA GPU', 'CUDA', 'llama.cpp', 'GGUF', 'Qwen', 'Docker', 'Python', 'FastAPI', 'FFmpeg'];
+const stackBadges = [
+	{ name: 'Linux', url: 'https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black' },
+	{ name: 'NVIDIA GPU', url: 'https://img.shields.io/badge/NVIDIA_GPU-76B900?style=for-the-badge&logo=nvidia&logoColor=white' },
+	{ name: 'CUDA', url: 'https://img.shields.io/badge/CUDA-76B900?style=for-the-badge&logo=nvidia&logoColor=white' },
+	{ name: 'llama.cpp', url: 'https://img.shields.io/badge/llama.cpp-3B82F6?style=for-the-badge' },
+	{ name: 'GGUF', url: 'https://img.shields.io/badge/GGUF-5B5B5B?style=for-the-badge' },
+	{ name: 'Qwen', url: 'https://img.shields.io/badge/Qwen-615EFF?style=for-the-badge&logo=alibabacloud&logoColor=white' },
+	{ name: 'Docker', url: 'https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white' },
+	{ name: 'Python', url: 'https://img.shields.io/badge/Python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54' },
+	{ name: 'FastAPI', url: 'https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white' },
+	{ name: 'FFmpeg', url: 'https://img.shields.io/badge/FFmpeg-007808?style=for-the-badge&logo=ffmpeg&logoColor=white' },
+];
+
+const sections = [
+	{
+		eyebrow: '01 · 시작한 이유',
+		title: '이미지와 영상 속 정보를 로컬 AI로 구조화하기 위해',
+		paragraphs: [
+			'이미지나 화면 녹화 영상에 담긴 시각 정보를 사람이 직접 확인해 입력하는 과정을 줄이려면, 파일을 받아 모델에 전달하는 데서 끝나지 않는 추출 시스템이 필요했습니다. 입력 전처리부터 추론, 결과 파싱까지 직접 제어할 수 있도록 Linux GPU에서 동작하는 로컬 AI 흐름을 구성했습니다.',
+			'현재 API는 카드와 은행 내역 프로필로 이미지·영상 추출 경로를 제공하며, 테스트는 합성 미디어를 사용합니다. 프로젝트의 핵심은 특정 데이터 유형보다 로컬 VLM을 애플리케이션이 사용할 구조화 결과로 연결하는 과정입니다.',
+		],
+	},
+	{
+		eyebrow: '02 · 추출 파이프라인',
+		title: '미디어 검증부터 JSON 결과까지 한 요청 흐름으로',
+		paragraphs: [
+			'FastAPI가 파일 형식과 크기를 확인한 뒤 이미지 또는 영상을 전처리합니다. 영상은 FFprobe로 스트림과 프레임 시각을 확인하고 FFmpeg로 2 FPS 샘플을 만듭니다. 샘플 타임라인에 누락이나 역순이 있으면 추론을 진행하지 않고 입력 오류로 반환합니다.',
+			'요청은 OpenAI 호환 API를 제공하는 llama-server에 전달됩니다. LlamaClient는 입력 토큰을 먼저 계산해 컨텍스트 한도를 검사한 다음 추론을 요청하고, 응답 파서는 완결된 JSON 객체와 미완성 꼬리를 구분해 애플리케이션용 필드로 변환합니다.',
+		],
+		flow: ['이미지·영상 업로드', 'FastAPI 입력 검증', 'FFmpeg 영상 샘플링', 'Qwen GGUF 로컬 추론', '응답 파싱과 JSON 결과'],
+		bullets: [
+			'JPG·JPEG·PNG 이미지와 MP4·MOV·M4V 영상 입력',
+			'업로드 크기와 영상 길이 제한, 미디어 형식과 실제 인코딩 일치 검사',
+			'샘플 프레임의 PTS 단조 증가·간격·시작 구간 검증',
+			'컨텍스트 예산 초과, 추론 서버 장애, 불완전한 모델 응답을 구분해 처리',
+		],
+	},
+	{
+		eyebrow: '03 · GPU 추론 환경',
+		title: '모델 실행과 추출 API를 분리해 자원을 관리',
+		paragraphs: [
+			'Docker Compose에서 GPU를 사용하는 llama.cpp 추론 서버와 FastAPI를 별도 서비스로 둡니다. 모델 파일은 읽기 전용으로 마운트하고 서비스 간 통신은 내부 네트워크에서 처리해, 추론 런타임과 요청·전처리 API의 역할을 나눴습니다.',
+			'API는 한 번에 하나의 추론만 허용하는 잠금을 두고, 이미 추론 중인 요청은 429로 돌려보냅니다. 모델의 컨텍스트 크기와 입력 토큰 수를 확인해 생성 전에 처리 가능한 요청인지 판단합니다.',
+		],
+		flow: ['FastAPI · 업로드 / 전처리', '내부 HTTP 요청', 'llama.cpp · Qwen GGUF', 'NVIDIA GPU · CUDA'],
+	},
+	{
+		eyebrow: '04 · 검증과 현재 과제',
+		title: '합성 입력으로 API 경계와 영상 타임라인을 검증',
+		paragraphs: [
+			'pytest와 FastAPI TestClient 테스트는 이미지·영상 입력, 프로필별 응답 스키마, 불완전 JSON, 컨텍스트 초과, 디코딩 실패, 영상 PTS 누락을 다룹니다. 영상 타임라인은 최근 커밋에서 FFprobe로 디코딩된 프레임 시각을 기준으로 검사하도록 보완했습니다.',
+			'별도 27B GGUF 실행 어댑터는 시작할 때 파일 크기와 SHA-256을 검사합니다. 현재 로컬 모델 파일은 고정 리비전 체크섬과 일치하지 않아 검증 단계에서 차단되며, CUDA 이미지를 깨끗하게 다시 빌드할 때도 컴파일 오류가 남아 있습니다. 모델 파일 정체성과 재빌드 과정을 마무리하는 것이 다음 과제입니다.',
+		],
+	},
+];
+---
+
+<PortfolioProjectDetail
+	title="Local AI Extraction"
+	eyebrow="Local AI · Vision Extraction"
+	subtitle="Linux GPU 환경에서 이미지와 영상의 시각정보를 구조화하는 로컬 VLM 시스템"
+	description="Linux GPU 환경에서 로컬 비전 언어 모델(VLM)을 실행하고, 이미지와 영상의 시각정보를 구조화된 데이터로 추출하는 시스템입니다."
+	stack={stack}
+	stackBadges={stackBadges}
+	sections={sections}
+	relatedPosts={[
+		{
+			title: '[Local VLM] Python으로 구축한 로컬 멀티모달 LLM 영상 분석 파이프라인',
+			description: 'FFmpeg 프레임 샘플링부터 로컬 추론 API 연결과 JSON 결과 검증까지 이어지는 처리 흐름을 정리했습니다.',
+			href: '/blog/local-vlm-python-video-pipeline/',
+		},
+		{
+			title: '[Local VLM] 같은 영상, 다른 결과 — 멀티모달 LLM 출력 일관성 검증',
+			description: '동일 영상의 추론 결과를 항목별로 비교하고, 전처리 프레임 보존 여부를 검증한 기록입니다.',
+			href: '/blog/local-vlm-output-consistency-and-frame-validation/',
+		},
+		{
+			title: '[Local VLM] Mac M5 vs RTX 3090 Ti — 27B급 로컬 비전 모델 영상 추론 성능 비교',
+			description: '서로 다른 로컬 추론 환경의 실행 시간과 모델 입력 경로를 구분해 비교했습니다.',
+			href: '/blog/local-vlm-mac-m5-vs-rtx3090ti/',
+		},
+	]}
+/>

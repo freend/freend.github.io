@@ -1,0 +1,68 @@
+---
+import PortfolioProjectDetail from '../../components/PortfolioProjectDetail.astro';
+
+const stack = ['Node.js', 'Express', 'EJS', 'i18n', 'Bootstrap 4', 'Unirest', 'Docker'];
+const stackBadges = [
+	{ name: 'Node.js', url: 'https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white' },
+	{ name: 'Express', url: 'https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white' },
+	{ name: 'EJS', url: 'https://img.shields.io/badge/EJS-B4CA65?style=for-the-badge&logo=ejs&logoColor=black' },
+	{ name: 'i18n', url: 'https://img.shields.io/badge/i18n-4051B5?style=for-the-badge' },
+	{ name: 'Bootstrap 4', url: 'https://img.shields.io/badge/Bootstrap_4-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white' },
+	{ name: 'Unirest', url: 'https://img.shields.io/badge/Unirest-444444?style=for-the-badge' },
+	{ name: 'Docker', url: 'https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white' },
+];
+
+const sections = [
+	{
+		eyebrow: '01 · 화면이 필요한 이유',
+		title: '상품 탐색부터 구매 확인까지 이어지는 웹 흐름',
+		paragraphs: [
+			'해외 선불 통신 요금제를 판매하려면 상품을 찾고, 사용할 회선과 수신자를 고르고, 결제 뒤 구매 결과를 확인할 화면이 필요했습니다. Express와 EJS로 브라우저 요청을 처리하는 렌더링 서버를 만들고, 회원·상품·구매 규칙은 별도 Spring API에 맡겼습니다.',
+			'브라우저에 전달할 페이지 데이터는 라우트가 API 응답에서 준비하고, EJS 템플릿은 그 데이터를 HTML 화면으로 조립합니다.',
+		],
+		flow: ['Browser request', 'Express route', 'Whoola API response', 'EJS template', 'HTML page'],
+	},
+	{
+		eyebrow: '02 · 구매 화면과 API 연결',
+		title: '페이지 요청의 맥락을 서버에서 이어서 처리',
+		cards: [
+			{ title: '상품 조회', body: '수신 전화번호 형식을 확인한 뒤 API에서 상품을 조회하고 요금제 선택 화면에 목록을 전달합니다.' },
+			{ title: '구매 상세', body: '상품과 수신자 정보를 API에서 받아 가격, 서비스 정보, 결제 화면에 필요한 값을 EJS 뷰로 넘깁니다.' },
+			{ title: '구매 결과', body: 'PayPal 반환 정보를 API에 전달하고, 검증·구매 처리 결과를 구매 내역 화면으로 연결합니다.' },
+		],
+		paragraphs: [
+			'Express 라우트는 URL·폼 요청을 서비스 API 요청으로 바꾸고, API 응답 상태에 따라 페이지·오류 화면을 선택합니다. 결제 검증과 외부 상품 공급 로직을 화면 서버가 직접 처리하지 않도록 경계를 유지했습니다.',
+		],
+	},
+	{
+		eyebrow: '03 · 다국어 템플릿',
+		title: '공통 뷰에 영어와 한국어 locale을 연결',
+		paragraphs: [
+			'i18n 미들웨어에서 `en`, `ko` locale과 쿠키를 설정하고 요청별 번역 함수를 EJS 템플릿에 전달합니다. `/en`, `/ko` 경로는 언어 쿠키를 바꾸고 기존 페이지로 돌아와 화면 언어를 전환합니다.',
+			'문구는 locale JSON 파일로 분리해 화면 구조와 언어별 텍스트를 따로 관리합니다. 언어 선택은 공통 템플릿과 주요 구매 화면에서 같은 요청 locale을 사용합니다.',
+		],
+	},
+	{
+		eyebrow: '04 · 역할 분리',
+		title: '화면 렌더링과 구매 규칙을 서로 다른 서버에',
+		paragraphs: [
+			'Renderer는 요청 라우팅, 사용자 입력 처리, API 호출, EJS 렌더링을 담당합니다. Spring API는 회원·상품 데이터, 인증, 결제 확인, 구매 상태를 관리합니다. 화면 데이터 구성과 서비스 규칙을 각 계층에 배치해 한쪽을 수정할 때 다른 쪽의 역할이 섞이지 않도록 했습니다.',
+			'결제와 구매 서비스의 금액·포인트 규칙 및 공급 결과 처리는 Whoola API의 JUnit 테스트에서 다룹니다.',
+		],
+	},
+];
+---
+
+<PortfolioProjectDetail
+	title="Whoola Renderer"
+	eyebrow="Server-Side Rendering · Node.js"
+	subtitle="선불 요금제 조회와 구매 화면을 서버에서 렌더링"
+	description="Express 라우트가 Whoola API를 호출하고 EJS 템플릿으로 HTML을 구성하는 웹 렌더링 서버입니다."
+	stack={stack}
+	stackBadges={stackBadges}
+	sections={sections}
+	relatedLinks={[
+		{ label: 'Whoola 서비스 개요', href: '/portfolio/whoola' },
+		{ label: 'Whoola API 구현', href: '/portfolio/whoola-api' },
+	]}
+/>

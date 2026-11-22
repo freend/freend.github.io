@@ -1,0 +1,271 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { SITE_TITLE } from '../../consts';
+
+const badge = (name: string, url: string) => ({ name, url });
+
+const projects = [
+	{
+		name: 'CloudAtlas',
+		tagline: 'Cloud Infrastructure · Graph Visualization',
+		participation: '개발 100%',
+		description: 'AWS 리소스와 연결 관계를 그래프로 시각화해 복잡한 인프라 구조를 탐색하는 개인 프로젝트입니다.',
+		features: ['AWS 리소스 정보 수집과 관계 모델링', '연결 구조의 인터랙티브 그래프 시각화', '리소스 검색·선택과 상세 정보 탐색'],
+		badges: [
+			badge('Python', 'https://img.shields.io/badge/Python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54'),
+			badge('AWS', 'https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white'),
+			badge('React', 'https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB'),
+			badge('TypeScript', 'https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white'),
+			badge('Graph Visualization', 'https://img.shields.io/badge/Graph_Visualization-6E40C9?style=for-the-badge'),
+			badge('AI Agent', 'https://img.shields.io/badge/AI_Agent-4B32C3?style=for-the-badge'),
+		],
+		links: [{ label: 'CloudAtlas 상세 페이지', description: '인프라 관계 탐색과 그래프 시각화', href: '/portfolio/cloudatlas' }],
+		blogLink: null,
+	},
+	{
+		name: 'Collect Dashboard',
+		tagline: 'Data Platform · Full-stack',
+		participation: '개발 100%',
+		description: '분산된 데이터 수집 현황을 통합하고 시각화해 도메인별 결과와 추세를 확인할 수 있도록 만든 프로젝트입니다.',
+		features: ['여러 데이터 저장소의 통계 집계', '통계 API와 웹 대시보드의 역할 분리', '도메인별 수집 현황 및 추세 시각화'],
+		badges: [
+			badge('Python', 'https://img.shields.io/badge/Python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54'),
+			badge('FastAPI', 'https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white'),
+			badge('SQLAlchemy', 'https://img.shields.io/badge/SQLAlchemy-D71F00?style=for-the-badge&logo=sqlalchemy&logoColor=white'),
+			badge('Next.js', 'https://img.shields.io/badge/Next.js-black?style=for-the-badge&logo=next.js&logoColor=white'),
+			badge('React', 'https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB'),
+			badge('TypeScript', 'https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white'),
+			badge('Docker', 'https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white'),
+		],
+		links: [
+			{ label: 'Collect Dashboard API', description: '데이터 집계 및 통계 API', href: '/portfolio/collect-dashboard-api' },
+			{ label: 'Ent-360 Insight Dashboard', description: '수집 현황 시각화 웹 대시보드', href: '/portfolio/ent-360-insight-dashboard' },
+		],
+		blogLink: null,
+	},
+	{
+		name: 'Local AI Extraction',
+		tagline: 'Local AI · Vision Extraction',
+		participation: '개발 100%',
+		description: 'Linux GPU 환경에서 로컬 비전 언어 모델을 실행하고, 이미지와 영상의 시각정보를 구조화된 데이터로 추출하는 시스템입니다.',
+		features: ['Linux GPU 기반 로컬 VLM 추론', '이미지 입력 검증과 영상 프레임 전처리', '추론 응답 파싱 및 JSON 구조화'],
+		badges: [
+			badge('Linux', 'https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black'),
+			badge('NVIDIA GPU', 'https://img.shields.io/badge/NVIDIA_GPU-76B900?style=for-the-badge&logo=nvidia&logoColor=white'),
+			badge('CUDA', 'https://img.shields.io/badge/CUDA-76B900?style=for-the-badge&logo=nvidia&logoColor=white'),
+			badge('llama.cpp', 'https://img.shields.io/badge/llama.cpp-3B82F6?style=for-the-badge'),
+			badge('GGUF', 'https://img.shields.io/badge/GGUF-5B5B5B?style=for-the-badge'),
+			badge('Qwen', 'https://img.shields.io/badge/Qwen-615EFF?style=for-the-badge&logo=alibabacloud&logoColor=white'),
+			badge('Docker', 'https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white'),
+		],
+		links: [{ label: 'Local AI Extraction 상세 페이지', description: 'Linux GPU 기반 미디어 추출과 로컬 VLM 추론', href: '/portfolio/linux-qwen-extraction' }],
+		blogLink: { title: '[Local VLM] Python으로 구축한 로컬 멀티모달 LLM 영상 분석 파이프라인', href: '/blog/local-vlm-python-video-pipeline/' },
+	},
+	{
+		name: 'Whoola',
+		tagline: 'Prepaid Telecom · Full-stack',
+		participation: '개발 100% · 공동 사업 기획',
+		description: '친구와 구상한 해외 선불 통신 요금제 판매 사업을 상품 조회와 결제, 주문 처리까지 갖춘 웹서비스로 구현했습니다.',
+		features: ['요금제 조회부터 구매 결과 확인까지의 흐름', 'PayPal 결제·가격·포인트 검증과 주문 처리', '외부 상품 공급 API 연동 및 주문 결과 처리'],
+		badges: [
+			badge('Java', 'https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white'),
+			badge('Spring Boot', 'https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white'),
+			badge('Node.js', 'https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white'),
+			badge('Express', 'https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white'),
+			badge('EJS', 'https://img.shields.io/badge/EJS-B4CA65?style=for-the-badge&logo=ejs&logoColor=black'),
+			badge('Spring Data JPA', 'https://img.shields.io/badge/Spring_Data_JPA-6DB33F?style=for-the-badge&logo=spring&logoColor=white'),
+			badge('PayPal', 'https://img.shields.io/badge/PayPal-003087?style=for-the-badge&logo=paypal&logoColor=white'),
+		],
+		links: [
+			{ label: 'Whoola API', description: '상품·회원·결제·주문 처리 백엔드', href: '/portfolio/whoola-api' },
+			{ label: 'Whoola Renderer', description: '사용자 화면 및 API 연동', href: '/portfolio/whoola-renderer' },
+		],
+		blogLink: null,
+	},
+	{
+		name: 'AWS Infrastructure as Code',
+		tagline: 'Cloud Infrastructure · IaC · CI/CD',
+		participation: '직접 설계·구축·관리',
+		description: '회사의 서비스와 배포 정책에 맞춰 AWS 리소스와 CI/CD 기반을 Terraform 코드로 설계하고 적용·관리했습니다.',
+		features: ['CodePipeline·CodeBuild·ECR 빌드 및 이미지 관리 리소스', 'S3·IAM·컴퓨트·서버리스 등 AWS 서비스 구성', 'Terraform 변경과 State 변화를 확인하며 인프라 관리'],
+		badges: [
+			badge('Terraform', 'https://img.shields.io/badge/Terraform-7B42BC?style=for-the-badge&logo=terraform&logoColor=white'),
+			badge('AWS', 'https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white'),
+			badge('CodePipeline', 'https://img.shields.io/badge/CodePipeline-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white'),
+			badge('CodeBuild', 'https://img.shields.io/badge/CodeBuild-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white'),
+			badge('Amazon ECR', 'https://img.shields.io/badge/Amazon_ECR-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white'),
+			badge('IAM', 'https://img.shields.io/badge/IAM-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white'),
+		],
+		links: [{ label: 'AWS Infrastructure as Code 상세 페이지', description: 'Terraform 기반 AWS·CI/CD 인프라 관리', href: '/portfolio/aws-infrastructure-as-code' }],
+		blogLink: null,
+	},
+	{
+		name: 'Kubernetes Platform Engineering',
+		tagline: 'Kubernetes · Container Platform',
+		participation: '직접 설계·구축·관리',
+		description: '회사의 배포·운영 정책에 맞춰 Kubernetes 애플리케이션의 실행, 서비스 노출, 리소스 기준을 직접 구성하고 관리했습니다.',
+		features: ['Deployment와 Service 기반 애플리케이션 배포', 'Gateway API·HTTPRoute를 활용한 서비스 라우팅', 'Probe, 리소스 요청·제한, 설정 참조 구성'],
+		badges: [
+			badge('Kubernetes', 'https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white'),
+			badge('Helm', 'https://img.shields.io/badge/Helm-0F1689?style=for-the-badge&logo=helm&logoColor=white'),
+			badge('Gateway API', 'https://img.shields.io/badge/Gateway_API-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white'),
+			badge('Deployment', 'https://img.shields.io/badge/Deployment-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white'),
+			badge('Service', 'https://img.shields.io/badge/Service-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white'),
+			badge('HTTPRoute', 'https://img.shields.io/badge/HTTPRoute-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white'),
+		],
+		links: [{ label: 'Kubernetes Platform Engineering 상세 페이지', description: '애플리케이션 배포와 서비스 노출 구조', href: '/portfolio/kubernetes-platform-engineering' }],
+		blogLink: null,
+	},
+	{
+		name: 'Kubernetes Autoscaling',
+		tagline: 'Kubernetes · Node Lifecycle Management',
+		participation: '직접 설계·구축·관리',
+		description: '워크로드 자원 요구에 대응하도록 Karpenter 노드 관리 설정과 AWS 중단 이벤트 처리 관련 인프라를 구성하고 관리했습니다.',
+		features: ['Karpenter Helm values와 노드 관리 설정', 'AWS SQS·EventBridge 기반 중단 처리 관련 구성', 'Helm 적용 및 변경 후 노드·배포 상태 관리'],
+		badges: [
+			badge('Karpenter', 'https://img.shields.io/badge/Karpenter-7B42BC?style=for-the-badge'),
+			badge('Kubernetes', 'https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white'),
+			badge('Helm', 'https://img.shields.io/badge/Helm-0F1689?style=for-the-badge&logo=helm&logoColor=white'),
+			badge('AWS', 'https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white'),
+			badge('Amazon SQS', 'https://img.shields.io/badge/Amazon_SQS-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white'),
+			badge('EventBridge', 'https://img.shields.io/badge/EventBridge-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white'),
+		],
+		links: [{ label: 'Kubernetes Autoscaling 상세 페이지', description: 'Karpenter 노드 정책과 중단 처리 구성', href: '/portfolio/kubernetes-autoscaling' }],
+		blogLink: null,
+	},
+	{
+		name: 'Kubernetes Observability',
+		tagline: 'Monitoring · Logging · Platform Operations',
+		participation: '직접 설계·구축·관리',
+		description: 'Kubernetes 서비스와 플랫폼 상태를 파악할 수 있도록 Prometheus 메트릭과 Loki·Alloy 로그 수집 구성을 Helm으로 관리했습니다.',
+		features: ['Prometheus 기반 메트릭 관측 구성', 'Alloy·Loki를 활용한 로그 수집 구성', 'Helm values 변경과 업그레이드 관리'],
+		badges: [
+			badge('Prometheus', 'https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=prometheus&logoColor=white'),
+			badge('Grafana Loki', 'https://img.shields.io/badge/Grafana_Loki-F46800?style=for-the-badge&logo=grafana&logoColor=white'),
+			badge('Grafana Alloy', 'https://img.shields.io/badge/Grafana_Alloy-F46800?style=for-the-badge&logo=grafana&logoColor=white'),
+			badge('Helm', 'https://img.shields.io/badge/Helm-0F1689?style=for-the-badge&logo=helm&logoColor=white'),
+			badge('Kubernetes', 'https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white'),
+		],
+		links: [{ label: 'Kubernetes Observability 상세 페이지', description: '메트릭·로그 기반 플랫폼 가시성 구성', href: '/portfolio/kubernetes-observability' }],
+		blogLink: null,
+	},
+	{
+		name: 'Cross-Database Data Synchronization',
+		tagline: 'Data Engineering · Event Streaming',
+		participation: '직접 설계·구축·관리',
+		description: '서로 다른 데이터베이스 간 데이터를 주고받을 수 있도록 Kafka와 Avro 기반 동기화 시스템을 설계·구축·관리했습니다.',
+		features: ['Kafka를 데이터 교환 계층으로 활용', 'Avro를 이용한 데이터 표현과 교환', 'Kafka Connect·Schema Registry를 포함한 Confluent 환경 구성'],
+		badges: [
+			badge('Apache Kafka', 'https://img.shields.io/badge/Apache_Kafka-231F20?style=for-the-badge&logo=apachekafka&logoColor=white'),
+			badge('Confluent', 'https://img.shields.io/badge/Confluent-1C1C1C?style=for-the-badge&logo=confluent&logoColor=white'),
+			badge('Apache Avro', 'https://img.shields.io/badge/Apache_Avro-4B32C3?style=for-the-badge&logo=apache&logoColor=white'),
+			badge('Kafka Connect', 'https://img.shields.io/badge/Kafka_Connect-231F20?style=for-the-badge&logo=apachekafka&logoColor=white'),
+			badge('Schema Registry', 'https://img.shields.io/badge/Schema_Registry-1C1C1C?style=for-the-badge&logo=confluent&logoColor=white'),
+		],
+		links: [{ label: 'Cross-Database Data Synchronization 상세 페이지', description: 'Kafka·Avro 기반 이기종 DB 데이터 동기화', href: '/portfolio/cross-database-data-synchronization' }],
+		blogLink: null,
+	},
+	{
+		name: 'Server Configuration Automation',
+		tagline: 'Ansible · Multi-Cloud Operations',
+		participation: '직접 설계·구축·관리',
+		description: 'AWS와 GCP의 서버를 동적으로 찾아 에이전트 설치와 런타임 설정을 관리하는 Ansible 자동화 구성을 만들었습니다.',
+		features: ['AWS·GCP Dynamic Inventory 구성', 'CloudWatch·SSM·Ops Agent 설치 Playbook', 'Python 환경과 IAM 관련 서버 설정 자동화'],
+		badges: [
+			badge('Ansible', 'https://img.shields.io/badge/Ansible-EE0000?style=for-the-badge&logo=ansible&logoColor=white'),
+			badge('AWS', 'https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white'),
+			badge('Google Cloud', 'https://img.shields.io/badge/Google_Cloud-4285F4?style=for-the-badge&logo=googlecloud&logoColor=white'),
+			badge('Python', 'https://img.shields.io/badge/Python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54'),
+			badge('Amazon CloudWatch', 'https://img.shields.io/badge/CloudWatch-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white'),
+			badge('AWS Systems Manager', 'https://img.shields.io/badge/Systems_Manager-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white'),
+		],
+		links: [{ label: 'Server Configuration Automation 상세 페이지', description: '멀티클라우드 Dynamic Inventory와 서버 구성', href: '/portfolio/server-configuration-automation' }],
+		blogLink: null,
+	},
+];
+---
+
+<!doctype html>
+<html lang="ko">
+	<head>
+		<BaseHead title={`Portfolio | ${SITE_TITLE}`} description="클라우드와 소프트웨어 엔지니어링 프로젝트를 소개합니다." />
+		<style>
+			.page-intro { margin: 2.5rem 0; }
+			.page-intro h1 { margin-top: 0; }
+			.page-intro p { max-width: 620px; color: #656d76; line-height: 1.75; }
+			.project-list { display: grid; gap: 1rem; margin: 2rem 0; }
+			.project-card { min-width: 0; padding: 1.25rem; border: 1px solid var(--border); border-radius: 8px; }
+			.project-group-heading { margin: 2rem 0 0; border: 0; padding: 1.4rem 0 0.2rem; border-top: 1px solid var(--border); font-size: 1.25rem; }
+			.project-heading { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.2rem 1rem; }
+			.project-card h2 { margin: 0; border: 0; padding: 0; font-size: 1.45rem; }
+			.project-tagline { margin: 0.25rem 0 0; color: #656d76; font-weight: 600; }
+			.participation { margin: 0; color: #656d76; font-size: 0.85rem; white-space: nowrap; }
+			.project-description { max-width: 760px; margin: 0.9rem 0; line-height: 1.7; }
+			.project-card h3 { margin: 1rem 0 0.35rem; font-size: 0.95rem; }
+			.feature-list { display: flex; flex-wrap: wrap; gap: 0.15rem 1.5rem; margin: 0; padding-left: 1.15rem; }
+			.feature-list li { margin: 0.15rem 0; }
+			.stack-badges { display: flex; flex-wrap: wrap; gap: 0.45rem; max-width: 100%; margin: 0; padding: 0; list-style: none; }
+			.stack-badges li { max-width: 100%; margin: 0; }
+			.stack-badges img { display: block; max-width: 100%; height: 24px; border: 0; filter: none; }
+			.project-links { display: grid; gap: 0.25rem; margin-top: 0.3rem; }
+			.project-detail-link { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.1rem 0.65rem; width: fit-content; max-width: 100%; padding: 0.2rem 0; }
+			.project-detail-link strong { font-size: 0.92rem; }
+			.project-detail-link span { color: #656d76; font-size: 0.85rem; }
+			.project-blog-link { margin: 0.35rem 0 0; font-size: 0.86rem; overflow-wrap: anywhere; }
+			.project-blog-link span { margin-right: 0.4rem; color: #656d76; }
+			@media (max-width: 600px) {
+				.project-card { padding: 1rem; }
+				.project-heading { align-items: flex-start; }
+				.project-tagline { font-size: 0.92rem; }
+				.feature-list { display: block; }
+				.stack-badges { gap: 0.4rem; }
+				.stack-badges img { height: 22px; }
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<header class="page-intro">
+				<p class="eyebrow">SELECTED WORK</p>
+				<h1>Portfolio</h1>
+				<p>서비스 개발, 데이터 엔지니어링, 클라우드·플랫폼, GPU 추론 인프라까지 문제의 전체 흐름을 설계하고 구현한 프로젝트를 소개합니다.</p>
+			</header>
+			<section class="project-list" aria-label="프로젝트 목록">
+				{projects.map((project, index) => (
+					<>
+					{index === 4 && <h2 class="project-group-heading">Infrastructure &amp; Data Engineering</h2>}
+					<article class="project-card">
+						<div class="project-heading">
+							<div>
+								<h2>{project.name}</h2>
+								<p class="project-tagline">{project.tagline}</p>
+							</div>
+							<p class="participation">{project.participation}</p>
+						</div>
+						<p class="project-description">{project.description}</p>
+						<h3>핵심 구현</h3>
+						<ul class="feature-list">{project.features.map((feature) => <li>{feature}</li>)}</ul>
+						<h3>주요 기술</h3>
+						<ul class="stack-badges" aria-label={`${project.name} 주요 기술`}>
+							{project.badges.map((item) => <li><img src={item.url} alt={item.name} loading="lazy" /></li>)}
+						</ul>
+						<h3>{project.links.length > 1 ? '프로젝트 구성' : '상세 페이지'}</h3>
+						<nav class="project-links" aria-label={`${project.name} 상세 페이지`}>
+							{project.links.map((link) => (
+								<a class="project-detail-link" href={link.href}>
+									<strong>{link.label}</strong><span>{link.description}</span>
+								</a>
+							))}
+						</nav>
+						{project.blogLink && <p class="project-blog-link"><span>관련 기술 기록</span><a href={project.blogLink.href}>{project.blogLink.title} <span aria-hidden="true">↗</span></a></p>}
+					</article>
+					</>
+				))}
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>

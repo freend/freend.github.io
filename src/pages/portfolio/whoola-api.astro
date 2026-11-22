@@ -1,0 +1,73 @@
+---
+import PortfolioProjectDetail from '../../components/PortfolioProjectDetail.astro';
+
+const stack = ['Java', 'Spring Boot', 'Spring Web', 'Spring Data JPA', 'Spring Security', 'JWT', 'MySQL', 'PayPal', 'DT One'];
+const stackBadges = [
+	{ name: 'Java', url: 'https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white' },
+	{ name: 'Spring Boot', url: 'https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white' },
+	{ name: 'Spring Web', url: 'https://img.shields.io/badge/Spring_Web-6DB33F?style=for-the-badge&logo=spring&logoColor=white' },
+	{ name: 'Spring Data JPA', url: 'https://img.shields.io/badge/Spring_Data_JPA-6DB33F?style=for-the-badge&logo=spring&logoColor=white' },
+	{ name: 'Spring Security', url: 'https://img.shields.io/badge/Spring_Security-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white' },
+	{ name: 'JWT', url: 'https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white' },
+	{ name: 'MySQL', url: 'https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white' },
+	{ name: 'PayPal', url: 'https://img.shields.io/badge/PayPal-003087?style=for-the-badge&logo=paypal&logoColor=white' },
+	{ name: 'DT One', url: 'https://img.shields.io/badge/DT_One-444444?style=for-the-badge' },
+];
+
+const sections = [
+	{
+		eyebrow: '01 · API의 역할',
+		title: '결제 검증과 통신 상품 구매를 잇는 백엔드',
+		paragraphs: [
+			'Whoola를 해외 선불 통신 요금제 판매 서비스로 만들면서 회원, 상품, 결제, 구매 결과를 다루는 API를 구현했습니다. Renderer가 만든 구매 요청을 받아 서버에서 PayPal 거래를 확인하고, 검증이 끝난 구매를 외부 통신상품 공급 API로 전달합니다.',
+			'Controller는 HTTP 요청과 응답을 맡고, 서비스 계층은 회원·상품·구매 흐름과 저장소 접근을 조율합니다. 구매 규칙을 화면 라우트에 넣지 않고 API 쪽에 두어 Renderer와 백엔드의 책임을 나눴습니다.',
+		],
+		flow: ['Renderer 구매 요청', 'Spring Controller', 'Domain Service', 'JPA Repository / 외부 API'],
+	},
+	{
+		eyebrow: '02 · 결제 확인',
+		title: '브라우저가 보낸 결제 결과를 서버에서 다시 검증',
+		paragraphs: [
+			'PayPal 완료 정보를 받으면 PayPalService가 통화를 USD로 제한하고, 이미 저장된 거래 ID인지 확인한 뒤 PayPal 검증 응답을 조회합니다. 이어 상품 판매가와 처리 수수료에 포인트 사용액을 더한 값이 실제 결제 금액과 맞는지 비교하고, 회원의 포인트 잔액도 검사합니다.',
+			'구매 요청 DTO는 결제 확인 뒤 PurchaseCommonService로 넘어갑니다. 이 계층은 구매자·상품·수신자 정보를 다시 모아 PurchaseService가 필요한 값으로 구성합니다.',
+		],
+		flow: ['PayPal 반환 정보', '통화·거래 중복 검사', 'PayPal 거래 확인', '상품 금액·포인트 검증', '구매 요청 생성'],
+		cards: [
+			{ title: '가격 검증', body: '클라이언트 결제액만 신뢰하지 않고 상품 가격과 처리 수수료를 기준으로 금액을 대조합니다.' },
+			{ title: '포인트 검증', body: '결제액에 사용 포인트를 더한 합계를 확인하고, 회원 잔액보다 큰 포인트 사용을 거부합니다.' },
+		],
+	},
+	{
+		eyebrow: '03 · 구매 처리와 외부 공급',
+		title: '구매 기록을 남기고 DT One 결과에 따라 상태를 나눔',
+		paragraphs: [
+			'PurchaseService는 구매 기록과 외부 식별자를 저장하고 DT One에 상품·수신 전화번호·선택 입력 정보를 전달합니다. 정상 응답에서는 공급사 거래 ID와 상태, 만료 정보를 구매 기록에 반영하고, 요청·응답 기록도 별도 로그로 남깁니다.',
+			'공급 API 오류는 ERROR 상태로, 응답을 정상 결과로 해석할 수 없는 경우는 PENDING 상태로 구분합니다. 운영 환경에서 오류와 보류 건은 알림을 남기며, 오류 경로는 환불 처리가 필요하다는 운영 메시지를 전달합니다.',
+		],
+		flow: ['구매 기록 저장', 'DT One 상품 요청', '응답 파싱', 'COMPLETE · ERROR · PENDING'],
+		note: 'PayPal과 DT One은 서로 다른 외부 시스템입니다. API의 DB 트랜잭션이 두 외부 서비스까지 하나의 원자적 작업으로 묶지는 않습니다.',
+	},
+	{
+		eyebrow: '04 · 검증 경험',
+		title: '결제 규칙과 구매 결과를 서비스 테스트로 확인',
+		paragraphs: [
+			'PayPalService 테스트는 USD 통화, 중복 거래 ID, PayPal 검증 응답, 상품 가격과 포인트 잔액 조건을 다룹니다. PurchaseService 테스트는 공급 API 성공 응답을 구매 처리에 연결하고, 상품 활성 상태와 구매 집계 조회를 확인합니다.',
+			'JUnit과 Mockito로 결제·공급 API 및 저장소 의존성을 대체해 서비스 규칙을 분리해 검증합니다. 테스트에서는 금액 검증과 구매 상태 처리처럼 외부 연동이 포함된 경계를 서비스 단위로 다룹니다.',
+		],
+	},
+];
+---
+
+<PortfolioProjectDetail
+	title="Whoola API"
+	eyebrow="Backend Engineering · Java"
+	subtitle="결제 검증부터 외부 통신상품 구매까지 처리하는 Spring API"
+	description="해외 선불 통신 요금제 판매 서비스의 회원·상품·결제·구매 흐름을 구현한 Spring Boot 백엔드입니다."
+	stack={stack}
+	stackBadges={stackBadges}
+	sections={sections}
+	relatedLinks={[
+		{ label: 'Whoola 서비스 개요', href: '/portfolio/whoola' },
+		{ label: 'Whoola Renderer 구현', href: '/portfolio/whoola-renderer' },
+	]}
+/>
