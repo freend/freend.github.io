@@ -2,9 +2,18 @@
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
+import TechnologyBadges from '../../components/TechnologyBadges.astro';
 import { SITE_TITLE } from '../../consts';
 
 const demoUrl = 'https://freend.github.io/cloudatlas-demo/';
+const stackBadges = [
+	{ name: 'Python', url: 'https://img.shields.io/badge/Python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54' },
+	{ name: 'AWS', url: 'https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white' },
+	{ name: 'React', url: 'https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB' },
+	{ name: 'TypeScript', url: 'https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white' },
+	{ name: 'Graph Visualization', url: 'https://img.shields.io/badge/Graph_Visualization-6E40C9?style=for-the-badge' },
+	{ name: 'AI Agent', url: 'https://img.shields.io/badge/AI_Agent-4B32C3?style=for-the-badge' },
+];
 ---
 
 <!doctype html>
@@ -24,7 +33,7 @@ const demoUrl = 'https://freend.github.io/cloudatlas-demo/';
 				<h1>CloudAtlas</h1>
 				<p class="project-subtitle">클라우드 인프라의 리소스와 연결 관계를 그래프로 탐색하는 도구</p>
 				<p>AWS에서 서비스가 여러 리소스와 이어지는 구조를 한눈에 파악할 수 있도록 만든 개인 프로젝트입니다. 개별 리소스의 설정을 나열하는 대신 연결 관계를 따라가며 인프라를 이해할 수 있도록 설계했습니다.</p>
-				<ul class="tag-list" aria-label="주요 기술"><li>Python</li><li>AWS</li><li>React</li><li>TypeScript</li><li>그래프 시각화</li><li>AI 에이전트</li></ul>
+				<TechnologyBadges badges={stackBadges} compact />
 				<div class="hero-actions">
 					<a class="button button-primary" href={demoUrl} target="_blank" rel="noopener noreferrer">데모 열기 <span aria-hidden="true">↗</span></a>
 					<a class="button button-secondary" href="/portfolio">Portfolio로 돌아가기</a>
@@ -115,8 +124,6 @@ const demoUrl = 'https://freend.github.io/cloudatlas-demo/';
 	.project-hero h1 { margin: 0; border: 0; padding: 0; font-size: clamp(2.5rem, 8vw, 4rem); letter-spacing: -0.04em; }
 	.project-subtitle { margin: 0.75rem 0 1rem; font-size: 1.25rem; font-weight: 600; }
 	.project-hero > p:not(.eyebrow):not(.project-subtitle) { max-width: 680px; color: #656d76; }
-	.tag-list { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 1rem 0 0; padding: 0; list-style: none; }
-	.tag-list li { margin: 0; padding: 0.2rem 0.55rem; border: 1px solid var(--border); border-radius: 999px; color: #656d76; font-size: 0.82rem; }
 	.hero-actions { display: flex; flex-wrap: wrap; gap: 0.65rem; margin-top: 1.35rem; }
 	.button { display: inline-flex; align-items: center; gap: 0.55rem; padding: 0.65rem 0.95rem; border: 1px solid var(--border); border-radius: 6px; font-weight: 600; }
 	.button-primary { border-color: var(--link); background: var(--link); color: #fff; }
