@@ -1,11 +1,12 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
+import { SITE_TITLE } from '../consts';
 ---
 
 <!doctype html>
 <html lang="ko">
 	<head>
-		<BaseHead title="페이지 이동 | Freend's Log" description="About 페이지가 Home으로 통합되었습니다." />
+		<BaseHead title={`페이지 이동 | ${SITE_TITLE}`} description="About 페이지가 Home으로 통합되었습니다." />
 		<meta http-equiv="refresh" content="0; url=/" />
 	</head>
 	<body>
