@@ -14,29 +14,29 @@ const representativeExperience = [
 	},
 	{
 		title: 'Kubernetes 플랫폼 운영',
-		body: '애플리케이션 배포와 Gateway API 라우팅, Karpenter 노드 관리, Prometheus·Loki 기반 관측 구성을 설계하고 운영했습니다.',
+		body: '애플리케이션 배포와 외부 요청 라우팅, 워크로드에 따른 노드 운영, 메트릭·로그 수집을 맡았습니다. 배포부터 서비스 상태 확인까지 이어지는 플랫폼 운영 흐름을 구성했습니다.',
 		href: '/portfolio/kubernetes-platform-engineering',
 		link: '플랫폼 경험 보기',
 	},
 	{
 		title: '백엔드와 데이터 흐름 구현',
-		body: '서비스 API와 데이터 수집·통계·동기화 시스템을 개발했습니다. 분산된 저장소의 현황을 통합하고 각 서비스가 활용할 수 있는 데이터 구조로 연결했습니다.',
+		body: '도메인별 저장소의 통계를 하나의 API로 집계해 대시보드에서 수집 현황과 추세를 확인하도록 구현했습니다. Kafka 기반 이기종 데이터베이스 동기화 파이프라인도 별도로 설계·구축했습니다.',
 		href: '/portfolio',
 		link: '백엔드·데이터 프로젝트 보기',
 	},
 	{
 		title: '로컬 AI 추론 파이프라인',
-		body: '이미지와 영상의 시각 정보를 구조화하기 위해 GPU 기반 로컬 VLM 실행 환경과 입력 전처리·추론·JSON 변환 흐름을 만들었습니다.',
+		body: '화면 정보를 직접 입력하는 번거로움을 줄이기 위해 로컬 VLM을 실제 입력 처리에 연결했습니다. 이미지·영상에서 필요한 정보를 추출해 구조화된 결과로 전달하는 흐름을 구현했습니다.',
 		href: '/portfolio/linux-qwen-extraction',
 		link: 'Local AI 경험 보기',
 	},
 ];
 
 const engineeringSteps = [
-	{ title: '문제를 구체화합니다', body: '사용자와 운영 맥락을 살펴 해결해야 할 문제와 완료 조건을 먼저 정합니다.' },
-	{ title: '구조와 영향 범위를 파악합니다', body: '요청·데이터·인프라가 지나가는 경로와 변경이 미치는 범위를 확인합니다.' },
-	{ title: '구현하고 반복 작업을 자동화합니다', body: '서비스와 운영 환경에 맞는 구조를 만들고, 반복되는 작업은 코드와 설정으로 관리합니다.' },
-	{ title: '실행 결과를 검증하고 운영합니다', body: '테스트와 실행 결과로 동작을 확인하고, 배포 뒤 서비스 상태와 변경 영향을 살핍니다.' },
+	{ title: '문제를 구체화합니다', body: '사용자와 운영 맥락을 확인해 해결할 문제와 완료 조건을 정합니다.' },
+	{ title: '구조와 영향 범위를 파악합니다', body: '요청·데이터·인프라의 흐름과 변경이 미치는 범위를 살핍니다.' },
+	{ title: '구현하고 반복 작업을 자동화합니다', body: '서비스와 운영 환경에 맞게 구현하고, 반복되는 작업은 코드와 설정으로 관리합니다.' },
+	{ title: '실행 결과를 검증하고 운영합니다', body: '테스트와 실행 결과를 확인하고 배포 뒤 서비스 상태와 변경 영향을 살핍니다.' },
 ];
 ---
 
@@ -54,8 +54,8 @@ const engineeringSteps = [
 			<section class="hero" aria-labelledby="hero-title">
 				<p class="eyebrow">DEVOPS · PLATFORM · SOFTWARE ENGINEERING</p>
 				<h1 id="hero-title">문제를 끝까지 책임지는<br />DevOps &amp; Platform Engineer</h1>
-				<p class="hero-lede">클라우드 인프라와 서비스의 흐름을 이해하고, 코드와 자동화로 운영 문제를 해결합니다.</p>
-				<p class="hero-intro">2021년부터 인프라 구축과 서비스 운영을 함께 맡아 왔습니다. 현재는 전사 클라우드 비용 최적화와 인프라 관리를 담당하며, Java·Python 백엔드와 데이터 시스템도 직접 구현합니다. 산업 분야 대규모 프로젝트에서 쌓은 도메인 지식을 API, 검색, 업무 화면으로 연결해 왔습니다.</p>
+				<p class="hero-lede">클라우드 인프라와 플랫폼 운영을 바탕으로 백엔드·데이터 시스템까지 연결하며, 코드와 자동화로 문제를 해결합니다.</p>
+				<p class="hero-intro">2021년부터 인프라 구축과 서비스 운영을 함께 맡아 왔습니다. 현재는 전사 클라우드 비용 최적화와 인프라 관리를 담당하며, Java·Python으로 백엔드와 데이터 시스템을 구현합니다. 대규모 산업 프로젝트에서 쌓은 도메인 지식을 API·검색·업무 화면으로 연결해 왔습니다.</p>
 				<div class="hero-actions">
 					<a class="button button-primary" href="/portfolio">프로젝트 보기 <span aria-hidden="true">→</span></a>
 					<a class="button button-secondary" href="/blog">기술 블로그 <span aria-hidden="true">→</span></a>
@@ -76,7 +76,7 @@ const engineeringSteps = [
 						</article>
 					))}
 				</div>
-				<p class="operational-note">전사 인프라와 클라우드 비용을 관리하면서 수천만 원 규모의 구축 비용 문제를 기술적 대안으로 해결한 경험이 있습니다. 변경의 비용과 서비스 영향을 함께 살피며 운영을 이어갑니다.</p>
+				<p class="operational-note">전사 인프라와 클라우드 비용을 관리하며 수천만 원 규모의 구축 비용 문제를 기술적 대안으로 해결한 경험이 있습니다. 변경의 비용과 서비스 영향을 함께 살피며 운영합니다.</p>
 			</section>
 
 			<section class="engineering-section" aria-labelledby="engineering-title">
@@ -93,7 +93,7 @@ const engineeringSteps = [
 						</article>
 					))}
 				</div>
-				<p class="engineering-note">동료에게서 배운 시스템 전체를 보는 시야와 서비스 안정성에 대한 책임을 일하는 기준으로 삼습니다. 필요한 곳에는 직접 코드를 쓰고, 구조를 이해한 뒤 테스트와 실행 결과로 판단합니다.</p>
+				<p class="engineering-note">시스템 전체를 살피고 서비스 안정성까지 책임지는 태도를 일하는 기준으로 삼습니다. 필요한 곳에는 직접 코드를 쓰고, 테스트와 실행 결과를 바탕으로 판단합니다.</p>
 			</section>
 
 			<TechnicalExperience />
@@ -104,8 +104,8 @@ const engineeringSteps = [
 					<h2 id="ai-title">AI 에이전트와 함께 만들고, 결과는 직접 확인합니다</h2>
 				</div>
 				<div class="ai-panel">
-				<p>Codex 등 AI 에이전트와 일할 때 문제와 완료 조건을 먼저 정리하고 조사·구현·검증으로 작업을 나눕니다. 프로젝트 기록과 문제 해결 과정을 함께 정리해 다음 작업의 맥락으로 활용합니다. 요구사항과 설계 방향, 작업 범위를 정하고, 제안된 코드가 기존 구조에 맞는지와 실행 결과를 직접 검토합니다. 최종 판단과 운영 책임은 제가 맡습니다.</p>
-					<p>화면에 표시된 거래 정보를 직접 옮기는 번거로움을 줄이기 위해 로컬 비전 언어 모델을 실험하고 추출 파이프라인을 구현했습니다. Apple Silicon의 MLX-VLM과 Linux NVIDIA GPU·CUDA의 Qwen 추론, FFmpeg 영상 프레임 처리, Python·FastAPI 요청과 JSON 결과 검증을 연결했습니다.</p>
+					<p>Codex 등 AI 에이전트와 작업할 때는 목표, 범위, 제약, 완료 조건부터 정리합니다. 조사와 반복 구현을 작은 단위로 나눠 맡기고, 제안된 변경이 기존 코드와 설계에 맞는지 검토합니다.</p>
+					<p>테스트와 실행 결과를 직접 확인하며 요구사항, 기술적 판단, 최종 결정과 운영 책임을 맡습니다.</p>
 					<div class="ai-links">
 						<a href="/portfolio/linux-qwen-extraction">Local AI Extraction 프로젝트 <span aria-hidden="true">→</span></a>
 						<a href="/blog/local-vlm-python-video-pipeline/">영상 분석 파이프라인 기록 <span aria-hidden="true">→</span></a>
@@ -123,30 +123,32 @@ const engineeringSteps = [
 	.eyebrow { margin: 0 0 0.75rem; color: var(--link); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.1em; }
 	.hero h1 { max-width: 700px; margin: 0; padding: 0; border: 0; font-size: clamp(2rem, 6vw, 3.25rem); line-height: 1.16; letter-spacing: -0.035em; }
 	.hero-lede { margin: 1.25rem 0 0.6rem; font-size: 1.2rem; font-weight: 600; }
-	.hero-intro { max-width: 720px; margin: 0; color: #656d76; font-size: 1.04rem; line-height: 1.8; }
+	.hero-intro { max-width: 720px; margin: 0; color: var(--text); font-size: 1.08rem; line-height: 1.8; }
 	.hero-actions { display: flex; flex-wrap: wrap; gap: 0.65rem; margin-top: 1.5rem; }
 	.button { display: inline-flex; gap: 0.6rem; align-items: center; padding: 0.65rem 0.95rem; border: 1px solid var(--border); border-radius: 6px; font-weight: 600; }
 	.button-primary { border-color: var(--link); background: var(--link); color: #fff; }
 	.button-secondary { background: var(--bg); }
-	.experience-section, .engineering-section, .ai-section { margin: 4rem 0; }
+	.experience-section, .engineering-section, .ai-section { margin: 3.5rem 0; }
 	.section-heading { margin-bottom: 1.25rem; }
 	.section-heading h2 { margin: 0; }
 	.experience-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
-	.experience-card { min-width: 0; padding: 1.15rem; border: 1px solid var(--border); border-radius: 8px; }
-	.experience-card h3, .engineering-step h3 { margin: 0 0 0.55rem; font-size: 1rem; }
-	.experience-card p, .engineering-step > p:last-child { margin: 0; color: #656d76; font-size: 0.95rem; line-height: 1.7; }
-	.experience-card a { display: inline-block; margin-top: 0.75rem; font-size: 0.9rem; font-weight: 600; }
+	.experience-card { min-width: 0; padding: 1.25rem; border: 1px solid var(--border); border-radius: 8px; }
+	.experience-card h3, .engineering-step h3 { margin: 0 0 0.65rem; font-size: 1.1rem; }
+	.experience-card p, .engineering-step > p:last-child { margin: 0; color: var(--text); font-size: 1rem; line-height: 1.75; }
+	.experience-card a { display: inline-block; margin-top: 0.85rem; font-size: 0.95rem; font-weight: 600; }
 	.operational-note, .engineering-note { margin: 1rem 0 0; line-height: 1.75; }
-	.engineering-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
-	.engineering-step { min-width: 0; padding: 1rem; border-top: 2px solid var(--link); background: var(--code-bg); }
+	.engineering-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+	.engineering-step { min-width: 0; padding: 1.2rem; border: 1px solid var(--border); border-top: 2px solid var(--link); border-radius: 8px; background: var(--code-bg); }
 	.step-number { margin: 0 0 0.75rem; color: var(--link); font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em; }
-	.ai-panel { padding: 1.25rem 1.4rem; border-left: 3px solid var(--link); background: var(--code-bg); line-height: 1.75; }
+	.ai-panel { padding: 1.3rem 1.4rem; border-left: 3px solid var(--link); background: var(--code-bg); color: var(--text); font-size: 1.02rem; line-height: 1.8; }
 	.ai-panel p:first-child { margin-top: 0; }
-	.ai-panel p:last-of-type { margin-bottom: 0.9rem; }
-	.ai-links { display: flex; flex-wrap: wrap; gap: 0.5rem 1.1rem; font-size: 0.92rem; }
+	.ai-panel p:last-of-type { margin-bottom: 1rem; }
+	.ai-links { display: flex; flex-wrap: wrap; gap: 0.55rem 1.1rem; font-size: 0.98rem; }
+	.experience-card a, .ai-links a { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+	.button:focus-visible, .experience-card a:focus-visible, .ai-links a:focus-visible { outline: 3px solid var(--link); outline-offset: 3px; }
+	@media (prefers-color-scheme: dark) { .button-primary { color: #0d1117; } }
 	@media (max-width: 700px) {
 		.experience-grid { grid-template-columns: 1fr; }
-		.engineering-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 	}
-	@media (max-width: 420px) { .engineering-grid { grid-template-columns: 1fr; } }
+	@media (max-width: 600px) { .engineering-grid { grid-template-columns: 1fr; } }
 </style>
