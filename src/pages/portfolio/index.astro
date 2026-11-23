@@ -8,6 +8,7 @@ const badge = (name: string, url: string) => ({ name, url });
 
 const projects = [
 	{
+		id: 'cloudatlas',
 		name: 'CloudAtlas',
 		tagline: 'Cloud Infrastructure · Graph Visualization',
 		participation: '개발 100%',
@@ -25,6 +26,7 @@ const projects = [
 		blogLink: null,
 	},
 	{
+		id: 'collect-dashboard',
 		name: 'Collect Dashboard',
 		tagline: 'Data Platform · Full-stack',
 		participation: '개발 100%',
@@ -46,6 +48,7 @@ const projects = [
 		blogLink: null,
 	},
 	{
+		id: 'local-ai-extraction',
 		name: 'Local AI Extraction',
 		tagline: 'Local AI · Vision Extraction',
 		participation: '개발 100%',
@@ -64,6 +67,7 @@ const projects = [
 		blogLink: { title: '[Local VLM] Python으로 구축한 로컬 멀티모달 LLM 영상 분석 파이프라인', href: '/blog/local-vlm-python-video-pipeline/' },
 	},
 	{
+		id: 'whoola',
 		name: 'Whoola',
 		tagline: 'Prepaid Telecom · Full-stack',
 		participation: '개발 100% · 공동 사업 기획',
@@ -85,6 +89,7 @@ const projects = [
 		blogLink: null,
 	},
 	{
+		id: 'aws-infrastructure-as-code',
 		name: 'AWS Infrastructure as Code',
 		tagline: 'Cloud Infrastructure · IaC · CI/CD',
 		participation: '직접 설계·구축·관리',
@@ -102,6 +107,7 @@ const projects = [
 		blogLink: null,
 	},
 	{
+		id: 'kubernetes-platform-engineering',
 		name: 'Kubernetes Platform Engineering',
 		tagline: 'Kubernetes · Container Platform',
 		participation: '직접 설계·구축·관리',
@@ -119,6 +125,7 @@ const projects = [
 		blogLink: null,
 	},
 	{
+		id: 'kubernetes-autoscaling',
 		name: 'Kubernetes Autoscaling',
 		tagline: 'Kubernetes · Node Lifecycle Management',
 		participation: '직접 설계·구축·관리',
@@ -136,6 +143,7 @@ const projects = [
 		blogLink: null,
 	},
 	{
+		id: 'kubernetes-observability',
 		name: 'Kubernetes Observability',
 		tagline: 'Monitoring · Logging · Platform Operations',
 		participation: '직접 설계·구축·관리',
@@ -152,6 +160,7 @@ const projects = [
 		blogLink: null,
 	},
 	{
+		id: 'cross-database-data-synchronization',
 		name: 'Cross-Database Data Synchronization',
 		tagline: 'Data Engineering · Event Streaming',
 		participation: '직접 설계·구축·관리',
@@ -168,6 +177,7 @@ const projects = [
 		blogLink: null,
 	},
 	{
+		id: 'server-configuration-automation',
 		name: 'Server Configuration Automation',
 		tagline: 'Ansible · Multi-Cloud Operations',
 		participation: '직접 설계·구축·관리',
@@ -185,6 +195,66 @@ const projects = [
 		blogLink: null,
 	},
 ];
+
+const focusOptions = [
+	{ value: 'all', label: '전체' },
+	{ value: 'platform', label: 'DevOps · Platform' },
+	{ value: 'backend', label: 'Backend · Full-stack' },
+	{ value: 'data', label: 'Data Engineering' },
+	{ value: 'ai', label: 'AI · Infrastructure' },
+] as const;
+
+const projectPriorities = {
+	all: projects.map(({ id }) => id),
+	platform: [
+		'cloudatlas',
+		'aws-infrastructure-as-code',
+		'kubernetes-platform-engineering',
+		'kubernetes-autoscaling',
+		'kubernetes-observability',
+		'server-configuration-automation',
+		'cross-database-data-synchronization',
+		'local-ai-extraction',
+		'collect-dashboard',
+		'whoola',
+	],
+	backend: [
+		'whoola',
+		'collect-dashboard',
+		'cross-database-data-synchronization',
+		'cloudatlas',
+		'local-ai-extraction',
+		'aws-infrastructure-as-code',
+		'kubernetes-platform-engineering',
+		'server-configuration-automation',
+		'kubernetes-observability',
+		'kubernetes-autoscaling',
+	],
+	data: [
+		'cross-database-data-synchronization',
+		'collect-dashboard',
+		'local-ai-extraction',
+		'cloudatlas',
+		'server-configuration-automation',
+		'aws-infrastructure-as-code',
+		'kubernetes-platform-engineering',
+		'kubernetes-observability',
+		'kubernetes-autoscaling',
+		'whoola',
+	],
+	ai: [
+		'local-ai-extraction',
+		'cloudatlas',
+		'collect-dashboard',
+		'kubernetes-platform-engineering',
+		'aws-infrastructure-as-code',
+		'kubernetes-autoscaling',
+		'kubernetes-observability',
+		'cross-database-data-synchronization',
+		'server-configuration-automation',
+		'whoola',
+	],
+};
 ---
 
 <!doctype html>
@@ -195,6 +265,15 @@ const projects = [
 			.page-intro { margin: 2.5rem 0; }
 			.page-intro h1 { margin-top: 0; }
 			.page-intro p { max-width: 620px; color: #656d76; line-height: 1.75; }
+			.portfolio-controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.85rem 1.25rem; margin: 1.5rem 0; }
+			.focus-options { display: flex; flex-wrap: wrap; gap: 0.5rem; max-width: 100%; }
+			.focus-button { max-width: 100%; padding: 0.5rem 0.8rem; border: 1px solid var(--border); border-radius: 999px; background: var(--bg); color: var(--text); font: inherit; font-size: 0.9rem; line-height: 1.35; cursor: pointer; }
+			.focus-button:hover { border-color: var(--link); }
+			.focus-button[aria-pressed="true"] { border-color: var(--link); background: var(--code-bg); color: var(--link); font-weight: 600; }
+			.focus-button:focus-visible, .copy-link-button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+			.share-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.75rem; }
+			.copy-link-button { padding: 0; border: 0; background: transparent; color: var(--link); font: inherit; font-size: 0.9rem; text-decoration: underline; cursor: pointer; }
+			.copy-feedback { min-height: 1.3em; color: #656d76; font-size: 0.82rem; }
 			.project-list { display: grid; gap: 1rem; margin: 2rem 0; }
 			.project-card { min-width: 0; padding: 1.25rem; border: 1px solid var(--border); border-radius: 8px; }
 			.project-group-heading { margin: 2rem 0 0; border: 0; padding: 1.4rem 0 0.2rem; border-top: 1px solid var(--border); font-size: 1.25rem; }
@@ -233,11 +312,33 @@ const projects = [
 				<h1>Portfolio</h1>
 				<p>서비스 개발, 데이터 엔지니어링, 클라우드·플랫폼, GPU 추론 인프라까지 문제의 전체 흐름을 설계하고 구현한 프로젝트를 소개합니다.</p>
 			</header>
+			<div
+				class="portfolio-controls"
+				data-portfolio-controls
+				data-priorities={JSON.stringify(projectPriorities)}
+			>
+				<div class="focus-options" role="group" aria-label="관심 직무별 프로젝트 우선순위">
+					{focusOptions.map((option) => (
+						<button
+							type="button"
+							class="focus-button"
+							data-focus={option.value}
+							aria-pressed={option.value === 'all' ? 'true' : 'false'}
+						>
+							{option.label}
+						</button>
+					))}
+				</div>
+				<div class="share-controls">
+					<button class="copy-link-button" type="button" data-copy-link>링크 복사</button>
+					<span class="copy-feedback" data-copy-feedback role="status" aria-live="polite"></span>
+				</div>
+			</div>
 			<section class="project-list" aria-label="프로젝트 목록">
 				{projects.map((project, index) => (
 					<>
-					{index === 4 && <h2 class="project-group-heading">Infrastructure &amp; Data Engineering</h2>}
-					<article class="project-card">
+					{index === 4 && <h2 class="project-group-heading" data-project-group-heading>Infrastructure &amp; Data Engineering</h2>}
+					<article class="project-card" data-project-id={project.id}>
 						<div class="project-heading">
 							<div>
 								<h2>{project.name}</h2>
@@ -267,5 +368,107 @@ const projects = [
 			</section>
 		</main>
 		<Footer />
+<script>
+	const controls = document.querySelector('[data-portfolio-controls]');
+	const projectList = document.querySelector('.project-list');
+
+	if (controls && projectList) {
+		const priorities = JSON.parse(controls.dataset.priorities || '{}');
+		const buttons = Array.from(controls.querySelectorAll('[data-focus]'));
+		const focusValues = new Set(buttons.map((button) => button.dataset.focus));
+		const cards = Array.from(projectList.querySelectorAll('[data-project-id]'));
+		const cardsById = new Map(cards.map((card) => [card.dataset.projectId, card]));
+		const groupHeading = projectList.querySelector('[data-project-group-heading]');
+		const copyButton = controls.querySelector('[data-copy-link]');
+		const copyFeedback = controls.querySelector('[data-copy-feedback]');
+
+		const currentFocusFromUrl = () => {
+			const url = new URL(window.location.href);
+			const requested = url.searchParams.get('focus');
+			if (requested === null) return 'all';
+			if (focusValues.has(requested)) return requested;
+
+			url.searchParams.delete('focus');
+			history.replaceState(history.state, '', `${url.pathname}${url.search}${url.hash}`);
+			return 'all';
+		};
+
+		const applyFocus = (focus) => {
+			const normalizedFocus = focusValues.has(focus) ? focus : 'all';
+			const orderedIds = priorities[normalizedFocus] || priorities.all || [];
+			const orderedCards = orderedIds.map((id) => cardsById.get(id)).filter(Boolean);
+			const includedCards = new Set(orderedCards);
+
+			cards.forEach((card) => {
+				if (!includedCards.has(card)) orderedCards.push(card);
+			});
+
+			if (groupHeading) groupHeading.remove();
+			orderedCards.forEach((card) => projectList.append(card));
+			if (normalizedFocus === 'all' && groupHeading && orderedCards[4]) {
+				projectList.insertBefore(groupHeading, orderedCards[4]);
+			}
+
+			buttons.forEach((button) => {
+				button.setAttribute('aria-pressed', String(button.dataset.focus === normalizedFocus));
+			});
+		};
+
+		const selectFocus = (focus, addHistoryEntry) => {
+			const normalizedFocus = focusValues.has(focus) ? focus : 'all';
+			if (addHistoryEntry) {
+				const url = new URL(window.location.href);
+				if (normalizedFocus === 'all') url.searchParams.delete('focus');
+				else url.searchParams.set('focus', normalizedFocus);
+				const nextUrl = `${url.pathname}${url.search}${url.hash}`;
+				const currentUrl = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+				if (nextUrl !== currentUrl) history.pushState({ focus: normalizedFocus }, '', nextUrl);
+			}
+			applyFocus(normalizedFocus);
+		};
+
+		buttons.forEach((button) => {
+			button.addEventListener('click', () => selectFocus(button.dataset.focus, true));
+		});
+
+		window.addEventListener('popstate', () => selectFocus(currentFocusFromUrl(), false));
+		selectFocus(currentFocusFromUrl(), false);
+
+		if (copyButton && copyFeedback) {
+			copyButton.addEventListener('click', async () => {
+				let copied = false;
+				try {
+					if (navigator.clipboard?.writeText) {
+						await navigator.clipboard.writeText(window.location.href);
+						copied = true;
+					}
+				} catch {
+					copied = false;
+				}
+
+				if (!copied) {
+					const field = document.createElement('textarea');
+					field.value = window.location.href;
+					field.setAttribute('readonly', '');
+					field.style.position = 'fixed';
+					field.style.opacity = '0';
+					document.body.append(field);
+					field.select();
+					try {
+						copied = document.execCommand('copy');
+					} catch {
+						copied = false;
+					} finally {
+						field.remove();
+					}
+				}
+
+				copyFeedback.textContent = copied
+					? '링크를 복사했어요.'
+					: '복사하지 못했어요. 주소창에서 링크를 복사해 주세요.';
+			});
+		}
+	}
+</script>
 	</body>
 </html>
