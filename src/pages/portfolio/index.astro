@@ -2,6 +2,7 @@
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
+import TechnologyBadges from '../../components/TechnologyBadges.astro';
 import { SITE_TITLE } from '../../consts';
 
 const badge = (name: string, url: string) => ({ name, url });
@@ -111,52 +112,25 @@ const projects = [
 		name: 'Kubernetes Platform Engineering',
 		tagline: 'Kubernetes · Container Platform',
 		participation: '직접 설계·구축·관리',
-		description: '회사의 배포·운영 정책에 맞춰 Kubernetes 애플리케이션의 실행, 서비스 노출, 리소스 기준을 직접 구성하고 관리했습니다.',
-		features: ['Deployment와 Service 기반 애플리케이션 배포', 'Gateway API·HTTPRoute를 활용한 서비스 라우팅', 'Probe, 리소스 요청·제한, 설정 참조 구성'],
+		description: '회사의 배포·운영 정책에 맞춰 Kubernetes 플랫폼을 구축하고 운영했습니다. 애플리케이션 배포와 서비스 라우팅부터 워크로드에 따른 노드 관리, 메트릭·로그 수집까지 플랫폼 운영의 각 영역을 담당했습니다.',
+		features: ['Deployment·Service·Gateway API 기반 배포와 라우팅, Probe·리소스·설정 관리', 'Karpenter와 SQS·EventBridge를 활용한 노드 수명주기 및 중단 이벤트 관련 구성', 'Prometheus·Loki·Alloy 기반 메트릭·로그 수집과 Helm 설정 관리'],
 		badges: [
 			badge('Kubernetes', 'https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white'),
 			badge('Helm', 'https://img.shields.io/badge/Helm-0F1689?style=for-the-badge&logo=helm&logoColor=white'),
 			badge('Gateway API', 'https://img.shields.io/badge/Gateway_API-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white'),
-			badge('Deployment', 'https://img.shields.io/badge/Deployment-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white'),
-			badge('Service', 'https://img.shields.io/badge/Service-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white'),
-			badge('HTTPRoute', 'https://img.shields.io/badge/HTTPRoute-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white'),
-		],
-		links: [{ label: 'Kubernetes Platform Engineering 상세 페이지', description: '애플리케이션 배포와 서비스 노출 구조', href: '/portfolio/kubernetes-platform-engineering' }],
-		blogLink: null,
-	},
-	{
-		id: 'kubernetes-autoscaling',
-		name: 'Kubernetes Autoscaling',
-		tagline: 'Kubernetes · Node Lifecycle Management',
-		participation: '직접 설계·구축·관리',
-		description: '워크로드 자원 요구에 대응하도록 Karpenter 노드 관리 설정과 AWS 중단 이벤트 처리 관련 인프라를 구성하고 관리했습니다.',
-		features: ['Karpenter Helm values와 노드 관리 설정', 'AWS SQS·EventBridge 기반 중단 처리 관련 구성', 'Helm 적용 및 변경 후 노드·배포 상태 관리'],
-		badges: [
 			badge('Karpenter', 'https://img.shields.io/badge/Karpenter-7B42BC?style=for-the-badge'),
-			badge('Kubernetes', 'https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white'),
-			badge('Helm', 'https://img.shields.io/badge/Helm-0F1689?style=for-the-badge&logo=helm&logoColor=white'),
 			badge('AWS', 'https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white'),
 			badge('Amazon SQS', 'https://img.shields.io/badge/Amazon_SQS-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white'),
 			badge('EventBridge', 'https://img.shields.io/badge/EventBridge-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white'),
-		],
-		links: [{ label: 'Kubernetes Autoscaling 상세 페이지', description: 'Karpenter 노드 정책과 중단 처리 구성', href: '/portfolio/kubernetes-autoscaling' }],
-		blogLink: null,
-	},
-	{
-		id: 'kubernetes-observability',
-		name: 'Kubernetes Observability',
-		tagline: 'Monitoring · Logging · Platform Operations',
-		participation: '직접 설계·구축·관리',
-		description: 'Kubernetes 서비스와 플랫폼 상태를 파악할 수 있도록 Prometheus 메트릭과 Loki·Alloy 로그 수집 구성을 Helm으로 관리했습니다.',
-		features: ['Prometheus 기반 메트릭 관측 구성', 'Alloy·Loki를 활용한 로그 수집 구성', 'Helm values 변경과 업그레이드 관리'],
-		badges: [
 			badge('Prometheus', 'https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=prometheus&logoColor=white'),
 			badge('Grafana Loki', 'https://img.shields.io/badge/Grafana_Loki-F46800?style=for-the-badge&logo=grafana&logoColor=white'),
 			badge('Grafana Alloy', 'https://img.shields.io/badge/Grafana_Alloy-F46800?style=for-the-badge&logo=grafana&logoColor=white'),
-			badge('Helm', 'https://img.shields.io/badge/Helm-0F1689?style=for-the-badge&logo=helm&logoColor=white'),
-			badge('Kubernetes', 'https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white'),
 		],
-		links: [{ label: 'Kubernetes Observability 상세 페이지', description: '메트릭·로그 기반 플랫폼 가시성 구성', href: '/portfolio/kubernetes-observability' }],
+		links: [
+			{ label: 'Kubernetes Platform Engineering', description: '배포·라우팅 · Deployment, Service, Gateway API', href: '/portfolio/kubernetes-platform-engineering' },
+			{ label: 'Kubernetes Autoscaling', description: '노드 관리 · Karpenter, SQS, EventBridge', href: '/portfolio/kubernetes-autoscaling' },
+			{ label: 'Kubernetes Observability', description: '메트릭·로그 · Prometheus, Loki, Alloy', href: '/portfolio/kubernetes-observability' },
+		],
 		blogLink: null,
 	},
 	{
@@ -229,8 +203,6 @@ const projectPriorities = {
 		'cloudatlas',
 		'aws-infrastructure-as-code',
 		'kubernetes-platform-engineering',
-		'kubernetes-autoscaling',
-		'kubernetes-observability',
 		'server-configuration-automation',
 		'cross-database-data-synchronization',
 		'dart-data-collection',
@@ -248,8 +220,6 @@ const projectPriorities = {
 		'aws-infrastructure-as-code',
 		'kubernetes-platform-engineering',
 		'server-configuration-automation',
-		'kubernetes-observability',
-		'kubernetes-autoscaling',
 	],
 	data: [
 		'cross-database-data-synchronization',
@@ -260,8 +230,6 @@ const projectPriorities = {
 		'server-configuration-automation',
 		'aws-infrastructure-as-code',
 		'kubernetes-platform-engineering',
-		'kubernetes-observability',
-		'kubernetes-autoscaling',
 		'whoola',
 	],
 	ai: [
@@ -270,8 +238,6 @@ const projectPriorities = {
 		'collect-dashboard',
 		'kubernetes-platform-engineering',
 		'aws-infrastructure-as-code',
-		'kubernetes-autoscaling',
-		'kubernetes-observability',
 		'cross-database-data-synchronization',
 		'dart-data-collection',
 		'server-configuration-automation',
@@ -301,6 +267,7 @@ const projectPriorities = {
 			.project-card { min-width: 0; padding: 1.25rem; border: 1px solid var(--border); border-radius: 8px; }
 			.project-group-heading { margin: 2rem 0 0; border: 0; padding: 1.4rem 0 0.2rem; border-top: 1px solid var(--border); font-size: 1.25rem; }
 			.project-heading { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.2rem 1rem; }
+			.project-heading > div { min-width: 0; }
 			.project-card h2 { margin: 0; border: 0; padding: 0; font-size: 1.45rem; }
 			.project-tagline { margin: 0.25rem 0 0; color: #656d76; font-weight: 600; }
 			.participation { margin: 0; color: #656d76; font-size: 0.85rem; white-space: nowrap; }
@@ -308,11 +275,8 @@ const projectPriorities = {
 			.project-card h3 { margin: 1rem 0 0.35rem; font-size: 0.95rem; }
 			.feature-list { display: flex; flex-wrap: wrap; gap: 0.15rem 1.5rem; margin: 0; padding-left: 1.15rem; }
 			.feature-list li { margin: 0.15rem 0; }
-			.stack-badges { display: flex; flex-wrap: wrap; gap: 0.45rem; max-width: 100%; margin: 0; padding: 0; list-style: none; }
-			.stack-badges li { max-width: 100%; margin: 0; }
-			.stack-badges img { display: block; max-width: 100%; height: 24px; border: 0; filter: none; }
 			.project-links { display: grid; gap: 0.25rem; margin-top: 0.3rem; }
-			.project-detail-link { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.1rem 0.65rem; width: fit-content; max-width: 100%; padding: 0.2rem 0; }
+			.project-detail-link { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.1rem 0.65rem; width: fit-content; max-width: 100%; padding: 0.2rem 0; overflow-wrap: anywhere; }
 			.project-detail-link strong { font-size: 0.92rem; }
 			.project-detail-link span { color: #656d76; font-size: 0.85rem; }
 			.project-blog-link { margin: 0.35rem 0 0; font-size: 0.86rem; overflow-wrap: anywhere; }
@@ -322,8 +286,6 @@ const projectPriorities = {
 				.project-heading { align-items: flex-start; }
 				.project-tagline { font-size: 0.92rem; }
 				.feature-list { display: block; }
-				.stack-badges { gap: 0.4rem; }
-				.stack-badges img { height: 22px; }
 			}
 		</style>
 	</head>
@@ -366,6 +328,13 @@ const projectPriorities = {
 							<div>
 								<h2>{project.name}</h2>
 								<p class="project-tagline">{project.tagline}</p>
+								<nav class="project-links" aria-label={`${project.name} 상세 페이지`}>
+									{project.links.map((link) => (
+										<a class="project-detail-link" href={link.href}>
+											<strong>{link.label}</strong><span>{link.description}</span>
+										</a>
+									))}
+								</nav>
 							</div>
 							<p class="participation">{project.participation}</p>
 						</div>
@@ -373,17 +342,7 @@ const projectPriorities = {
 						<h3>핵심 구현</h3>
 						<ul class="feature-list">{project.features.map((feature) => <li>{feature}</li>)}</ul>
 						<h3>주요 기술</h3>
-						<ul class="stack-badges" aria-label={`${project.name} 주요 기술`}>
-							{project.badges.map((item) => <li><img src={item.url} alt={item.name} loading="lazy" /></li>)}
-						</ul>
-						<h3>{project.links.length > 1 ? '프로젝트 구성' : '상세 페이지'}</h3>
-						<nav class="project-links" aria-label={`${project.name} 상세 페이지`}>
-							{project.links.map((link) => (
-								<a class="project-detail-link" href={link.href}>
-									<strong>{link.label}</strong><span>{link.description}</span>
-								</a>
-							))}
-						</nav>
+						<TechnologyBadges badges={project.badges} label={`${project.name} 주요 기술`} compact />
 						{project.blogLink && <p class="project-blog-link"><span>관련 기술 기록</span><a href={project.blogLink.href}>{project.blogLink.title} <span aria-hidden="true">↗</span></a></p>}
 					</article>
 					</>
