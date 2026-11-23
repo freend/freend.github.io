@@ -11,6 +11,35 @@ const stackBadges = [
 	{ name: 'IAM', url: 'https://img.shields.io/badge/IAM-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white' },
 ];
 
+const resourceTable = {
+	caption: 'Terraform으로 관리한 AWS 리소스 범위',
+	headers: ['영역', 'AWS 리소스', '관리 내용'],
+	rows: [
+		['CI/CD 오케스트레이션', 'AWS CodePipeline', '서비스별 소스·빌드·배포 단계를 연결하는 파이프라인 정의'],
+		['빌드 환경', 'AWS CodeBuild', '서비스별 빌드 프로젝트와 파이프라인 연동 설정'],
+		['컨테이너 이미지 저장', 'Amazon ECR Repository', '서비스별 컨테이너 이미지 저장소'],
+		['이미지 수명 주기', 'ECR Lifecycle Policy', '이미지 보존 기간과 오래된 이미지 정리 기준'],
+		['이미지 저장소 접근', 'ECR Repository Policy', '저장소에 대한 서비스 간 접근 정책'],
+		['컴퓨팅', 'Amazon EC2', '인스턴스와 연결 리소스 설정'],
+		['이벤트 기반 컴퓨팅', 'AWS Lambda', '함수와 실행 구성'],
+		['API 구성', 'Amazon API Gateway', 'REST API, 리소스·메서드, 통합 및 스테이지'],
+		['데이터 저장', 'Amazon DocumentDB', '클러스터와 인스턴스 구성'],
+		['캐시·세션 데이터', 'Amazon ElastiCache for Redis', '복제 그룹과 1개 멤버 노드 (aws_elasticache_replication_group)'],
+		['NoSQL 테이블', 'Amazon DynamoDB', '운영 테이블 3개를 테이블 단위로 관리 (aws_dynamodb_table)'],
+		['관계형 데이터베이스', 'Amazon RDS for MariaDB', 'MariaDB DB 인스턴스 (aws_db_instance)'],
+		['오브젝트 저장', 'Amazon S3', '버킷과 접근 설정'],
+		['메시지 큐', 'Amazon SQS', '큐와 큐 접근 정책'],
+		['DNS와 네트워크 접근', 'Amazon Route 53', 'DNS 호스팅 영역과 레코드'],
+		['네트워크 경계', 'Amazon EC2 Security Groups', '서비스 연결에 필요한 인바운드·아웃바운드 규칙'],
+		['사람과 서비스 계정', 'AWS IAM Users', '사용자와 자격 증명 관련 관리 항목'],
+		['서비스 권한 위임', 'AWS IAM Roles', '서비스와 자동화가 사용하는 역할'],
+		['세부 권한 제어', 'AWS IAM Policies', '사용자·역할에 연결하는 작업 권한 정의'],
+		['이벤트 자동화', 'Amazon EventBridge', '이벤트 규칙과 대상 연결'],
+		['웹 앱 호스팅', 'AWS Amplify', '앱, 브랜치 및 도메인 연결'],
+		['서비스 설정값', 'Systems Manager Parameter Store', '애플리케이션에서 사용하는 파라미터'],
+	],
+};
+
 const sections = [
 	{
 		eyebrow: '01 · WHY',
@@ -20,7 +49,14 @@ const sections = [
 		],
 	},
 	{
-		eyebrow: '02 · HOW',
+		eyebrow: '02 · Terraform 관리 체계 전환',
+		title: '기존 AWS 인프라의 Terraform 관리 체계 전환',
+		paragraphs: [
+			'기존에 운영 중이던 약 320개의 AWS 리소스를 Terraform 관리 대상으로 편입했습니다. 서비스에 영향을 주지 않고 기존 리소스를 코드와 State에 연결했으며, 최종 terraform plan에서 추가·변경·삭제 항목이 없는 상태를 확인했습니다.',
+		],
+	},
+	{
+		eyebrow: '03 · HOW',
 		title: '서비스와 배포 정책에 필요한 리소스를 Terraform으로 구성',
 		paragraphs: [
 			'Terraform 코드로 AWS 리소스를 정의하고 적용한 뒤, 변경사항과 State 변화를 확인하며 관리했습니다. CodePipeline과 CodeBuild는 빌드·배포 흐름을 구성하고, ECR은 컨테이너 이미지 관리에 사용했습니다.',
@@ -30,9 +66,10 @@ const sections = [
 			{ title: 'CI/CD 리소스', body: 'CodePipeline·CodeBuild·ECR 등 빌드와 이미지 관리에 필요한 AWS 리소스를 Terraform으로 구성했습니다.' },
 			{ title: '서비스 인프라', body: '스토리지, IAM, 컴퓨트, 서버리스, 데이터베이스와 메시징 관련 리소스를 서비스 요구에 맞춰 관리했습니다.' },
 		],
+		table: resourceTable,
 	},
 	{
-		eyebrow: '03 · WHAT',
+		eyebrow: '04 · WHAT',
 		title: '직접 설계·구축한 범위의 AWS 리소스와 변경사항을 관리',
 		bullets: [
 			'Terraform으로 서비스 운영에 필요한 AWS 및 CI/CD 리소스를 선언하고 적용',
@@ -43,7 +80,7 @@ const sections = [
 		flow: ['Terraform 코드', 'AWS 리소스 구성', '변경 적용 및 State 확인'],
 	},
 	{
-		eyebrow: '04 · ENGINEERING DECISIONS',
+		eyebrow: '05 · ENGINEERING DECISIONS',
 		title: '반복 구성을 코드로 관리하고 State 변화까지 확인',
 		paragraphs: [
 			'반복적으로 다루는 리소스부터 Terraform으로 선언해 코드 기반으로 관리했습니다. 변경을 적용한 뒤에는 설정과 Terraform State의 변화를 함께 살펴 리소스 상태를 확인했습니다.',
