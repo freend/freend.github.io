@@ -49,14 +49,21 @@ const sections = [
 		],
 	},
 	{
-		eyebrow: '02 · Terraform 관리 체계 전환',
+		eyebrow: '02 · 클라우드 비용 대응',
+		title: '구축 비용 문제에 기술적 대안 적용',
+		paragraphs: [
+			'전사 인프라와 클라우드 비용을 관리하며 수천만 원 규모의 구축 비용 문제를 기술적 대안으로 해결한 경험이 있습니다.',
+		],
+	},
+	{
+		eyebrow: '03 · Terraform 관리 체계 전환',
 		title: '기존 AWS 인프라의 Terraform 관리 체계 전환',
 		paragraphs: [
 			'기존에 운영 중이던 약 320개의 AWS 리소스를 Terraform 관리 대상으로 편입했습니다. 서비스에 영향을 주지 않고 기존 리소스를 코드와 State에 연결했으며, 최종 terraform plan에서 추가·변경·삭제 항목이 없는 상태를 확인했습니다.',
 		],
 	},
 	{
-		eyebrow: '03 · HOW',
+		eyebrow: '04 · HOW',
 		title: '서비스와 배포 정책에 필요한 리소스를 Terraform으로 구성',
 		paragraphs: [
 			'Terraform 코드로 AWS 리소스를 정의하고 적용한 뒤, 변경사항과 State 변화를 확인하며 관리했습니다. CodePipeline과 CodeBuild는 빌드·배포 흐름을 구성하고, ECR은 컨테이너 이미지 관리에 사용했습니다.',
@@ -69,7 +76,7 @@ const sections = [
 		table: resourceTable,
 	},
 	{
-		eyebrow: '04 · WHAT',
+		eyebrow: '05 · WHAT',
 		title: '직접 설계·구축한 범위의 AWS 리소스와 변경사항을 관리',
 		bullets: [
 			'Terraform으로 서비스 운영에 필요한 AWS 및 CI/CD 리소스를 선언하고 적용',
@@ -80,7 +87,7 @@ const sections = [
 		flow: ['Terraform 코드', 'AWS 리소스 구성', '변경 적용 및 State 확인'],
 	},
 	{
-		eyebrow: '05 · ENGINEERING DECISIONS',
+		eyebrow: '06 · ENGINEERING DECISIONS',
 		title: '반복 구성을 코드로 관리하고 State 변화까지 확인',
 		paragraphs: [
 			'반복적으로 다루는 리소스부터 Terraform으로 선언해 코드 기반으로 관리했습니다. 변경을 적용한 뒤에는 설정과 Terraform State의 변화를 함께 살펴 리소스 상태를 확인했습니다.',
