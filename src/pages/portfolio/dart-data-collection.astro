@@ -17,50 +17,51 @@ const stackBadges = [
 const sections = [
 	{
 		eyebrow: '01 · WHY',
-		title: 'DART 공시·재무 데이터를 서비스에서 활용할 수 있도록',
+		title: '수집 대상에 따라 두 방식으로 개발',
 		paragraphs: [
-			'DART에 공개된 공시와 재무 정보를 조회·집계 기능에서 활용하려면 필요한 데이터를 수집하고 서비스가 다룰 수 있는 구조로 정리해야 했습니다. 공시 웹페이지를 파싱하는 수집 시스템을 직접 설계하고 구현했으며, Open DART API를 이용하는 별도 수집 서비스의 일부 기능 개발에도 참여했습니다.',
+			'DART 공식 API에서 데이터를 제공하는 기업의 기업정보·재무정보·공시목록을 수집하는 서비스 개발에 일부 참여했습니다. 별도로, 공식 API에서 데이터를 제공하지 않는 외감기업을 대상으로 DART 홈페이지에서 재무정보와 재무 관련 공시목록을 수집하는 시스템을 설계·구현했습니다.',
 		],
 	},
 	{
 		eyebrow: '02 · WEB SCRAPING',
-		title: '공시 페이지와 보고서 HTML에서 필요한 데이터를 추출',
+		title: 'API 미제공 외감기업의 재무정보를 홈페이지에서 수집',
 		paragraphs: [
-			'직접 설계·구현한 스크래핑 시스템은 DART 공시 목록에서 감사보고서, 재무보고서, 계약 관련 공시를 찾고 보고서의 HTML 표를 구조화된 데이터로 변환합니다.',
+			'DART 공식 API에서 데이터를 제공하지 않는 외감기업을 대상으로, 홈페이지 공시목록에서 재무 관련 보고서를 확인·선별했습니다. 선택한 보고서를 직접 크롤링해 재무정보를 추출하고 서비스에서 활용할 수 있도록 구조화했습니다.',
 		],
-		flow: ['DART 공시 목록', 'Selenium 페이지 탐색', 'HTML·iframe 표 파싱', 'Pandas 데이터 정리', 'FastAPI·데이터 저장소'],
+		flow: ['외감기업 공시목록', '재무 관련 보고서 선별', 'Selenium 페이지 탐색', 'HTML·iframe 표 파싱', 'Pandas 데이터 정리', 'FastAPI·데이터 저장소'],
 		bullets: [
-			'Selenium으로 날짜별 공시 목록을 탐색하고 회사 식별 정보, 문서 제목, 접수일과 보고서 링크를 수집합니다.',
-			'보고서 페이지의 iframe과 표를 읽어 감사·재무·계약 정보를 추출하고 Pandas DataFrame으로 정리합니다.',
+			'Selenium으로 DART 공시목록을 탐색해 재무 관련 보고서를 선별한 뒤 해당 보고서로 이동합니다.',
+			'보고서 HTML과 iframe 표에서 재무정보를 추출해 Pandas DataFrame으로 정리합니다.',
 			'필수 필드와 날짜 입력을 확인한 뒤 SQLAlchemy 기반 저장 계층에 기록하고, FastAPI 조회·집계 엔드포인트로 제공합니다.',
-			'계약·재무 데이터 수집을 FastAPI BackgroundTasks로 시작할 수 있도록 구성했으며 Docker 실행 설정도 마련했습니다.',
+			'재무정보 수집을 FastAPI BackgroundTasks로 실행할 수 있도록 구성하고 Docker 실행 환경을 마련했습니다.',
 		],
 		note: 'dart-audit-api-server 전체 설계 및 구현을 담당했습니다(100%).',
 	},
 	{
 		eyebrow: '03 · OPEN API',
-		title: 'Open DART API를 이용한 수집 서비스 개발에도 참여',
+		title: 'Open DART API가 제공하는 기업정보·재무정보 수집',
 		paragraphs: [
-			'관련 수집 서비스는 Open DART API에서 기업 개황, 재무 정보, 공시 목록을 가져옵니다. aiohttp 비동기 요청으로 응답을 받고 Pydantic 모델과 전처리 과정을 거쳐 저장·조회에 사용할 데이터로 변환합니다.',
-			'FastAPI는 기업 및 재무 정보 조회 응답을 모델로 관리하며, 해당 조회 엔드포인트에는 JWT 토큰 검증이 적용되어 있습니다. 이 서비스에서는 일부 기능 개발에 참여했으며, 전체 구현을 담당한 것은 아닙니다.',
+			'Open DART API에서 데이터를 제공하는 기업을 대상으로 기업정보, 재무정보, 공시목록을 수집합니다. aiohttp 비동기 요청으로 응답을 받고 Pydantic 모델과 전처리 단계를 거쳐 저장·조회에 사용할 데이터로 변환합니다.',
+			'FastAPI는 기업 및 재무 정보 조회 응답을 모델로 관리하며, 해당 조회 엔드포인트에는 JWT 토큰 검증이 적용되어 있습니다. 이 서비스의 일부 기능 개발에 참여했습니다.',
 		],
 		flow: ['Open DART API', 'aiohttp 비동기 요청', 'Pydantic 응답 모델', '데이터 전처리·저장', 'FastAPI 조회 API'],
-		note: 'ai-dart-scraper의 전체 개발이 아닌 일부 기능 개발에 참여했습니다(약 10–20%). 특정 기능을 단독 구현했다고 주장하지 않습니다.',
+		note: 'ai-dart-scraper 일부 기능 개발에 참여했습니다(약 10–20%).',
 	},
 	{
 		eyebrow: '04 · APPROACH',
-		title: '웹 스크래핑과 Open API를 데이터 형태에 맞춰 활용',
+		title: '수집 대상에 맞춰 각 프로젝트에서 다른 방식을 사용',
+		paragraphs: ['두 수집 방식은 각기 다른 대상을 위한 별도 프로젝트로 구현했습니다.'],
 		cards: [
-			{ title: '웹 스크래핑', body: 'DART 페이지에 표시된 공시와 보고서 내용을 브라우저 자동화로 읽고, HTML 표를 파싱해 필요한 필드를 데이터프레임으로 구조화했습니다.' },
-			{ title: 'Open DART API', body: '기업·재무·공시 데이터를 제공하는 API를 호출하고, JSON 응답을 모델과 전처리 단계를 거쳐 서비스 데이터로 연결했습니다.' },
+			{ title: 'DART 홈페이지 크롤링', body: '대상은 공식 API에서 데이터를 제공하지 않는 외감기업입니다. 공시목록에서 재무 관련 보고서를 선별하고 HTML에서 재무정보를 추출·구조화합니다.' },
+			{ title: 'Open DART API', body: '대상은 공식 API에서 데이터를 제공하는 기업입니다. 기업정보·재무정보·공시목록을 API로 수집해 응답 데이터를 처리합니다.' },
 		],
 	},
 	{
 		eyebrow: '05 · SCOPE',
-		title: '두 저장소에서 맡은 개발 범위를 구분',
+		title: '각 프로젝트에서 맡은 범위',
 		bullets: [
-			'dart-audit-api-server: 데이터 수집·파싱·조회 시스템 전체 설계 및 구현 (100%)',
-			'ai-dart-scraper: Open DART API 기반 수집 서비스 일부 기능 개발 참여 (약 10–20%)',
+			'dart-audit-api-server: API 미제공 외감기업의 재무정보와 재무 관련 공시목록 수집 시스템 전체 설계 및 구현 (100%)',
+			'ai-dart-scraper: Open DART API 제공 기업의 기업정보·재무정보·공시목록 수집 서비스 일부 기능 개발 참여 (약 10–20%)',
 		],
 		note: '두 원본 저장소는 비공개이므로 공개 소스 링크를 제공하지 않습니다. 내부 주소, 인증 정보, 기업 데이터와 회사 전용 스키마는 포트폴리오에 포함하지 않았습니다.',
 	},
@@ -70,8 +71,8 @@ const sections = [
 <PortfolioProjectDetail
 	title="DART Data Collection"
 	eyebrow="Data Engineering · Backend"
-	subtitle="웹 스크래핑과 Open DART API를 활용한 공시·재무 데이터 수집"
-	description="금융감독원 DART의 공시·재무 데이터를 웹 스크래핑과 Open DART API 연동 방식으로 수집하고, 서비스에서 활용할 수 있도록 구조화한 경험입니다."
+	subtitle="API 제공 기업 정보 수집과 외감기업 재무정보 크롤링"
+	description="Open DART API 제공 기업의 기업정보·재무정보·공시목록을 수집하는 서비스 개발에 일부 참여하고, API 미제공 외감기업의 재무정보와 재무 관련 공시목록을 수집하는 별도 크롤링 시스템을 설계·구현했습니다."
 	stack={stack}
 	stackBadges={stackBadges}
 	sections={sections}
