@@ -52,7 +52,7 @@ const projects = [
 		name: 'Local AI Extraction',
 		tagline: 'Local AI · Vision Extraction',
 		participation: '개발 100%',
-		description: 'Linux GPU 환경에서 로컬 비전 언어 모델을 실행하고, 이미지와 영상의 시각정보를 구조화된 데이터로 추출하는 시스템입니다.',
+		description: '화면에 표시된 정보를 직접 입력하는 번거로움을 줄이기 위해 로컬 비전 언어 모델을 활용한 정보 추출을 실험했습니다. Linux GPU 환경에 추론 시스템을 구성하고, 이미지와 영상의 시각 정보를 구조화된 데이터로 변환하는 기능을 개발했습니다.',
 		features: ['Linux GPU 기반 로컬 VLM 추론', '이미지 입력 검증과 영상 프레임 전처리', '추론 응답 파싱 및 JSON 구조화'],
 		badges: [
 			badge('Linux', 'https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black'),
@@ -93,8 +93,8 @@ const projects = [
 		name: 'AWS Infrastructure as Code',
 		tagline: 'Cloud Infrastructure · IaC · CI/CD',
 		participation: '직접 설계·구축·관리',
-		description: '회사의 서비스와 배포 정책에 맞춰 AWS 리소스와 CI/CD 기반을 Terraform 코드로 설계하고 적용·관리했습니다.',
-		features: ['CodePipeline·CodeBuild·ECR 빌드 및 이미지 관리 리소스', 'S3·IAM·컴퓨트·서버리스 등 AWS 서비스 구성', 'Terraform 변경과 State 변화를 확인하며 인프라 관리'],
+		description: 'CI/CD와 AWS 리소스를 관리하면서 반복적인 콘솔 작업을 줄이기 위해 Terraform을 도입했습니다. 이후 서비스와 배포 정책에 맞춰 AWS 인프라 및 CI/CD 관련 리소스를 코드로 구성하고 관리했습니다.',
+		features: ['Terraform 기반 AWS 인프라 및 CI/CD 리소스 구성', 'CodePipeline·CodeBuild·ECR 등 배포 관련 리소스 관리', 'Terraform 변경사항과 State를 확인하며 인프라 운영'],
 		badges: [
 			badge('Terraform', 'https://img.shields.io/badge/Terraform-7B42BC?style=for-the-badge&logo=terraform&logoColor=white'),
 			badge('AWS', 'https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white'),
@@ -164,8 +164,8 @@ const projects = [
 		name: 'Cross-Database Data Synchronization',
 		tagline: 'Data Engineering · Event Streaming',
 		participation: '직접 설계·구축·관리',
-		description: '서로 다른 데이터베이스 간 데이터를 주고받을 수 있도록 Kafka와 Avro 기반 동기화 시스템을 설계·구축·관리했습니다.',
-		features: ['Kafka를 데이터 교환 계층으로 활용', 'Avro를 이용한 데이터 표현과 교환', 'Kafka Connect·Schema Registry를 포함한 Confluent 환경 구성'],
+		description: 'RDS, Neo4j, Elasticsearch 등 여러 데이터 저장소를 사용하는 환경에서 별도의 대량 배치 작업에 의존하지 않고 데이터를 동기화하기 위해 Kafka 기반 파이프라인을 설계하고 구축했습니다.',
+		features: ['JDBC Source Connector로 updated_at 기준 변경 데이터를 증분 수집', 'ksqlDB로 Elasticsearch 문서용 JSON·배열 구조 변환', '별도 Kafka Topic과 Elasticsearch Sink Connector를 통한 PK 기준 Upsert 적재'],
 		badges: [
 			badge('Apache Kafka', 'https://img.shields.io/badge/Apache_Kafka-231F20?style=for-the-badge&logo=apachekafka&logoColor=white'),
 			badge('Confluent', 'https://img.shields.io/badge/Confluent-1C1C1C?style=for-the-badge&logo=confluent&logoColor=white'),
