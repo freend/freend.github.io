@@ -25,11 +25,11 @@ const resourceTable = {
 
 const sections = [
 	{
-		eyebrow: '01 · 확인한 결과',
-		title: '기존 리소스를 Terraform 관리 대상으로 편입하고 계획을 검증',
+		eyebrow: '01 · 관리 방식 개선',
+		title: '반복적인 AWS 인프라 관리를 Terraform 코드 기반으로 전환',
 		cards: [
-			{ title: '약 320개 AWS 리소스', body: '서비스에 영향을 주지 않고 기존 운영 리소스를 Terraform 코드와 State에 연결해 관리 대상으로 편입했습니다.' },
-			{ title: '0 to add · 0 to change · 0 to destroy', body: '관리 전환 후 확인한 최종 terraform plan 결과입니다. 해당 계획에서 추가·변경·삭제 예정 항목이 없음을 확인했습니다.' },
+			{ title: '관리 방식 개선', body: '콘솔 중심에서 Terraform 코드 기반으로 전환했습니다. 반복적인 인프라 설정과 변경 작업을 코드로 정의하고 관리했습니다.' },
+			{ title: '적용 범위', body: '기존 AWS 리소스 약 320개를 Terraform 코드와 State에 연결해 관리 대상으로 편입했습니다.' },
 		],
 	},
 	{
@@ -58,9 +58,9 @@ const sections = [
 	},
 	{
 		eyebrow: '05 · ENGINEERING DECISIONS',
-		title: '코드와 State를 함께 살피며 인프라 변경 관리',
+			title: '코드와 State를 함께 살피며 인프라 변경 관리',
 		paragraphs: [
-			'반복되던 CI/CD 및 서비스 리소스 설정을 Terraform 코드로 관리했습니다. 변경 시에는 선언한 구성과 State의 변화를 함께 확인하고, 최종 plan에서 Terraform이 제안하는 변경 범위를 검토했습니다.',
+			'Terraform 코드에 선언한 구성과 State의 변화를 함께 확인하며 인프라를 관리했습니다. 기존 리소스의 관리 전환 후 최종 terraform plan에서 추가·변경·삭제 예정 항목이 없음을 확인했습니다.',
 		],
 	},
 ];
