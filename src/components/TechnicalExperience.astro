@@ -1,8 +1,10 @@
 ---
+import TechnologyBadges from './TechnologyBadges.astro';
+
 const areas = [
 	{
 		title: 'DevOps / Cloud Infrastructure',
-		description: 'Terraform으로 AWS 인프라와 CI/CD 리소스를 관리하고, Ansible로 멀티클라우드 서버 설정을 자동화합니다.',
+		description: 'Terraform으로 AWS 인프라와 CI/CD 리소스를 코드로 관리하고, Ansible Dynamic Inventory로 AWS·GCP 서버 설정 작업을 자동화합니다.',
 		badges: [
 			{ name: 'AWS', url: 'https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white' },
 			{ name: 'Terraform', url: 'https://img.shields.io/badge/Terraform-7B42BC?style=for-the-badge&logo=terraform&logoColor=white' },
@@ -15,7 +17,7 @@ const areas = [
 	},
 	{
 		title: 'Kubernetes / Platform',
-		description: '애플리케이션 배포와 서비스 라우팅부터 노드 관리, 메트릭·로그 수집까지 Kubernetes 운영 기반을 구성합니다.',
+		description: 'Deployment·Service와 Gateway API로 서비스 배포·라우팅을 구성하고, Karpenter와 Prometheus·Loki·Alloy로 노드 운영 및 메트릭·로그 수집을 다룹니다.',
 		badges: [
 			{ name: 'Kubernetes', url: 'https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white' },
 			{ name: 'Helm', url: 'https://img.shields.io/badge/Helm-0F1689?style=for-the-badge&logo=helm&logoColor=white' },
@@ -33,7 +35,7 @@ const areas = [
 	},
 	{
 		title: 'Backend / Data Engineering',
-		description: 'Java·Spring과 Python·FastAPI로 API를 구현하고, 여러 저장소의 데이터 수집·집계·동기화 흐름을 연결합니다. Jupyter에서 기업·재무·특허 데이터를 분석하고 Elasticsearch 색인과 Neo4j 관계 분석에도 활용합니다.',
+		description: 'Java·Spring과 Python·FastAPI로 API를 구현하고 SQLAlchemy·Redis·Kafka를 데이터 접근, 캐시, 집계·동기화 흐름에 활용합니다.',
 		badges: [
 			{ name: 'Java', url: 'https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white' },
 			{ name: 'Spring Boot', url: 'https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white' },
@@ -59,7 +61,7 @@ const areas = [
 	},
 	{
 		title: 'AI-assisted Engineering',
-		description: 'AI 에이전트와 작업을 나누고 요구사항·완료 조건·검증 결과를 직접 관리합니다. 로컬 VLM을 영상·이미지 추출 파이프라인에 연결한 경험도 있습니다.',
+		description: 'Python·FFmpeg 입력 전처리, llama.cpp·Qwen 로컬 추론, JSON 결과 검증을 이미지·영상 처리 흐름으로 연결합니다.',
 		badges: [
 			{ name: 'Python', url: 'https://img.shields.io/badge/Python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54' },
 			{ name: 'llama.cpp', url: 'https://img.shields.io/badge/llama.cpp-3B82F6?style=for-the-badge' },
@@ -84,9 +86,9 @@ const areas = [
 			<article class="tech-area">
 				<h3>{area.title}</h3>
 				<p>{area.description}</p>
-				<ul class="tech-badges" aria-label={`${area.title} 기술`}>
-					{area.badges.map((badge) => <li><img src={badge.url} alt={badge.name} loading="lazy" /></li>)}
-				</ul>
+				<div class="tech-badges">
+					<TechnologyBadges badges={area.badges} label={`${area.title} 기술`} compact />
+				</div>
 				<nav aria-label={`${area.title} 프로젝트`}>
 					{area.links.map((link) => <a href={link.href}>{link.label}<span aria-hidden="true"> →</span></a>)}
 				</nav>
@@ -96,17 +98,17 @@ const areas = [
 </section>
 
 <style>
-	.tech-summary { margin: 4rem 0; }
+	.tech-summary { margin: 3.5rem 0; }
 	.section-heading { margin-bottom: 1.25rem; }
 	.eyebrow { margin: 0 0 0.65rem; color: var(--link); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.1em; }
 	.section-heading h2 { margin: 0; }
 	.tech-area-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
-	.tech-area { min-width: 0; padding: 1.15rem; border: 1px solid var(--border); border-radius: 8px; }
-	.tech-area h3 { margin: 0 0 0.55rem; font-size: 1rem; color: var(--link); }
-	.tech-area p { margin: 0; color: #656d76; font-size: 0.95rem; line-height: 1.7; }
-	.tech-badges { display: flex; flex-wrap: wrap; gap: 0.45rem; margin: 0.9rem 0; padding: 0; list-style: none; }
-	.tech-badges li { min-width: 0; margin: 0; }
-	.tech-badges img { display: block; max-width: 100%; height: 22px; border: 0; }
-	.tech-area nav { display: flex; flex-wrap: wrap; gap: 0.35rem 0.8rem; font-size: 0.9rem; }
+	.tech-area { min-width: 0; padding: 1.25rem; border: 1px solid var(--border); border-radius: 8px; }
+	.tech-area h3 { margin: 0 0 0.65rem; font-size: 1.1rem; color: var(--link); }
+	.tech-area p { margin: 0; color: var(--text); font-size: 1rem; line-height: 1.7; }
+	.tech-badges { margin: 0.9rem 0; }
+	.tech-area nav { display: flex; flex-wrap: wrap; gap: 0.4rem 0.9rem; margin-top: 0.9rem; font-size: 0.95rem; }
+	.tech-area nav a { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+	.tech-area nav a:focus-visible { outline: 3px solid var(--link); outline-offset: 3px; }
 	@media (max-width: 700px) { .tech-area-grid { grid-template-columns: 1fr; } }
 </style>
