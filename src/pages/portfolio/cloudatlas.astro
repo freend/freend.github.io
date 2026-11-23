@@ -47,14 +47,14 @@ const demoUrl = 'https://freend.github.io/cloudatlas-demo/';
 						<p>개별 리소스 설정만으로는 서비스 여러 개에 걸친 이벤트 흐름과 관계를 한 번에 이해하기 어려웠습니다.</p>
 					</article>
 				</div>
-				<p class="scope-note"><strong>운영 경험과 데모 범위:</strong> 두 연결 흐름은 개발 동기를 설명하는 운영 사례입니다. 특히 이벤트 기반 전체 흐름이 현재 공개 데모에 구현되어 있다는 뜻은 아닙니다. 공개 데모는 일부 기능을 보여주는 포트폴리오용 환경입니다.</p>
+				<p class="scope-note"><strong>운영 경험과 데모:</strong> 두 연결 흐름은 실제 운영에서 관계를 추적하며 겪은 불편함을 설명합니다. 공개 데모에서는 합성 샘플 데이터로 리소스 탐색과 관계 확인을 체험할 수 있습니다.</p>
 			</section>
 
 			<section class="content-section" aria-labelledby="approach-title">
 				<p class="eyebrow">해결 접근 방식</p>
 				<h2 id="approach-title">해결 접근 방식</h2>
 				<p>개별 리소스 정보를 나열하는 대신 리소스와 관계를 그래프 구조로 표현합니다. 사용자는 전체 구조를 둘러보고, 리소스를 검색하거나 선택한 다음 연결된 리소스를 따라가며 세부 정보를 확인할 수 있습니다.</p>
-				<p>이 방식으로 AWS 콘솔에서 여러 화면을 오가며 관계를 추적하는 과정을 시각적으로 살펴볼 수 있게 했습니다. 이 소개에서는 확인되지 않은 성능 개선이나 사용 성과 수치를 제시하지 않습니다.</p>
+				<p>이 방식으로 AWS 콘솔에서 여러 화면을 오가며 관계를 추적하는 과정을 시각적으로 살펴볼 수 있게 했습니다.</p>
 			</section>
 
 			<section class="content-section" aria-labelledby="architecture-title">
@@ -65,7 +65,6 @@ const demoUrl = 'https://freend.github.io/cloudatlas-demo/';
 					<article><h3>React · TypeScript</h3><p>그래프 화면과 리소스 탐색 인터페이스를 구성합니다.</p></article>
 					<article><h3>인터랙티브 그래프</h3><p>리소스를 검색·선택하고 연결 관계와 상세 정보를 살펴보는 그래프 시각화를 제공합니다.</p></article>
 				</div>
-				<p class="scope-note">이 페이지는 시스템의 역할과 데이터 흐름을 개략적으로 설명하며 상세 구현 코드는 공개하지 않습니다.</p>
 			</section>
 
 			<section class="content-section" aria-labelledby="agents-title">
@@ -78,8 +77,7 @@ const demoUrl = 'https://freend.github.io/cloudatlas-demo/';
 					</article>
 					<article>
 						<h3>CloudAtlas 내부의 AI 에이전트</h3>
-						<p>프로젝트 내부에서도 클라우드 리소스 조사와 관계 분석을 지원하는 AI 에이전트 구조를 사용했습니다. 이 기능은 공개 데모에서 제공되는 기능으로 표시하지 않습니다.</p>
-						<p class="measurement-note">내부 프롬프트, 분석 알고리즘, 오케스트레이션과 비공개 설계는 이 포트폴리오에 포함하지 않습니다.</p>
+						<p>CloudAtlas 내부에서는 클라우드 리소스 조사와 관계 분석을 지원하는 AI 에이전트 구조를 사용했습니다.</p>
 					</article>
 				</div>
 			</section>
@@ -95,14 +93,13 @@ const demoUrl = 'https://freend.github.io/cloudatlas-demo/';
 					<li>정적 빌드 검증</li>
 					<li>브라우저에서 검색·선택·연결 탐색 등 동작 확인</li>
 				</ul>
-				<p class="measurement-note">이번 블로그 저장소에는 CloudAtlas 개발 소스가 포함되어 있지 않아 테스트 건수나 커버리지 등 수치는 제시하지 않습니다.</p>
 			</section>
 
 			<section class="demo-section" aria-labelledby="demo-title">
 				<p class="eyebrow">공개 데모</p>
 				<h2 id="demo-title">공개 데모에서 확인할 수 있는 것</h2>
 				<p>데모에서는 합성 AWS 샘플 그래프를 대상으로 리소스 검색과 선택, 상세 정보 확인, 연결 관계 탐색을 할 수 있습니다. Force-Directed, Radial, Flow-First 등의 그래프 레이아웃을 바꿔 볼 수도 있습니다.</p>
-				<p class="scope-note"><strong>시연 환경:</strong> 실제 AWS 계정에 연결되지 않은 합성 샘플 데이터 기반의 정적 데모입니다. 실제 운영 인프라나 계정 정보는 포함하지 않습니다.</p>
+				<p class="scope-note"><strong>시연 환경:</strong> 합성 AWS 샘플 데이터로 동작하는 정적 데모입니다.</p>
 				<a class="button button-primary" href={demoUrl} target="_blank" rel="noopener noreferrer">CloudAtlas 데모 보기 <span aria-hidden="true">↗</span></a>
 			</section>
 		</main>

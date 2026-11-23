@@ -24,7 +24,6 @@ const sections = [
 		title: 'Karpenter 설정과 AWS 이벤트 인프라를 역할에 맞춰 관리',
 		paragraphs: [
 			'Karpenter Helm values와 Node 관련 설정을 통해 Kubernetes 노드 관리 정책을 구성했습니다. Terraform으로는 SQS와 EventBridge 관련 AWS 리소스를 관리하고, Karpenter 설정에는 interruptionQueue 항목을 두었습니다.',
-			'공개 설명은 노드 관리와 중단 이벤트 처리라는 역할 수준으로 제한했습니다. 내부 큐 이름이나 계정별 설정은 노출하지 않습니다.',
 		],
 		cards: [
 			{ title: 'Kubernetes 노드 관리', body: 'Karpenter 설정과 Node 관련 값을 Helm으로 관리하고, 변경 시 적용 상태를 확인했습니다.' },
@@ -40,7 +39,6 @@ const sections = [
 			'Terraform 기반 SQS·EventBridge 리소스 구성',
 			'Helm 변경 적용 이력과 노드·배포 상태 확인',
 		],
-		note: '이 흐름은 노드 관리 경험을 설명하는 개념도입니다. Terraform의 큐 이름과 Karpenter의 interruptionQueue 값이 동일하다고 표현하지 않습니다.',
 	},
 	{
 		eyebrow: '04 · ENGINEERING DECISIONS',
