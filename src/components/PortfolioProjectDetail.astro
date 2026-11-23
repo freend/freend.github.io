@@ -9,6 +9,17 @@ interface DetailCard {
 	body: string;
 }
 
+interface DetailTable {
+	caption: string;
+	headers: string[];
+	rows: string[][];
+}
+
+interface DetailCode {
+	language: string;
+	content: string;
+}
+
 interface DetailSection {
 	eyebrow?: string;
 	title: string;
@@ -16,6 +27,9 @@ interface DetailSection {
 	bullets?: string[];
 	flow?: string[];
 	cards?: DetailCard[];
+	table?: DetailTable;
+	code?: DetailCode;
+	formula?: string;
 	note?: string;
 }
 
@@ -90,6 +104,17 @@ const { title, eyebrow, subtitle, description, stack, stackBadges, relatedLinks,
 							{section.cards.map((card) => <article><h3>{card.title}</h3><p>{card.body}</p></article>)}
 						</div>
 					)}
+					{section.formula && <p class="detail-formula"><code>{section.formula}</code></p>}
+					{section.code && <pre class="detail-code"><code class={`language-${section.code.language}`}>{section.code.content}</code></pre>}
+					{section.table && (
+						<div class="detail-table-wrap" role="region" aria-label={section.table.caption} tabindex="0">
+							<table class="detail-table">
+								<caption>{section.table.caption}</caption>
+								<thead><tr>{section.table.headers.map((header) => <th scope="col">{header}</th>)}</tr></thead>
+								<tbody>{section.table.rows.map((row) => <tr>{row.map((cell, cellIndex) => cellIndex === 0 ? <th scope="row">{cell}</th> : <td>{cell}</td>)}</tr>)}</tbody>
+							</table>
+						</div>
+					)}
 					{section.note && <p class="scope-note">{section.note}</p>}
 				</section>
 			))}
@@ -161,6 +186,16 @@ const { title, eyebrow, subtitle, description, stack, stackBadges, relatedLinks,
 	.flow { color: var(--link); font-weight: 650; overflow-wrap: anywhere; }
 	.flow span { padding: 0 0.2rem; color: #656d76; }
 	.scope-note { padding: 0.9rem 1rem; border-left: 3px solid var(--link); background: var(--code-bg); }
+	.detail-formula { margin: 1rem 0; }
+	.detail-formula code { padding: 0.45rem 0.7rem; font-size: 1rem; }
+	.detail-code { max-width: 100%; overflow-x: auto; padding: 1rem; border: 1px solid var(--border); border-radius: 6px; background: var(--code-bg); }
+	.detail-code code { padding: 0; background: transparent; font-size: 0.88rem; }
+	.detail-table-wrap { max-width: 100%; margin: 1rem 0 1.5rem; overflow-x: auto; border: 1px solid var(--border); border-radius: 6px; }
+	.detail-table { width: 100%; min-width: 46rem; border-collapse: collapse; font-size: 0.9rem; }
+	.detail-table caption { padding: 0.75rem 1rem; color: var(--text); font-weight: 600; text-align: left; }
+	.detail-table th, .detail-table td { padding: 0.7rem 0.85rem; border-top: 1px solid var(--border); text-align: left; vertical-align: top; }
+	.detail-table thead th { background: var(--code-bg); font-weight: 600; }
+	.detail-table tbody th { font-weight: 600; white-space: nowrap; }
 	@media (max-width: 600px) {
 		.detail-grid { grid-template-columns: 1fr; }
 		.project-subtitle { font-size: 1.1rem; }

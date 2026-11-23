@@ -46,6 +46,17 @@ const sections = [
 			'메트릭과 로그를 각각의 도구 설정으로 다루고, Helm values와 Alloy 구성을 통해 Kubernetes 배포에 반영했습니다. 관측성 구성의 변경도 플랫폼 설정 변경의 일부로 관리해 클러스터 운영 흐름 안에서 다룰 수 있도록 했습니다.',
 		],
 	},
+	{
+		eyebrow: '05 · 서비스 메트릭과 로그 탐색',
+		title: 'ServiceMonitor로 메트릭을 수집하고 LogQL로 오류 로그를 좁혔습니다',
+		paragraphs: [
+			'Prometheus는 ServiceMonitor를 통해 Spring Actuator의 JVM·HTTP 메트릭을 15초 간격으로 수집합니다. Grafana Alloy는 로그를 Loki로 전달하며, 네임스페이스와 컨테이너 라벨로 범위를 좁힌 뒤 JSON 파싱과 오류 문자열 필터를 조합해 로그를 탐색합니다.',
+		],
+		code: {
+			language: 'logql',
+			content: '{namespace="application", container="api"} |= "error" | json',
+		},
+	},
 ];
 ---
 
