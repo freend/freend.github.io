@@ -25,42 +25,58 @@ const resourceTable = {
 
 const sections = [
 	{
-		eyebrow: '01 · 관리 방식 개선',
-		title: '반복적인 AWS 인프라 관리를 Terraform 코드 기반으로 전환',
+		eyebrow: '01 · WHY',
+		title: '반복적인 AWS 콘솔 작업에서 IaC의 필요성을 발견',
+		paragraphs: [
+			'초기에는 AWS CodeBuild와 CodePipeline 등 배포 리소스를 콘솔에서 직접 생성하고 설정했습니다. 비슷한 구성을 반복하면서 인프라 정의와 변경을 코드로 관리할 필요성을 느꼈습니다.',
+		],
+		flow: ['CodeBuild · CodePipeline 콘솔 구성', '반복 설정 경험', 'IaC 도입 필요성'],
+	},
+	{
+		eyebrow: '02 · ADOPTION',
+		title: 'Terraform 도입으로 리소스 구성을 코드로 전환',
+		paragraphs: [
+			'인프라를 코드로 관리하는 IaC 방식을 알아보며 Terraform을 도입했습니다. CodeBuild와 CodePipeline 등 배포에 필요한 AWS 리소스를 코드로 정의하고 적용하면서, 콘솔에서 수행하던 구성을 코드 기반으로 관리하는 방식으로 전환했습니다.',
+		],
+		flow: ['Terraform 코드로 리소스 정의', 'AWS 구성에 적용', '코드와 State 확인'],
 		cards: [
-			{ title: '관리 방식 개선', body: '콘솔 중심에서 Terraform 코드 기반으로 전환했습니다. 반복적인 인프라 설정과 변경 작업을 코드로 정의하고 관리했습니다.' },
-			{ title: '적용 범위', body: '기존 AWS 리소스 약 320개를 Terraform 코드와 State에 연결해 관리 대상으로 편입했습니다.' },
+			{ title: 'CodeBuild', body: '서비스별 빌드 프로젝트와 파이프라인 연동에 필요한 구성을 Terraform으로 관리했습니다.' },
+			{ title: 'CodePipeline', body: '서비스의 소스·빌드·배포 단계를 연결하는 파이프라인 리소스를 코드로 구성했습니다.' },
 		],
 	},
 	{
-		eyebrow: '02 · WHY',
-		title: '반복적인 AWS 콘솔 설정을 코드로 관리하기 시작',
+		eyebrow: '03 · EXPANSION',
+		title: '배포 리소스에서 AWS 서비스 인프라로 관리 범위 확장',
 		paragraphs: [
-			'회사에서 CI/CD와 AWS 리소스를 구성·관리하며 콘솔에서 반복해서 설정하는 작업이 많았습니다. 반복 작업을 줄일 방법을 찾다가 Terraform을 도입했고, 필요한 인프라를 코드로 선언하고 관리하는 방식으로 발전시켰습니다.',
+			'Terraform 활용 범위를 CodeBuild·CodePipeline·ECR 등 배포 관련 리소스에서 서비스 운영에 필요한 AWS 인프라로 넓혔습니다. 서비스와 배포 정책에 맞춰 컴퓨팅, 스토리지, 데이터베이스, 네트워크, 접근 제어 등 여러 영역의 리소스를 코드로 구성했습니다. Terraform 관리 범위 확장과는 별도로, 서비스에 필요한 AWS 인프라를 직접 설계·구축·운영했습니다.',
 		],
-	},
-	{
-		eyebrow: '03 · 클라우드 비용 대응',
-		title: '구축 비용 문제에 기술적 대안 적용',
-		paragraphs: [
-			'전사 인프라와 클라우드 비용을 관리하며 수천만 원 규모의 구축 비용 문제를 기술적 대안으로 해결한 경험이 있습니다.',
-		],
-	},
-	{
-		eyebrow: '04 · HOW',
-		title: 'AWS 인프라를 설계·구축·운영하고 Terraform으로 관리',
-		paragraphs: [
-			'서비스와 배포 정책에 필요한 AWS 인프라를 직접 설계·구축·운영했습니다. Terraform 코드로 리소스를 정의하고 변경을 적용하며, 구성과 State 변화를 확인해 관리했습니다.',
-			'CodePipeline·CodeBuild·ECR을 빌드와 컨테이너 이미지 관리에 활용하고, 컴퓨팅·데이터 저장·메시징·네트워크·접근 제어 등 서비스 운영에 필요한 리소스를 구성했습니다. 아래 표에 역할별 범위를 정리했습니다.',
-		],
-		flow: ['Terraform 코드', 'AWS 리소스 구성', '변경 적용 및 State 확인'],
+		note: '별도 경험 · Terraform 관리 범위 확대와는 별도로, 전사 인프라와 클라우드 비용을 관리하며 수천만 원 규모의 구축 비용 문제에 기술적 대안을 적용했습니다.',
 		table: resourceTable,
 	},
 	{
-		eyebrow: '05 · ENGINEERING DECISIONS',
-			title: '코드와 State를 함께 살피며 인프라 변경 관리',
+		eyebrow: '04 · EXISTING RESOURCE ADOPTION',
+		title: '기존 운영 리소스 약 320개를 Terraform 관리 대상으로 편입',
 		paragraphs: [
-			'Terraform 코드에 선언한 구성과 State의 변화를 함께 확인하며 인프라를 관리했습니다. 기존 리소스의 관리 전환 후 최종 terraform plan에서 추가·변경·삭제 예정 항목이 없음을 확인했습니다.',
+			'새로 만드는 리소스뿐 아니라 이미 운영 중인 AWS 리소스도 코드와 State를 기준으로 일관되게 관리할 필요가 있었습니다. 기존 운영 리소스 약 320개를 Terraform 코드와 State에 연결해 관리 범위에 편입했습니다.',
+		],
+		flow: ['기존 운영 리소스', 'Terraform 코드 정의', 'State 연결', '관리 대상으로 편입'],
+	},
+	{
+		eyebrow: '05 · RESULT',
+		title: '최종 plan에서 당시 계획된 인프라 변경이 없음을 확인',
+		paragraphs: [
+			'기존 리소스를 관리 대상으로 편입한 뒤 Terraform 구성과 실제 AWS 인프라 상태를 대조했습니다. 최종 terraform plan에서 추가·변경·삭제 예정 항목이 모두 0건임을 확인했습니다.',
+		],
+		cards: [
+			{ title: '최종 terraform plan', body: 'Add: 0 · Change: 0 · Destroy: 0' },
+			{ title: '확인한 범위', body: '당시 Terraform 구성과 AWS 인프라 상태 사이에 계획된 추가·변경·삭제가 없었습니다.' },
+		],
+	},
+	{
+		eyebrow: '06 · ENGINEERING DECISIONS',
+		title: '신규 구성과 기존 운영 리소스를 하나의 IaC 관리 흐름으로 연결',
+		paragraphs: [
+			'신규 AWS 리소스는 Terraform 코드로 정의하고 적용하며, 이미 운영 중인 리소스는 코드와 State에 연결해 관리 범위에 포함했습니다. 변경 전에는 plan으로 적용될 내용을 확인하고, 이후 코드·State와 실제 인프라 구성을 함께 살펴보는 방식으로 관리 범위를 넓혔습니다.',
 		],
 	},
 ];
@@ -69,8 +85,8 @@ const sections = [
 <PortfolioProjectDetail
 	title="AWS Infrastructure as Code"
 	eyebrow="직접 설계·구축·관리 · Cloud Infrastructure"
-	subtitle="AWS 인프라 설계·운영과 Terraform 기반 관리"
-	description="서비스와 배포 정책에 맞는 AWS 인프라를 직접 설계·구축·운영했습니다. 반복 설정을 Terraform 코드로 관리하며, 기존 리소스의 관리 전환과 최종 plan 검증도 수행했습니다."
+	subtitle="AWS 콘솔의 반복 작업에서 시작해 기존 운영 리소스까지 Terraform으로 관리"
+	description="CodeBuild·CodePipeline 등 AWS 리소스를 콘솔에서 반복 구성하던 작업을 Terraform 기반 IaC로 전환했습니다. 이후 관리 범위를 넓혀 기존 약 320개 AWS 리소스를 Terraform 관리 대상으로 편입하고, 코드와 실제 인프라 상태를 검증했습니다."
 	stack={stack}
 	stackBadges={stackBadges}
 	sections={sections}
