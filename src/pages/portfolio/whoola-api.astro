@@ -16,42 +16,42 @@ const stackBadges = [
 
 const sections = [
 	{
-		eyebrow: '01 · API의 역할',
-		title: '결제 검증과 통신 상품 구매를 잇는 백엔드',
+		eyebrow: '01 · 서비스 백엔드',
+		title: '상품 조회부터 결제 검증과 구매 상태까지 관리',
 		paragraphs: [
-			'Whoola를 해외 선불 통신 요금제 판매 서비스로 만들면서 회원, 상품, 결제, 구매 결과를 다루는 API를 구현했습니다. Renderer가 만든 구매 요청을 받아 서버에서 PayPal 거래를 확인하고, 검증이 끝난 구매를 외부 통신상품 공급 API로 전달합니다.',
-			'Controller는 HTTP 요청과 응답을 맡고, 서비스 계층은 회원·상품·구매 흐름과 저장소 접근을 조율합니다. 구매 규칙을 화면 라우트에 넣지 않고 API 쪽에 두어 Renderer와 백엔드의 책임을 나눴습니다.',
+			'Whoola는 해외 선불 통신 상품을 판매하는 서비스입니다. Spring Boot API는 회원과 상품 정보, 주문·구매 기록, 결제 검증, 외부 공급자 요청을 처리합니다.',
+			'Controller가 HTTP 요청을 받고 Service가 도메인 처리 흐름을 조율하며, Repository가 Spring Data JPA를 통해 MySQL 데이터에 접근합니다. Renderer는 사용자 화면과 API 호출을 담당하고, 구매 규칙과 상태 관리는 API에서 처리합니다.',
 		],
 		flow: ['Renderer 구매 요청', 'Spring Controller', 'Domain Service', 'JPA Repository / 외부 API'],
 	},
 	{
-		eyebrow: '02 · 결제 확인',
-		title: '브라우저가 보낸 결제 결과를 서버에서 다시 검증',
+		eyebrow: '02 · PayPal 결제 검증',
+		title: 'PayPal 거래를 서버에서 재조회하고 결제 조건을 확인',
 		paragraphs: [
-			'PayPal 완료 정보를 받으면 PayPalService가 통화를 USD로 제한하고, 이미 저장된 거래 ID인지 확인한 뒤 PayPal 검증 응답을 조회합니다. 이어 상품 판매가와 처리 수수료에 포인트 사용액을 더한 값이 실제 결제 금액과 맞는지 비교하고, 회원의 포인트 잔액도 검사합니다.',
-			'구매 요청 DTO는 결제 확인 뒤 PurchaseCommonService로 넘어갑니다. 이 계층은 구매자·상품·수신자 정보를 다시 모아 PurchaseService가 필요한 값으로 구성합니다.',
+			'PayPal 반환 정보를 받으면 PayPalService가 거래를 서버에서 확인합니다. USD 통화와 거래 ID를 검사하고 저장된 거래 ID와 비교해 중복 요청을 확인합니다.',
+			'상품 판매가와 처리 수수료, 사용 포인트를 반영한 금액을 PayPal 검증 결과와 대조하고 회원의 포인트 잔액도 확인합니다. 조건을 확인한 구매 요청은 PurchaseCommonService로 전달합니다.',
 		],
-		flow: ['PayPal 반환 정보', '통화·거래 중복 검사', 'PayPal 거래 확인', '상품 금액·포인트 검증', '구매 요청 생성'],
+		flow: ['PayPal 반환 정보', '통화·거래 ID 확인', '서버 측 거래 조회', '상품 금액·포인트 검증', '구매 요청 처리'],
 		cards: [
 			{ title: '가격 검증', body: '클라이언트 결제액만 신뢰하지 않고 상품 가격과 처리 수수료를 기준으로 금액을 대조합니다.' },
 			{ title: '포인트 검증', body: '결제액에 사용 포인트를 더한 합계를 확인하고, 회원 잔액보다 큰 포인트 사용을 거부합니다.' },
 		],
 	},
 	{
-		eyebrow: '03 · 구매 처리와 외부 공급',
-		title: '구매 기록을 남기고 DT One 결과에 따라 상태를 나눔',
+		eyebrow: '03 · 구매 처리 및 외부 공급자 연동',
+		title: '구매를 기록하고 DT One 응답을 주문 상태에 반영',
 		paragraphs: [
-			'PurchaseService는 구매 기록과 외부 식별자를 저장하고 DT One에 상품·수신 전화번호·선택 입력 정보를 전달합니다. 정상 응답에서는 공급사 거래 ID와 상태, 만료 정보를 구매 기록에 반영하고, 요청·응답 기록도 별도 로그로 남깁니다.',
-			'공급 API 오류는 ERROR 상태로, 응답을 정상 결과로 해석할 수 없는 경우는 PENDING 상태로 구분합니다. 운영 환경에서 오류와 보류 건은 알림을 남기며, 오류 경로는 환불 처리가 필요하다는 운영 메시지를 전달합니다.',
+			'PurchaseCommonService가 구매자·상품·수신자 정보를 정리해 PurchaseService로 전달합니다. PurchaseService는 구매 기록을 저장한 뒤 DT One에 상품, 수신 전화번호, 선택 입력 정보를 요청합니다.',
+			'정상 응답에서는 공급사 거래 ID와 상태, 만료 정보를 구매 기록에 반영하고 요청·응답을 기록합니다. 공급 결과는 COMPLETE, ERROR, PENDING으로 구분하며, 오류와 보류 건은 운영자가 확인할 수 있도록 알림을 남깁니다.',
 		],
-		flow: ['구매 기록 저장', 'DT One 상품 요청', '응답 파싱', 'COMPLETE · ERROR · PENDING'],
+		flow: ['구매 기록 저장', 'DT One 상품 요청', '공급 응답 확인', '구매 상태 반영 · COMPLETE / ERROR / PENDING'],
 	},
 	{
-		eyebrow: '04 · 검증 경험',
-		title: '결제 규칙과 구매 결과를 서비스 테스트로 확인',
+		eyebrow: '04 · 결제·구매 로직 검증',
+		title: '결제 조건과 외부 공급 결과 처리를 서비스 단위로 검증',
 		paragraphs: [
 			'PayPalService 테스트는 USD 통화, 중복 거래 ID, PayPal 검증 응답, 상품 가격과 포인트 잔액 조건을 다룹니다. PurchaseService 테스트는 공급 API 성공 응답을 구매 처리에 연결하고, 상품 활성 상태와 구매 집계 조회를 확인합니다.',
-			'JUnit과 Mockito로 결제·공급 API 및 저장소 의존성을 대체해 서비스 규칙을 분리해 검증합니다. 테스트에서는 금액 검증과 구매 상태 처리처럼 외부 연동이 포함된 경계를 서비스 단위로 다룹니다.',
+			'JUnit과 Mockito로 결제·공급 API 및 저장소 의존성을 대체해 금액 검증, 구매 요청 생성, 공급 응답 처리와 상태 반영을 확인합니다.',
 		],
 	},
 ];
@@ -60,8 +60,8 @@ const sections = [
 <PortfolioProjectDetail
 	title="Whoola API"
 	eyebrow="Backend Engineering · Java"
-	subtitle="결제 검증부터 외부 통신상품 구매까지 처리하는 Spring API"
-	description="해외 선불 통신 요금제 판매 서비스의 회원·상품·결제·구매 흐름을 구현한 Spring Boot 백엔드입니다."
+	subtitle="해외 선불 통신 상품의 결제 검증과 외부 구매를 처리하는 Spring API"
+	description="회원·상품 조회부터 PayPal 거래 검증, DT One 구매 요청과 구매 상태 관리까지 담당하는 Spring Boot 백엔드입니다."
 	stack={stack}
 	stackBadges={stackBadges}
 	sections={sections}
