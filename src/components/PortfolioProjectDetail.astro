@@ -26,6 +26,7 @@ interface DetailSection {
 	paragraphs?: string[];
 	bullets?: string[];
 	flow?: string[];
+	flowSteps?: { label: string; detail: string }[];
 	cards?: DetailCard[];
 	table?: DetailTable;
 	code?: DetailCode;
@@ -98,6 +99,16 @@ const { title, eyebrow, subtitle, description, stack, stackBadges, relatedLinks,
 					<h2 id={`section-${index}-title`}>{section.title}</h2>
 					{section.paragraphs?.map((paragraph) => <p>{paragraph}</p>)}
 					{section.flow && <p class="flow">{section.flow.map((item, itemIndex) => <>{itemIndex > 0 && <span aria-hidden="true"> → </span>}{item}</>)}</p>}
+					{section.flowSteps && (
+						<ol class="flow-diagram" aria-label="데이터 처리 흐름">
+							{section.flowSteps.map((step) => (
+								<li class="flow-diagram-step">
+									<strong>{step.label}</strong>
+									<span>{step.detail}</span>
+								</li>
+							))}
+						</ol>
+					)}
 					{section.bullets && <ul class="feature-list">{section.bullets.map((item) => <li>{item}</li>)}</ul>}
 					{section.cards && (
 						<div class="detail-grid">
@@ -185,6 +196,11 @@ const { title, eyebrow, subtitle, description, stack, stackBadges, relatedLinks,
 	.detail-grid p { margin-bottom: 0; }
 	.flow { color: var(--link); font-weight: 650; overflow-wrap: anywhere; }
 	.flow span { padding: 0 0.2rem; color: #656d76; }
+	.flow-diagram { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 0.65rem; margin: 1.35rem 0 0; padding: 0; list-style: none; }
+	.flow-diagram-step { position: relative; display: flex; min-width: 0; min-height: 6.25rem; flex-direction: column; justify-content: center; gap: 0.35rem; padding: 0.75rem 0.55rem; border: 1px solid var(--border); border-radius: 8px; background: var(--code-bg); text-align: center; overflow-wrap: anywhere; }
+	.flow-diagram-step:not(:last-child)::after { position: absolute; top: 50%; right: -0.58rem; z-index: 1; color: var(--link); content: '→'; font-weight: 700; transform: translate(50%, -50%); }
+	.flow-diagram-step strong { font-size: 0.78rem; line-height: 1.3; }
+	.flow-diagram-step span { color: #656d76; font-size: 0.75rem; line-height: 1.4; }
 	.scope-note { padding: 0.9rem 1rem; border-left: 3px solid var(--link); background: var(--code-bg); }
 	.detail-formula { margin: 1rem 0; }
 	.detail-formula code { padding: 0.45rem 0.7rem; font-size: 1rem; }
@@ -199,5 +215,10 @@ const { title, eyebrow, subtitle, description, stack, stackBadges, relatedLinks,
 	@media (max-width: 600px) {
 		.detail-grid { grid-template-columns: 1fr; }
 		.project-subtitle { font-size: 1.1rem; }
+	}
+	@media (max-width: 700px) {
+		.flow-diagram { grid-template-columns: 1fr; gap: 0.6rem; max-width: 28rem; margin-inline: auto; }
+		.flow-diagram-step { min-height: 0; padding: 0.8rem 1rem; }
+		.flow-diagram-step:not(:last-child)::after { top: auto; right: auto; bottom: -0.6rem; left: 50%; content: '↓'; transform: translate(-50%, 50%); }
 	}
 </style>

@@ -13,41 +13,43 @@ const stackBadges = [
 const sections = [
 	{
 		eyebrow: '01 · WHY',
-		title: '서로 다른 저장소의 데이터를 별도 대량 배치 없이 동기화하기 위해',
+		title: '서로 다른 저장소의 변경 데이터를 연결',
 		paragraphs: [
-			'회사에서는 RDS, Neo4j, Elasticsearch 등 서로 다른 데이터 저장소를 사용했습니다. 저장소마다 데이터를 따로 추출해 대량 배치 작업으로 맞추는 방식에 의존하지 않고, 변경 데이터를 전달하고 목적지에 맞게 가공하는 공통 파이프라인을 설계·구축했습니다.',
-			'이 페이지에서는 RDS에서 Elasticsearch로 이어지는 데이터 흐름을 중심으로 설명합니다.',
+			'서비스는 RDS, Neo4j, Elasticsearch 등 서로 다른 저장소를 사용했습니다. 저장소별 데이터를 각각 추출해 대량 배치로 맞추기보다, 변경분을 전달하고 목적지 구조에 맞춰 변환하는 공통 흐름이 필요했습니다.',
+			'구체적인 구현 사례는 RDS 변경 데이터를 Elasticsearch 문서로 동기화한 파이프라인입니다.',
 		],
 	},
 	{
 		eyebrow: '02 · HOW',
-		title: '수집, 변환, 적재를 Kafka 토픽으로 연결',
+		title: '수집·변환·적재를 Kafka 파이프라인으로 분리',
 		paragraphs: [
-			'RDS 조회는 Kafka Connect JDBC Source Connector가 맡고, ksqlDB는 원본 토픽의 레코드를 Elasticsearch 문서 구조로 바꿉니다. 변환 결과를 별도 토픽에 기록한 뒤 Elasticsearch Sink Connector가 목적지에 적재하도록 단계별 책임을 나눴습니다.',
-			'커넥터와 스트림 처리 구성에 Kafka Connect, ksqlDB를 사용했고, 데이터 표현에는 Avro와 Schema Registry를 활용했습니다. 각 단계는 Kafka 토픽으로 연결해 수집과 목적지별 변환을 분리했습니다.',
+			'Kafka Connect JDBC Source Connector가 RDS 변경 데이터를 수집하고, ksqlDB가 이를 Elasticsearch 문서 구조로 변환합니다. 수집 결과와 변환 결과를 각각 Kafka 토픽에 전달한 뒤 Sink Connector가 Elasticsearch에 적재하도록 단계별 흐름을 구성했습니다.',
 		],
-		flow: ['RDS', 'JDBC Source Connector', 'Kafka Topic A', 'ksqlDB', 'Kafka Topic B', 'Elasticsearch Sink Connector', 'Elasticsearch'],
-		bullets: [
-			'JDBC Source Connector가 updated_at 컬럼을 기준으로 변경 데이터를 주기적으로 폴링해 Topic A에 전달합니다.',
-			'ksqlDB가 Topic A의 레코드를 Elasticsearch 문서에 맞는 JSON 및 배열 구조로 변환하고 Topic B에 기록합니다.',
-			'Elasticsearch Sink Connector가 Topic B를 읽어 기본 키 또는 문서 ID를 기준으로 신규 문서를 만들거나 기존 문서를 갱신합니다.',
+		flowSteps: [
+			{ label: 'RDS', detail: '원본 데이터' },
+			{ label: 'JDBC Source', detail: '변경분 수집' },
+			{ label: 'Topic A', detail: '수집 레코드' },
+			{ label: 'ksqlDB', detail: '문서 구조 변환' },
+			{ label: 'Topic B', detail: '변환 레코드' },
+			{ label: 'ES Sink', detail: 'ID 기준 Upsert' },
+			{ label: 'Elasticsearch', detail: '검색 문서' },
 		],
 	},
 	{
 		eyebrow: '03 · WHAT',
 		title: 'RDS 변경 데이터를 Elasticsearch 문서로 연결',
 		bullets: [
-			'JDBC Source Connector가 updated_at 컬럼을 기준으로 주기적으로 변경 데이터를 조회해 Topic A에 전달했습니다.',
-			'Kafka 토픽을 수집 결과와 변환 결과의 경계로 두고, ksqlDB에서 Elasticsearch용 JSON·배열 문서 구조를 만들었습니다.',
-			'Elasticsearch Sink Connector에서 기본 키 또는 문서 ID를 기준으로 Upsert하여 신규 레코드와 기존 문서 갱신을 처리했습니다.',
+			'JDBC Source Connector를 updated_at 컬럼 기준의 주기 조회로 구성해 변경분을 원본 토픽으로 보냈습니다.',
+			'ksqlDB에서 Elasticsearch가 소비하는 JSON·배열 필드 구조를 만들고 변환 결과를 별도 토픽에 기록했습니다.',
+			'Elasticsearch Sink Connector는 기본 키 또는 문서 ID를 문서 식별에 사용해 신규 문서를 만들고 기존 문서를 갱신하도록 구성했습니다.',
 		],
 	},
 	{
 		eyebrow: '04 · ENGINEERING DECISIONS',
-		title: '원본 수집과 목적지별 데이터 구조 변환을 분리',
+		title: '원본 수집과 목적지별 변환을 분리',
 		paragraphs: [
-			'JDBC Source Connector는 RDS에서 변경분을 가져오는 역할에 집중하고, ksqlDB는 Elasticsearch가 소비하기 쉬운 문서 형태를 만드는 역할을 맡습니다. 원본 조회 로직과 목적지 문서 변환을 분리해 데이터 전달 경로와 변환 단계를 각각 관리했습니다.',
-			'Kafka 토픽을 단계 사이의 연결 지점으로 사용해 수집과 변환을 구분했습니다. Avro와 Schema Registry도 데이터 교환 환경에 활용했습니다.',
+			'JDBC Source Connector에는 RDS 변경분 수집을 맡기고, Elasticsearch 문서 가공은 ksqlDB에서 처리했습니다. 수집 토픽과 변환 토픽을 나눠 원본 전달 경로와 목적지별 변환 책임을 분리했습니다.',
+			'레코드 구조는 Avro 스키마로 정의하고, Schema Registry를 ksqlDB와 연결해 스키마 정보를 다루도록 구성했습니다. Kafka Connect 실행 설정은 JSON Converter를 사용해 커넥터 구간의 데이터 표현을 구분했습니다.',
 		],
 	},
 ];
@@ -56,7 +58,7 @@ const sections = [
 <PortfolioProjectDetail
 	title="Cross-Database Data Synchronization"
 	eyebrow="직접 설계·구축·관리 · Data Engineering"
-	subtitle="RDS 변경 데이터를 변환해 Elasticsearch에 적재하는 Kafka 파이프라인"
+	subtitle="RDS 변경 데이터를 Elasticsearch 문서로 전달하는 Kafka 파이프라인"
 	description="Kafka Connect JDBC Source Connector, ksqlDB, Elasticsearch Sink Connector를 연결해 RDS 데이터를 Elasticsearch 문서 구조로 변환·동기화한 경험입니다."
 	stack={stack}
 	stackBadges={stackBadges}
