@@ -13,44 +13,46 @@ const stackBadges = [
 const sections = [
 	{
 		eyebrow: '01 · WHY',
-		title: 'Kubernetes 서비스와 플랫폼 상태를 관측하기 위해',
+		title: '서비스 지표와 로그를 통해 서로 다른 운영 신호를 확인할 수 있도록',
 		paragraphs: [
-			'클러스터에서 실행되는 서비스와 플랫폼 구성요소의 상태를 파악하려면 메트릭과 로그를 지속적으로 수집할 기반이 필요했습니다. Prometheus, Loki, Alloy를 Kubernetes 환경에 맞춰 구성하고 관리했습니다.',
+			'JVM·HTTP 메트릭은 서비스의 시계열 상태를 보여주고, 로그는 개별 오류와 이벤트의 맥락을 확인하는 데 쓰입니다. 두 신호를 Kubernetes 환경에서 조회할 수 있도록 Prometheus 메트릭 수집과 Alloy·Loki 로그 수집 구성을 마련했습니다.',
 		],
 	},
 	{
 		eyebrow: '02 · HOW',
-		title: '메트릭과 로그 수집 구성을 분리해 관리',
+		title: 'ServiceMonitor 메트릭 수집과 Alloy 로그 전달을 분리해 구성',
 		cards: [
-			{ title: '메트릭 · Prometheus', body: 'Prometheus Helm values를 관리해 Kubernetes 환경의 메트릭 수집 기반을 구성했습니다.' },
-			{ title: '로그 · Alloy와 Loki', body: 'Alloy 설정과 Loki Helm values를 다뤄 클러스터 로그 수집 구성을 관리했습니다.' },
+			{ title: '메트릭 · Prometheus', body: 'ServiceMonitor를 통해 Spring Actuator의 JVM·HTTP 지표를 수집하고 Prometheus 배포 설정을 Helm values로 관리했습니다.' },
+			{ title: '로그 · Alloy와 Loki', body: 'Alloy가 Kubernetes 로그를 Loki로 전달하도록 구성하고, Loki 배포 설정과 로그 라벨·파싱 구성을 관리했습니다.' },
 		],
 		paragraphs: [
-			'각 구성요소의 배포 값과 수집 설정을 Helm 및 Alloy 설정으로 관리했습니다. 설정 변경은 Helm upgrade 적용 과정과 함께 다뤘습니다.',
+			'메트릭 scrape 설정과 로그 전달·가공 설정을 각각 관리했습니다. Prometheus와 Loki의 배포 값은 Helm으로, 로그 파이프라인은 Alloy 설정으로 적용했습니다.',
 		],
 	},
 	{
 		eyebrow: '03 · WHAT',
-		title: '메트릭·로그 기반 운영 가시성을 위한 구성 요소를 관리',
+		title: '애플리케이션 메트릭 수집과 로그 질의 경로를 구성했습니다',
 		flow: ['Kubernetes 서비스와 플랫폼', 'Prometheus 메트릭 · Alloy 로그 수집', '관측 데이터 구성'],
 		bullets: [
-			'Prometheus 및 Loki Helm values 관리',
-			'Alloy 로그 수집 설정 구성',
-			'Helm upgrade로 설정 변경 적용 및 관리',
+			'ServiceMonitor로 Spring Actuator JVM·HTTP 메트릭을 15초 간격으로 수집',
+			'Alloy에서 Loki로 로그 전달, 네임스페이스·컨테이너 라벨 기반 범위 지정',
+			'JSON 파싱과 오류 문자열 필터를 결합한 LogQL 질의 구성',
+			'Prometheus·Loki Helm values와 Alloy 설정을 배포 변경에 맞춰 관리',
 		],
 	},
 	{
 		eyebrow: '04 · ENGINEERING DECISIONS',
-		title: '플랫폼 운영에 필요한 관측 구성과 배포 설정을 함께 관리',
+		title: '메트릭과 로그가 보여주는 범위를 구분했습니다',
 		paragraphs: [
-			'메트릭과 로그를 각각의 도구 설정으로 다루고, Helm values와 Alloy 구성을 통해 Kubernetes 배포에 반영했습니다. 관측성 구성의 변경도 플랫폼 설정 변경의 일부로 관리해 클러스터 운영 흐름 안에서 다룰 수 있도록 했습니다.',
+			'ServiceMonitor 메트릭은 설정된 Spring Actuator 대상의 JVM·HTTP 시계열을 보여주고, Loki 로그는 선택한 네임스페이스와 컨테이너의 이벤트를 조회하게 합니다. 서로 다른 범위의 신호를 별도 수집 경로와 질의 방식으로 관리했습니다.',
+			'애플리케이션 메트릭 수집 상태만으로 외부 요청 경로 전체의 정상 여부를 판단할 수는 없습니다. 수집 대상과 관측 범위를 명확히 나눠 메트릭과 로그를 해석하도록 구성했습니다.',
 		],
 	},
 	{
 		eyebrow: '05 · 서비스 메트릭과 로그 탐색',
-		title: 'ServiceMonitor로 메트릭을 수집하고 LogQL로 오류 로그를 좁혔습니다',
+		title: '서비스 지표와 라벨 기반 로그 필터를 함께 활용',
 		paragraphs: [
-			'Prometheus는 ServiceMonitor를 통해 Spring Actuator의 JVM·HTTP 메트릭을 15초 간격으로 수집합니다. Grafana Alloy는 로그를 Loki로 전달하며, 네임스페이스와 컨테이너 라벨로 범위를 좁힌 뒤 JSON 파싱과 오류 문자열 필터를 조합해 로그를 탐색합니다.',
+			'Prometheus는 ServiceMonitor를 통해 Spring Actuator의 JVM·HTTP 메트릭을 15초 간격으로 수집합니다. Grafana Alloy가 Loki로 전달한 로그는 네임스페이스와 컨테이너 라벨로 범위를 정한 뒤 JSON 파싱과 오류 문자열 필터를 조합해 조회할 수 있습니다.',
 		],
 		code: {
 			language: 'logql',
@@ -63,8 +65,8 @@ const sections = [
 <PortfolioProjectDetail
 	title="Kubernetes Observability"
 	eyebrow="직접 설계·구축·관리 · Monitoring & Logging"
-	subtitle="Prometheus·Loki·Alloy 기반 Kubernetes 관측성 구성"
-	description="Kubernetes 서비스와 플랫폼 상태를 파악할 수 있도록 메트릭 및 로그 수집 기반을 구성하고 Helm으로 관리했습니다."
+	subtitle="Prometheus 메트릭과 Alloy·Loki 로그 수집으로 구성한 Kubernetes 관측성"
+	description="Spring Actuator의 JVM·HTTP 지표와 Kubernetes 로그의 수집·조회 경로를 구성하고 Helm과 Alloy 설정으로 관리했습니다."
 	stack={stack}
 	stackBadges={stackBadges}
 	sections={sections}
