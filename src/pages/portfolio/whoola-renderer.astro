@@ -14,47 +14,48 @@ const stackBadges = [
 
 const sections = [
 	{
-		eyebrow: '01 · 화면이 필요한 이유',
-		title: '상품 탐색부터 구매 확인까지 이어지는 웹 흐름',
+		eyebrow: '01 · 서비스와 사용자 구매 흐름',
+		title: '상품 탐색부터 구매 결과 확인까지 제공하는 화면',
 		paragraphs: [
-			'해외 선불 통신 요금제를 판매하려면 상품을 찾고, 사용할 회선과 수신자를 고르고, 결제 뒤 구매 결과를 확인할 화면이 필요했습니다. Express와 EJS로 브라우저 요청을 처리하는 렌더링 서버를 만들고, 회원·상품·구매 규칙은 별도 Spring API에 맡겼습니다.',
-			'브라우저에 전달할 페이지 데이터는 라우트가 API 응답에서 준비하고, EJS 템플릿은 그 데이터를 HTML 화면으로 조립합니다.',
+			'Whoola Renderer는 해외 선불 통신 상품을 찾고 수신 정보를 입력해 구매한 뒤 결과를 확인하는 사용자 화면을 제공합니다. 사용자는 상품과 요금제를 선택하고 구매 정보를 입력한 다음 결제를 요청하고, 처리 결과를 구매 내역 화면에서 확인합니다.',
+			'Renderer는 구매 화면과 요청 전달을 맡습니다. PayPal 거래 검증과 구매 처리, 외부 공급자 요청은 Whoola API가 담당합니다.',
 		],
-		flow: ['Browser request', 'Express route', 'Whoola API response', 'EJS template', 'HTML page'],
+		flow: ['상품 탐색', '상품·요금제 선택', '구매 정보 입력', '결제 요청', '구매 결과 확인'],
 	},
 	{
-		eyebrow: '02 · 구매 화면과 API 연결',
-		title: '페이지 요청의 맥락을 서버에서 이어서 처리',
+		eyebrow: '02 · 상품 조회·구매·결과 화면',
+		title: '화면별 입력과 API 응답을 구매 흐름으로 연결',
 		cards: [
-			{ title: '상품 조회', body: '수신 전화번호 형식을 확인한 뒤 API에서 상품을 조회하고 요금제 선택 화면에 목록을 전달합니다.' },
-			{ title: '구매 상세', body: '상품과 수신자 정보를 API에서 받아 가격, 서비스 정보, 결제 화면에 필요한 값을 EJS 뷰로 넘깁니다.' },
-			{ title: '구매 결과', body: 'PayPal 반환 정보를 API에 전달하고, 검증·구매 처리 결과를 구매 내역 화면으로 연결합니다.' },
+			{ title: '상품 조회', body: '수신 전화번호 형식을 확인하고 API에서 상품을 조회해 요금제 선택 화면에 목록을 전달합니다.' },
+			{ title: '구매 상세', body: 'API에서 상품과 수신자 정보를 받아 가격·서비스 정보와 결제 화면에 필요한 값을 EJS 뷰로 전달합니다.' },
+			{ title: '구매 결과', body: 'PayPal 반환 정보를 API에 전달하고, 서버의 검증·구매 처리 결과를 구매 내역 화면으로 연결합니다.' },
 		],
 		paragraphs: [
-			'Express 라우트는 URL·폼 요청을 서비스 API 요청으로 바꾸고, API 응답 상태에 따라 페이지·오류 화면을 선택합니다. 결제 검증과 외부 상품 공급 로직을 화면 서버가 직접 처리하지 않도록 경계를 유지했습니다.',
+			'Express 라우트가 URL과 폼 입력을 서비스 API 요청으로 바꾸고, 응답 상태에 따라 화면 또는 오류 안내를 선택합니다. 결제 검증과 DT One 상품 요청은 API가 처리합니다.',
 		],
 	},
 	{
-		eyebrow: '03 · 다국어 템플릿',
-		title: '공통 뷰에 영어와 한국어 locale을 연결',
+		eyebrow: '03 · Express와 EJS 서버 렌더링',
+		title: 'API 응답을 EJS 템플릿에 전달해 HTML로 렌더링',
+		paragraphs: [
+			'Browser request를 Express 라우트에서 받아 필요한 Whoola API를 호출하고, 응답 데이터로 페이지 뷰를 구성합니다. EJS 템플릿은 전달받은 화면 데이터를 HTML로 조립해 브라우저에 응답합니다.',
+		],
+		flow: ['Browser request', 'Express route', 'Whoola API', 'EJS template', 'HTML response'],
+	},
+	{
+		eyebrow: '04 · 한국어·영어 다국어 화면',
+		title: '공통 템플릿에 en·ko locale을 연결',
 		paragraphs: [
 			'i18n 미들웨어에서 `en`, `ko` locale과 쿠키를 설정하고 요청별 번역 함수를 EJS 템플릿에 전달합니다. `/en`, `/ko` 경로는 언어 쿠키를 바꾸고 기존 페이지로 돌아와 화면 언어를 전환합니다.',
-			'문구는 locale JSON 파일로 분리해 화면 구조와 언어별 텍스트를 따로 관리합니다. 언어 선택은 공통 템플릿과 주요 구매 화면에서 같은 요청 locale을 사용합니다.',
+			'문구는 locale JSON 파일로 분리해 화면 구조와 언어별 텍스트를 따로 관리합니다. 언어 선택 이후에도 요청 locale을 공통 템플릿과 주요 구매 화면에 전달합니다.',
 		],
 	},
 	{
-		eyebrow: '04 · 역할 분리',
-		title: '화면 렌더링과 구매 규칙을 서로 다른 서버에',
+		eyebrow: '05 · 실행 환경 및 역할 분리',
+		title: 'Docker·NGINX 구성에서 화면과 구매 처리를 분리',
 		paragraphs: [
-			'Renderer는 요청 라우팅, 사용자 입력 처리, API 호출, EJS 렌더링을 담당합니다. Spring API는 회원·상품 데이터, 인증, 결제 확인, 구매 상태를 관리합니다. 화면 데이터 구성과 서비스 규칙을 각 계층에 배치해 한쪽을 수정할 때 다른 쪽의 역할이 섞이지 않도록 했습니다.',
-			'결제와 구매 서비스의 금액·포인트 규칙 및 공급 결과 처리는 Whoola API의 JUnit 테스트에서 다룹니다.',
-		],
-	},
-	{
-		eyebrow: '05 · 실행 구성',
-		title: 'Docker 컨테이너를 NGINX 뒤에서 실행',
-		paragraphs: [
-			'Renderer를 Docker 컨테이너로 구성하고 NGINX 뒤에서 실행해 브라우저 요청을 받아 EJS 화면으로 전달했습니다. 화면 렌더링 서버의 실행 구성과 Spring API의 서비스 로직을 분리해 운영했습니다.',
+			'Renderer는 Docker 컨테이너로 구성해 NGINX 뒤에서 실행하며 요청 라우팅, 사용자 입력, API 호출과 EJS 렌더링을 담당합니다. Spring API는 회원·상품 데이터, 인증, 결제 검증, 구매 상태와 외부 공급자 연동을 처리합니다.',
+			'화면 데이터 구성은 Renderer에, 서비스 규칙과 구매 처리는 API에 두어 두 서버의 책임을 나눴습니다.',
 		],
 	},
 ];
@@ -63,8 +64,8 @@ const sections = [
 <PortfolioProjectDetail
 	title="Whoola Renderer"
 	eyebrow="Server-Side Rendering · Node.js"
-	subtitle="선불 요금제 조회와 구매 화면을 서버에서 렌더링"
-	description="Express 라우트가 Whoola API를 호출하고 EJS 템플릿으로 HTML을 구성하는 웹 렌더링 서버입니다."
+	subtitle="해외 선불 통신 상품 조회부터 구매 결과까지 제공하는 Express·EJS 서버"
+	description="Express 라우트가 Whoola API를 호출해 상품·구매 데이터를 준비하고 EJS 템플릿으로 사용자 화면을 렌더링합니다."
 	stack={stack}
 	stackBadges={stackBadges}
 	sections={sections}
