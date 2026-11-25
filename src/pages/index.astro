@@ -52,10 +52,10 @@ const engineeringSteps = [
 		<Header />
 		<main>
 			<section class="hero" aria-labelledby="hero-title">
-				<p class="eyebrow">DEVOPS · PLATFORM · SOFTWARE ENGINEERING</p>
-				<h1 id="hero-title">문제를 끝까지 책임지는<br />DevOps &amp; Platform Engineer</h1>
+				<p class="eyebrow">SOFTWARE ENGINEERING · CLOUD · PLATFORM</p>
+				<h1 id="hero-title">서비스 전체를 이해하고<br />문제를 끝까지 해결하는 <span class="hero-title-role">엔지니어</span></h1>
 				<p class="hero-lede">프론트엔드부터 백엔드, 데이터 시스템, 클라우드 인프라까지 직접 구축하고 운영해 왔습니다.</p>
-				<p class="hero-intro">서비스 전체의 흐름을 이해하고, 코드와 자동화로 문제를 해결합니다.</p>
+				<p class="hero-intro">서비스의 기능 구현부터 배포와 운영까지, 코드와 자동화로 문제를 해결합니다.</p>
 				<div class="hero-actions">
 					<a class="button button-primary" href="/portfolio">프로젝트 보기 <span aria-hidden="true">→</span></a>
 					<a class="button button-secondary" href="/blog">기술 블로그 <span aria-hidden="true">→</span></a>
@@ -128,6 +128,7 @@ const engineeringSteps = [
 	.button:focus-visible, .experience-card a:focus-visible { outline: 3px solid var(--link); outline-offset: 3px; }
 	@media (prefers-color-scheme: dark) { .button-primary { color: #0d1117; } }
 	@media (max-width: 700px) {
+		.hero h1 .hero-title-role { white-space: nowrap; }
 		.experience-grid { grid-template-columns: 1fr; }
 	}
 	@media (max-width: 600px) { .engineering-grid { grid-template-columns: 1fr; } }
