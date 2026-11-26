@@ -23,11 +23,11 @@ const sections = [
 		eyebrow: '02 · HOW',
 		title: '동적 인벤토리와 Playbook으로 서버 작업을 구성',
 		paragraphs: [
-			'AWS·GCP Dynamic Inventory를 사용해 클라우드 환경의 서버를 대상으로 삼고, Playbook에 에이전트 설치와 런타임 설정 작업을 구성했습니다. CloudWatch·SSM·Ops Agent 등 운영 에이전트 설치와 Python 환경, IAM 관련 서버 작업을 다뤘습니다.',
+			'AWS·GCP Dynamic Inventory로 작업 대상 서버를 찾고, Ansible Playbook에서 AWS CloudWatch Agent와 GCP Ops Agent의 설치·설정을 자동화했습니다. 두 에이전트는 서버의 모니터링 데이터를 수집하고, Ansible은 대상 탐색과 설치·구성 작업을 담당합니다. 기존 SSM Agent 구성과 Python 환경, IAM 관련 서버 작업도 Playbook에 포함했습니다.',
 		],
 		flow: ['AWS · GCP Dynamic Inventory', '대상 서버 선택', 'Ansible Playbook', '에이전트 · 런타임 · IAM 구성'],
 		cards: [
-			{ title: '운영 에이전트', body: 'CloudWatch, SSM, Ops Agent 설치 Playbook으로 모니터링·관리 구성요소를 서버에 적용했습니다.' },
+			{ title: '운영 에이전트', body: 'AWS CloudWatch Agent와 GCP Ops Agent의 설치·설정을 Playbook으로 적용해 모니터링 데이터 수집을 구성했습니다. SSM Agent 관련 설정도 함께 다뤘습니다.' },
 			{ title: '서버 런타임과 권한', body: 'Python 환경 설정과 IAM 관련 Playbook을 구성해 서버 운영에 필요한 작업을 자동화했습니다.' },
 		],
 	},
