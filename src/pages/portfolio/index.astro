@@ -189,6 +189,47 @@ const projects = [
 	},
 ];
 
+type AgentInvolvement = 'Full' | 'Partial' | 'None';
+
+const cardAgentLevels: Record<string, AgentInvolvement> = {
+	cloudatlas: 'Full',
+	'local-ai-extraction': 'Full',
+	whoola: 'None',
+	'aws-infrastructure-as-code': 'Partial',
+	'cross-database-data-synchronization': 'None',
+	'server-configuration-automation': 'Full',
+	'dart-data-collection': 'Partial',
+};
+
+const linkAgentLevels: Record<string, AgentInvolvement> = {
+	'/portfolio/collect-dashboard-api': 'Full',
+	'/portfolio/ent-360-insight-dashboard': 'Full',
+	'/portfolio/kubernetes-platform-engineering': 'Partial',
+	'/portfolio/kubernetes-autoscaling': 'Full',
+	'/portfolio/kubernetes-observability': 'Partial',
+};
+
+const aiAgentLegend: { level: AgentInvolvement; mode: string; description: string }[] = [
+	{
+		level: 'Full',
+		mode: 'Agent-led',
+		description: '구현 전반을 AI 에이전트에 위임하고, 사람이 요구사항·판단·검증을 담당',
+	},
+	{
+		level: 'Partial',
+		mode: 'Hybrid',
+		description: '직접 작성한 코드와 AI 에이전트가 구현한 코드가 공존',
+	},
+	{
+		level: 'None',
+		mode: 'Human-written',
+		description: 'AI 에이전트 없이 직접 구현',
+	},
+];
+
+const getCardAgentLevel = (projectId: string) => cardAgentLevels[projectId];
+const getLinkAgentLevel = (href: string) => linkAgentLevels[href];
+
 const focusOptions = [
 	{ value: 'all', label: '전체' },
 	{ value: 'platform', label: 'DevOps · Platform' },
@@ -268,9 +309,11 @@ const projectPriorities = {
 			.project-group-heading { margin: 2rem 0 0; border: 0; padding: 1.4rem 0 0.2rem; border-top: 1px solid var(--border); font-size: 1.25rem; }
 			.project-heading { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.2rem 1rem; }
 			.project-heading > div { min-width: 0; }
-			.project-card h2 { margin: 0; border: 0; padding: 0; font-size: 1.45rem; }
+			.project-card h2 { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem 0.55rem; margin: 0; border: 0; padding: 0; font-size: 1.45rem; }
 			.project-tagline { margin: 0.25rem 0 0; color: #656d76; font-weight: 600; }
 			.participation { margin: 0; color: #656d76; font-size: 0.85rem; white-space: nowrap; }
+			.agent-badge { display: inline-flex; width: fit-content; align-items: center; padding: 0.16rem 0.48rem; border: 1px solid var(--border); border-radius: 999px; background: var(--code-bg); color: var(--text); font-size: 0.7rem; font-weight: 600; line-height: 1.35; white-space: nowrap; }
+			.project-card h2 .agent-badge { font-size: 0.68rem; }
 			.project-description { max-width: 760px; margin: 0.9rem 0; line-height: 1.7; }
 			.project-card h3 { margin: 1rem 0 0.35rem; font-size: 0.95rem; }
 			.feature-list { display: flex; flex-wrap: wrap; gap: 0.15rem 1.5rem; margin: 0; padding-left: 1.15rem; }
@@ -279,13 +322,29 @@ const projectPriorities = {
 			.project-detail-link { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.1rem 0.65rem; width: fit-content; max-width: 100%; padding: 0.2rem 0; overflow-wrap: anywhere; }
 			.project-detail-link strong { font-size: 0.92rem; }
 			.project-detail-link span { color: #656d76; font-size: 0.85rem; }
+			.project-detail-link .agent-badge { color: var(--text); }
 			.project-blog-link { margin: 0.35rem 0 0; font-size: 0.86rem; overflow-wrap: anywhere; }
 			.project-blog-link span { margin-right: 0.4rem; color: #656d76; }
+			.ai-agent-legend { margin: 0.25rem 0 1.5rem; padding: 1rem; border: 1px solid var(--border); border-radius: 8px; background: var(--code-bg); }
+			.ai-agent-legend-heading { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; }
+			.ai-agent-legend h2 { margin: 0; border: 0; padding: 0; font-size: 1rem; }
+			.ai-agent-info { position: relative; display: inline-flex; }
+			.ai-agent-info summary { display: inline-flex; width: 1.25rem; height: 1.25rem; align-items: center; justify-content: center; list-style: none; border: 1px solid var(--border); border-radius: 50%; color: var(--text); font-size: 0.76rem; font-weight: 700; line-height: 1; cursor: pointer; }
+			.ai-agent-info summary::-webkit-details-marker { display: none; }
+			.ai-agent-info summary:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+			.ai-agent-info-popover { position: absolute; z-index: 5; top: calc(100% + 0.5rem); left: 0; width: min(19rem, calc(100vw - 3rem)); padding: 0.75rem 0.85rem; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); color: var(--text); box-shadow: 0 8px 24px rgb(0 0 0 / 14%); font-size: 0.85rem; line-height: 1.5; visibility: hidden; opacity: 0; transition: opacity 120ms ease; }
+			.ai-agent-info:hover .ai-agent-info-popover, .ai-agent-info:focus-within .ai-agent-info-popover, .ai-agent-info[open] .ai-agent-info-popover { visibility: visible; opacity: 1; }
+			.ai-agent-legend-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.75rem; }
+			.ai-agent-legend-item { min-width: 0; padding: 0.75rem; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); }
+			.ai-agent-legend-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem 0.55rem; }
+			.ai-agent-mode { color: #656d76; font-size: 0.82rem; font-weight: 600; }
+			.ai-agent-legend-item p { margin: 0.45rem 0 0; font-size: 0.84rem; line-height: 1.55; }
 			@media (max-width: 600px) {
 				.project-card { padding: 1rem; }
 				.project-heading { align-items: flex-start; }
 				.project-tagline { font-size: 0.92rem; }
 				.feature-list { display: block; }
+				.ai-agent-legend-grid { grid-template-columns: 1fr; }
 			}
 		</style>
 	</head>
@@ -297,6 +356,26 @@ const projectPriorities = {
 				<h1>Portfolio</h1>
 				<p>서비스 개발, 데이터 엔지니어링, 클라우드·플랫폼, GPU 추론 인프라까지 문제의 전체 흐름을 설계하고 구현한 프로젝트를 소개합니다.</p>
 			</header>
+			<section class="ai-agent-legend" aria-labelledby="ai-agent-legend-title">
+				<div class="ai-agent-legend-heading">
+					<h2 id="ai-agent-legend-title">AI Agent Involvement</h2>
+					<details class="ai-agent-info">
+						<summary aria-label="AI Agent Involvement 설명 보기" title="설명 보기"><span aria-hidden="true">i</span></summary>
+						<span class="ai-agent-info-popover" role="tooltip">AI 에이전트의 개발 참여 방식을 나타냅니다. 개발 실력이나 프로젝트 기여도에 대한 평가가 아닙니다.</span>
+					</details>
+				</div>
+				<div class="ai-agent-legend-grid">
+					{aiAgentLegend.map((item) => (
+						<div class="ai-agent-legend-item">
+							<div class="ai-agent-legend-meta">
+								<span class="agent-badge">Agent · {item.level}</span>
+								<span class="ai-agent-mode">{item.mode}</span>
+							</div>
+							<p>{item.description}</p>
+						</div>
+					))}
+				</div>
+			</section>
 			<div
 				class="portfolio-controls"
 				data-portfolio-controls
@@ -326,12 +405,12 @@ const projectPriorities = {
 					<article class="project-card" data-project-id={project.id}>
 						<div class="project-heading">
 							<div>
-								<h2>{project.name}</h2>
+								<h2>{project.name}{getCardAgentLevel(project.id) && <span class="agent-badge">Agent · {getCardAgentLevel(project.id)}</span>}</h2>
 								<p class="project-tagline">{project.tagline}</p>
 								<nav class="project-links" aria-label={`${project.name} 상세 페이지`}>
 									{project.links.map((link) => (
 										<a class="project-detail-link" href={link.href}>
-											<strong>{link.label}</strong><span>{link.description}</span>
+											<strong>{link.label}</strong>{getLinkAgentLevel(link.href) && <span class="agent-badge">Agent · {getLinkAgentLevel(link.href)}</span>}<span>{link.description}</span>
 										</a>
 									))}
 								</nav>
