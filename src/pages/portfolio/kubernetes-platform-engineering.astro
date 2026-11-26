@@ -14,39 +14,40 @@ const stackBadges = [
 const sections = [
 	{
 		eyebrow: '01 · WHY',
-		title: '애플리케이션 실행부터 외부 요청 전달까지 운영 경계를 정리했습니다',
+		title: '여러 서비스의 실행 상태와 요청 경로를 함께 운영해야 했습니다',
 		paragraphs: [
-			'여러 애플리케이션을 Kubernetes에 배포할 때 실행 구성, 클러스터 내부 접근, 외부 요청 경로와 준비 상태를 함께 관리해야 했습니다. 회사의 배포 정책과 워크로드 요구에 맞춰 각 책임을 Kubernetes 리소스와 Helm 배포 설정으로 구성했습니다.',
+			'EKS에서 여러 애플리케이션을 운영하며 각 워크로드의 실행 상태와 클러스터 내부 접근, 외부 HTTP 경로를 함께 관리해야 했습니다. 서비스별 설정과 배포 후 점검 대상을 매니페스트 단위로 추적할 수 있는 구성이 필요했습니다.',
 		],
 	},
 	{
 		eyebrow: '02 · HOW',
-		title: '실행 구성과 요청 전달 경로를 각각의 리소스로 구성',
+		title: '네임스페이스별 매니페스트와 파일별 적용 절차를 구성했습니다',
 		paragraphs: [
-			'Deployment는 애플리케이션 Pod의 실행 구성을, Service는 클러스터 내부 접근 지점을, Gateway API의 HTTPRoute는 외부 요청 경로를 담당하도록 구성했습니다. 각 리소스가 맡는 경계를 나눠 배포 설정과 서비스 노출 경로를 관리했습니다.',
-			'워크로드에는 readiness/liveness probe와 Resource Requests·Limits를 설정하고, ConfigMap·Secret 참조로 실행 설정을 Pod 정의와 분리했습니다.',
+			'애플리케이션 매니페스트는 네임스페이스별 디렉터리에서 관리하고, 공용 Gateway는 Gateway 리소스와 Helm values로 구성했습니다. 배포 요청이 들어오면 대상 파일과 kind·리소스 이름·namespace를 먼저 특정하도록 절차를 정리했습니다.',
+			'각 대상 파일에 server-side dry-run과 kubectl diff를 수행하고, 승인된 파일만 적용하도록 했습니다. 적용 뒤에는 rollout 상태와 readiness, Pod·Service·Endpoint를 확인하는 절차를 문서화했습니다.',
 		],
-		flow: ['Deployment', 'Service', 'Gateway API · HTTPRoute'],
+		flow: ['Gateway', 'HTTPRoute', 'Service', 'Pod · Deployment 관리'],
 		cards: [
-			{ title: '워크로드 실행', body: 'Deployment에 실행 설정과 Probe를 두고, Resource Requests·Limits로 워크로드의 자원 기준을 정의했습니다.' },
-			{ title: '서비스 접근 경로', body: 'Service의 클러스터 내부 접근 지점과 HTTPRoute의 외부 요청 경로를 구성했습니다.' },
+			{ title: '워크로드 실행', body: 'Deployment에서 Pod 실행 상태와 자원 기준을 관리하고, 외부 설정값은 ConfigMap·Secret 참조로 연결했습니다.' },
+			{ title: '서비스 접근 경로', body: '서비스별 HTTPRoute와 공용 Gateway 설정을 분리해 외부 진입 경로를 애플리케이션 실행 설정과 별도로 관리했습니다.' },
 		],
 	},
 	{
 		eyebrow: '03 · WHAT',
-		title: '배포·라우팅·실행 상태를 확인할 구성을 만들었습니다',
+		title: 'API 매니페스트에서 실제 리소스 연결을 확인했습니다',
 		bullets: [
-			'Deployment, Service, Gateway API·HTTPRoute와 CronJob 리소스 구성',
-			'워크로드별 Probe, Resource Requests·Limits, ConfigMap·Secret 참조 설정',
-			'kubectl apply와 Helm upgrade로 적용한 뒤 rollout 및 readiness 상태 확인',
+			'점검한 API Deployment의 Pod label과 Service selector가 일치하고, HTTPRoute backend가 해당 Service를 참조하는 구성 확인',
+			'해당 HTTPRoute가 Gateway를 parent로 지정해 Gateway → HTTPRoute → Service → Pod 경로를 구성',
+			'Deployment에 readiness/liveness Probe, Resource Requests·Limits, ConfigMap·Secret 참조 선언',
+			'네임스페이스별 Deployment·Service·HTTPRoute와 배치용 CronJob 매니페스트, 공용 Gateway Helm values 관리',
 		],
 	},
 	{
 		eyebrow: '04 · ENGINEERING DECISIONS',
-		title: '실행 변경과 트래픽 경로 변경의 대상을 구분했습니다',
+		title: '변경 이유와 영향 범위를 매니페스트 단위로 검토하도록 했습니다',
 		paragraphs: [
-			'애플리케이션 실행 설정과 서비스 라우팅을 각 리소스의 역할에 맞춰 나눴습니다. 이 구조에서는 변경할 설정과 배포 후 확인할 상태를 Deployment, Service, HTTPRoute 단위로 구분할 수 있습니다.',
-			'Probe와 자원 기준은 워크로드 설정에 두고, 매니페스트 및 Helm 적용 뒤에는 rollout과 readiness 상태를 확인했습니다.',
+			'Deployment, Service, HTTPRoute를 나누면 워크로드 실행 설정과 내부 대상 선택, 외부 요청 경로를 각각 검토할 수 있습니다. 실제 API 구성에서도 Pod label → Service selector → HTTPRoute backend와 Gateway parent 연결이 이어져, 변경하는 리소스가 다음 참조 관계와 맞는지 확인할 수 있습니다.',
+			'운영 문서는 디렉터리 전체 적용 대신 대상 파일을 지정하도록 하고, ConfigMap·Secret은 별도 승인 없이 적용하지 않도록 제한합니다. `kubectl diff`로 현재 구성과 적용 예정 구성을 먼저 비교한 뒤 승인된 파일만 반영해 무관한 리소스가 함께 변경될 위험을 줄이고, 적용 후 rollout·readiness·endpoint를 확인하도록 절차를 정의했습니다.',
 		],
 	},
 ];
