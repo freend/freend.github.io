@@ -191,22 +191,20 @@ const projects = [
 
 type AgentInvolvement = 'Full' | 'Partial' | 'None';
 
-const cardAgentLevels: Record<string, AgentInvolvement> = {
-	cloudatlas: 'Full',
-	'local-ai-extraction': 'Full',
-	whoola: 'None',
-	'aws-infrastructure-as-code': 'Partial',
-	'cross-database-data-synchronization': 'None',
-	'server-configuration-automation': 'Full',
-	'dart-data-collection': 'Partial',
-};
-
 const linkAgentLevels: Record<string, AgentInvolvement> = {
+	'/portfolio/cloudatlas': 'Full',
 	'/portfolio/collect-dashboard-api': 'Full',
 	'/portfolio/ent-360-insight-dashboard': 'Full',
+	'/portfolio/linux-qwen-extraction': 'Full',
+	'/portfolio/whoola-api': 'None',
+	'/portfolio/whoola-renderer': 'None',
+	'/portfolio/aws-infrastructure-as-code': 'Partial',
 	'/portfolio/kubernetes-platform-engineering': 'Partial',
 	'/portfolio/kubernetes-autoscaling': 'Full',
 	'/portfolio/kubernetes-observability': 'Partial',
+	'/portfolio/cross-database-data-synchronization': 'None',
+	'/portfolio/server-configuration-automation': 'Full',
+	'/portfolio/dart-data-collection': 'Partial',
 };
 
 const aiAgentLegend: { level: AgentInvolvement; mode: string; description: string }[] = [
@@ -227,7 +225,6 @@ const aiAgentLegend: { level: AgentInvolvement; mode: string; description: strin
 	},
 ];
 
-const getCardAgentLevel = (projectId: string) => cardAgentLevels[projectId];
 const getLinkAgentLevel = (href: string) => linkAgentLevels[href];
 
 const focusOptions = [
@@ -309,11 +306,10 @@ const projectPriorities = {
 			.project-group-heading { margin: 2rem 0 0; border: 0; padding: 1.4rem 0 0.2rem; border-top: 1px solid var(--border); font-size: 1.25rem; }
 			.project-heading { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.2rem 1rem; }
 			.project-heading > div { min-width: 0; }
-			.project-card h2 { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem 0.55rem; margin: 0; border: 0; padding: 0; font-size: 1.45rem; }
+			.project-card h2 { margin: 0; border: 0; padding: 0; font-size: 1.45rem; }
 			.project-tagline { margin: 0.25rem 0 0; color: #656d76; font-weight: 600; }
 			.participation { margin: 0; color: #656d76; font-size: 0.85rem; white-space: nowrap; }
 			.agent-badge { display: inline-flex; width: fit-content; align-items: center; padding: 0.16rem 0.48rem; border: 1px solid var(--border); border-radius: 999px; background: var(--code-bg); color: var(--text); font-size: 0.7rem; font-weight: 600; line-height: 1.35; white-space: nowrap; }
-			.project-card h2 .agent-badge { font-size: 0.68rem; }
 			.project-description { max-width: 760px; margin: 0.9rem 0; line-height: 1.7; }
 			.project-card h3 { margin: 1rem 0 0.35rem; font-size: 0.95rem; }
 			.feature-list { display: flex; flex-wrap: wrap; gap: 0.15rem 1.5rem; margin: 0; padding-left: 1.15rem; }
@@ -405,7 +401,7 @@ const projectPriorities = {
 					<article class="project-card" data-project-id={project.id}>
 						<div class="project-heading">
 							<div>
-								<h2>{project.name}{getCardAgentLevel(project.id) && <span class="agent-badge">Agent · {getCardAgentLevel(project.id)}</span>}</h2>
+								<h2>{project.name}</h2>
 								<p class="project-tagline">{project.tagline}</p>
 								<nav class="project-links" aria-label={`${project.name} 상세 페이지`}>
 									{project.links.map((link) => (
