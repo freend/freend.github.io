@@ -17,20 +17,20 @@ const stackBadges = [
 const sections = [
 	{
 		eyebrow: '01 · WHY',
-		title: '데이터 제공 방식에 따라 재무정보 수집 경로를 분리',
+		title: '데이터 제공 범위에 따라 기업·재무·공시 수집 경로를 분리',
 		paragraphs: [
-			'DART 공식 API는 기업 유형과 데이터 항목에 따라 제공 범위가 달랐습니다. 공식 API로 수집할 수 있는 기업정보·재무정보와 홈페이지 공시에서 직접 확인해야 하는 외감기업 재무정보를 구분하고, 대상에 맞는 수집 경로를 각각 구성했습니다.',
+			'Open DART API는 기업 유형과 데이터 항목에 따라 제공 범위가 달랐습니다. API로 제공되는 기업정보·재무정보·공시목록은 API로 수집하고, API에서 제공하지 않는 외감기업의 재무정보와 관련 공시보고서는 DART 공시 페이지에서 찾아 파싱했습니다.',
 		],
 	},
 	{
 		eyebrow: '02 · WEB SCRAPING',
-		title: 'DART 공시 페이지에서 외감기업 재무정보 수집',
+		title: 'DART 공시 페이지에서 외감기업 재무정보와 공시보고서 수집',
 		paragraphs: [
-			'dart-audit-api-server에서는 DART 공시목록에서 재무 관련 보고서를 찾아 내용을 추출하고, 정리한 재무정보를 저장한 뒤 조회·집계 API로 제공하도록 구성했습니다.',
+			'dart-audit-api-server에서는 DART 공시목록에서 외감기업의 재무정보와 관련 공시보고서를 찾아 파싱하는 수집 흐름을 구현했습니다. 정리한 재무정보는 저장한 뒤 조회·집계 API로 제공합니다.',
 		],
-		flow: ['외감기업 공시목록', '재무 관련 보고서 선별', 'Selenium 페이지 탐색', 'HTML·iframe 표 파싱', 'Pandas 데이터 정리', 'FastAPI·데이터 저장소'],
+		flow: ['외감기업 공시목록', '재무정보·공시보고서 확인', 'Selenium 페이지 탐색', '공시 페이지·보고서 HTML·iframe 파싱', 'Pandas 데이터 정리', 'FastAPI·데이터 저장소'],
 		bullets: [
-			'Selenium으로 공시목록을 탐색해 재무 관련 보고서를 선별하고, 보고서 HTML과 iframe 표에서 재무정보를 추출합니다.',
+			'Selenium으로 DART 공시목록에서 외감기업의 재무정보와 관련 공시보고서를 찾고, 공시 페이지와 보고서 HTML·iframe에서 내용을 파싱합니다.',
 			'추출한 값을 Pandas DataFrame으로 정리하고 필수 필드와 날짜 입력을 확인한 뒤 SQLAlchemy 저장 계층에 기록합니다.',
 			'저장된 데이터는 FastAPI 조회·집계 엔드포인트로 제공하며, 수집 작업은 BackgroundTasks로 실행하고 Docker 환경에 구성했습니다.',
 		],
@@ -48,9 +48,9 @@ const sections = [
 	},
 	{
 		eyebrow: '04 · ENGINEERING DECISIONS',
-		title: '공식 API 제공 여부에 따라 수집 방식을 선택',
+		title: 'API 제공 범위에 따라 수집 경로를 구분',
 		paragraphs: [
-			'수집 경로는 대상 기업에 필요한 정보가 공식 API로 제공되는지를 기준으로 나눴습니다. API에서 다루지 않는 재무 보고서는 공시 페이지에서 찾아 파싱하고, API 제공 데이터는 응답 모델을 기준으로 처리해 각 경로의 책임을 분명히 했습니다.',
+			'Open DART API로 제공되는 기업정보·재무정보·공시목록은 API 응답을 기준으로 처리했습니다. API에서 제공하지 않는 외감기업의 재무정보와 관련 공시보고서는 DART 공시 페이지에서 찾아 파싱하도록 수집 경로를 구분했습니다.',
 			'두 방식 모두 정리된 데이터를 저장하고 조회 API로 전달하도록 구성해, 수집 방식과 서비스에서 데이터를 활용하는 흐름을 연결했습니다.',
 		],
 	},
@@ -60,8 +60,8 @@ const sections = [
 <PortfolioProjectDetail
 	title="DART Data Collection"
 	eyebrow="Data Engineering · Backend"
-	subtitle="API 제공 기업 정보 수집과 외감기업 재무정보 크롤링"
-	description="Open DART API로 수집하는 기업정보·재무정보와 DART 홈페이지에서 직접 수집하는 외감기업 재무정보를 구분해, 두 데이터 접근 경로에 맞는 수집 시스템을 구성했습니다."
+	subtitle="Open DART API 데이터와 외감기업 재무정보·공시보고서 수집"
+	description="Open DART API가 제공하는 기업정보·재무정보·공시목록을 수집하고, API에서 제공하지 않는 외감기업의 재무정보와 관련 공시보고서는 DART 공시 페이지에서 찾아 파싱하는 두 수집 경로를 구성했습니다."
 	stack={stack}
 	stackBadges={stackBadges}
 	sections={sections}
