@@ -4,15 +4,13 @@ description: "Python으로 영상 전처리, 로컬 멀티모달 추론, JSON �
 pubDate: "Oct 10 2026"
 ---
 
-# [Local VLM] Python으로 구축한 로컬 멀티모달 LLM 영상 분석 파이프라인
-
 ## 먼저 결론부터
 
 37.678초 길이의 모바일 화면 녹화 영상을 Python으로 처리해, 화면에 시간에 따라 표시되는 목록 항목을 로컬 멀티모달 LLM으로 분석하고 구조화된 JSON으로 추출했다. Mac에서는 MLX-VLM으로 샘플 프레임을 전달했고, Linux에서는 OpenCV와 FFmpeg로 입력 영상을 구성한 뒤 llama.cpp CUDA 추론 API에 연결했다.
 
-이번 실험에서 중요한 부분은 모델 이름보다 영상 입력을 추론 엔진이 받을 수 있는 형태로 만들고, 응답을 다시 파싱 가능한 데이터로 검증하는 연결부였다. 실제 Python 구현을 확인해 보니 Mac 쪽은 `ffprobe`와 FFmpeg로 프레임을 읽고 `mlx_vlm.stream_generate`에 전달한다. Linux 쪽은 Python 어댑터가 영상 파일을 multipart HTTP 요청으로 보내고 응답 구조를 확인한다. 아래 코드는 이 구현에서 공개 가능한 부분을 발췌했으며, 프로젝트 전용 데이터 필드와 내부 경로는 제외했다. Linux 쪽 프레임 인코딩은 실행 기록에 남은 설정을 기준으로 설명한다.
+이번 실험에서 중요한 부분은 영상 입력을 각 추론 환경이 받을 수 있는 형태로 만들고, 응답을 파싱 가능한 데이터로 검증하는 연결부였다. 이 글에 포함한 Mac runner 코드 발췌는 `ffprobe`와 FFmpeg로 프레임을 읽어 `mlx_vlm.stream_generate`에 전달한다. Linux 쪽에서는 Python 어댑터가 영상 파일을 multipart HTTP 요청으로 보내고 응답 구조를 확인한다. 아래 코드는 공개 가능한 부분을 발췌했으며, 프로젝트 전용 데이터 필드와 내부 경로는 제외했다. Linux 쪽 프레임 인코딩은 실행 기록에 남은 설정을 기준으로 설명한다.
 
-두 환경에는 SHA-256이 일치한 동일 원본 영상이 사용됐다. 보존된 Linux 실행 기록에서는 원시 API 응답과 저장된 36개 항목의 순서까지 맞는 것이 확인됐다. 이 연결 덕분에 보존된 Mac 결과와 기존에 수행한 개별 항목 비교를 Linux 저장 결과에 대응시킬 근거가 생겼다. 항목별 검증 수치는 3편에서 다룬다.
+두 환경에는 SHA-256이 일치한 동일 원본 영상이 사용됐다. 보존된 Linux 실행 기록에서는 원시 API 응답과 저장된 36개 항목의 순서가 일치했다. Mac·Linux 결과의 항목별 비교와 입력 프레임 검증 과정은 [출력 일관성 검증 글](/blog/local-vlm-output-consistency-and-frame-validation/)에서 자세히 다룬다.
 
 ## 왜 텍스트 입력만으로 처리하지 않았나
 
@@ -30,19 +28,23 @@ pubDate: "Oct 10 2026"
 | 원본에서 샘플링한 프레임 | 76개 |
 | 추출 결과 | 각 환경에서 36개 항목 |
 
-## 전체 파이프라인
+## Mac과 Linux의 영상 처리 경로
 
 ```text
-HEVC 원본 영상
-  -> Python에서 ffprobe로 영상 메타데이터 확인
-  -> FFmpeg로 시간 간격에 맞춰 RGB 프레임 디코딩
-  -> 환경별 입력 구성
-       Mac: 프레임 이미지와 메타데이터를 MLX-VLM 입력으로 구성
-       Linux: 프레임 시퀀스를 FFmpeg로 CFR 영상으로 인코딩
-  -> 27B급 로컬 비전 모델 추론
-  -> JSON 텍스트 응답
-  -> Python JSON 파싱 및 구조 검증
+                         원본 HEVC 화면 녹화
+                                  │
+              ┌───────────────────┴───────────────────┐
+              │                                       │
+       Mac · Python runner                    Linux · 실험 경로
+       ffprobe: 영상 정보 확인                 OpenCV: 2 FPS, 76개 프레임 샘플링
+       FFmpeg: RGB 프레임 디코딩               FFmpeg: CFR 영상 구성, 78개 입력
+       RGB 프레임 + 메타데이터                 Python adapter: multipart HTTP
+       MLX-VLM · stream_generate              추론 API · llama.cpp CUDA
+       응답 조각 수집                         HTTP JSON 응답
+       JSON 파싱·구조 확인                    JSON 파싱·구조 확인
 ```
+
+두 경로는 각 환경에서 별도로 실행했다. Linux의 OpenCV·FFmpeg 단계는 실행 기록을, multipart 요청과 응답 처리는 글에 포함한 Python 어댑터 코드 발췌를 기준으로 표시했다. 그림은 실제 공통 모듈이나 하나의 통합 파이프라인 구현을 뜻하지 않는다.
 
 | 환경 | 모델 구성 | 추론 엔진 | 영상 입력 처리 |
 | --- | --- | --- | --- |
@@ -141,7 +143,7 @@ with urlopen(request, timeout=timeout_seconds) as response:
 payload = json.loads(response_body)
 ```
 
-실제 어댑터는 HTTP 오류·시간 초과·연결 실패를 각각 분류하고, JSON 파싱 성공 뒤 필수 결과 구조를 검사한다. 비공개 목적을 드러낼 수 있는 결과 필드명과 예외 타입은 코드에서 제외했다. 보존된 Linux 실행 기록에는 입력 토큰 13,350개, 생성 토큰 1,700개, `finish_reason=stop`, `parse_complete=true`, `incomplete_tail=false`가 남아 있다. 이 수치는 Linux 실행 자료이며 Mac 실행 토큰 수와 직접 비교할 자료는 없다.
+실제 어댑터는 HTTP 오류·시간 초과·연결 실패를 각각 분류하고, JSON 파싱 성공 뒤 필수 결과 구조를 검사한다. 비공개 목적을 드러낼 수 있는 결과 필드명과 예외 타입은 코드에서 제외했다. 보존된 Linux 실행 기록에는 HTTP 200, 입력 토큰 13,350개, 생성 토큰 1,700개, `finish_reason=stop`, `parse_complete=true`, `incomplete_tail=false`가 남아 있다. 이 수치는 Linux 실행 자료이며 Mac 실행 토큰 수와 직접 비교할 자료는 없다.
 
 Mac 쪽 runner는 MLX-VLM의 `stream_generate` 결과를 조각 단위로 모은 뒤 파서에 넘기고, 원문과 구조화 결과를 별도 파일로 기록한다. 아래는 실제 생성 호출과 텍스트 수집 부분이다. `media_kwargs`에는 앞서 만든 프레임 배열 및 영상 메타데이터가 전달된다.
 
@@ -195,9 +197,9 @@ if not isinstance(records, list) or any(
 | Linux 원시 API 응답과 저장된 36개 항목의 순서 일치 | 36개 항목이 실제 영상의 독립 정답지와 모두 일치하는지 |
 | Linux 응답 파싱 완료 상태 기록 | 원시 실행 시간과 Mac 토큰 수 |
 
-실험을 통해 Python이 영상 파일을 프레임과 모델 입력으로 바꾸고, 별도 추론 런타임을 HTTP로 호출하며, 결과를 구조화된 형태로 다시 검증하는 접착 계층 역할을 한다는 점을 확인했다. 바이브 코딩으로 이 연결을 빠르게 구성하더라도 입력 형식, 타임스탬프, 응답 파싱을 직접 확인해야 파이프라인의 동작을 설명할 수 있었다.
+실험에서 Python은 환경마다 다른 영상 입력 준비를 연결했다. Mac에서는 MLX-VLM의 `stream_generate`를 호출하고, Linux에서는 HTTP API를 통해 CUDA 추론 구성과 연결한 뒤 각 경로의 결과를 수집하고 JSON 구조를 확인했다. AI 코딩 에이전트로 연결 코드를 빠르게 구성했지만, 입력 형식과 타임스탬프, API 응답과 파싱 결과를 직접 확인해야 처리 흐름을 설명할 수 있었다.
 
-다음 편에서는 같은 영상을 처리한 Mac M5와 RTX 3090 Ti 구성의 실행 시간과 추론 환경 차이를 비교한다.
+Mac M5와 RTX 3090 Ti의 실행 시간 및 추론 환경 차이는 [성능 비교 글](/blog/local-vlm-mac-m5-vs-rtx3090ti/)에서, 항목별 출력 차이와 입력 프레임 검증은 [출력 일관성 검증 글](/blog/local-vlm-output-consistency-and-frame-validation/)에서 다룬다.
 
 ## 참고 문서
 
