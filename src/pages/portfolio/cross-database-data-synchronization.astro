@@ -23,6 +23,7 @@ const sections = [
 	{
 		eyebrow: '02 · HOW',
 		title: 'RDS에서 Elasticsearch까지 이어지는 데이터 경로',
+		flowLayout: 'horizontal-scroll',
 		paragraphs: [
 			'JDBC Source Connector는 MariaDB JDBC 드라이버로 AWS RDS에 연결합니다. Kafka 토픽의 JSON 제품 데이터를 ksqlDB 입력 테이블에서 읽고, 지속 실행 CTAS 쿼리로 변환해 결과 토픽에 기록합니다. Elasticsearch Sink Connector는 그 결과 토픽을 구독해 Elasticsearch로 전달합니다.',
 		],
