@@ -1,55 +1,57 @@
 ---
 import PortfolioProjectDetail from '../../components/PortfolioProjectDetail.astro';
 
-const stack = ['Apache Kafka', 'Confluent Platform', 'Apache Avro', 'Kafka Connect', 'Schema Registry'];
+const stack = ['Apache Kafka', 'Confluent Platform', 'Kafka Connect', 'ksqlDB', 'Amazon RDS', 'Elasticsearch'];
 const stackBadges = [
 	{ name: 'Apache Kafka', url: 'https://img.shields.io/badge/Apache_Kafka-231F20?style=for-the-badge&logo=apachekafka&logoColor=white' },
 	{ name: 'Confluent', url: 'https://img.shields.io/badge/Confluent-1C1C1C?style=for-the-badge&logo=confluent&logoColor=white' },
-	{ name: 'Apache Avro', url: 'https://img.shields.io/badge/Apache_Avro-4B32C3?style=for-the-badge&logo=apache&logoColor=white' },
 	{ name: 'Kafka Connect', url: 'https://img.shields.io/badge/Kafka_Connect-231F20?style=for-the-badge&logo=apachekafka&logoColor=white' },
-	{ name: 'Schema Registry', url: 'https://img.shields.io/badge/Schema_Registry-1C1C1C?style=for-the-badge&logo=confluent&logoColor=white' },
+	{ name: 'ksqlDB', url: 'https://img.shields.io/badge/ksqlDB-231F20?style=for-the-badge&logo=apachekafka&logoColor=white' },
+	{ name: 'Amazon RDS', url: 'https://img.shields.io/badge/Amazon_RDS-527FFF?style=for-the-badge&logo=amazonaws&logoColor=white' },
+	{ name: 'Elasticsearch', url: 'https://img.shields.io/badge/Elasticsearch-005571?style=for-the-badge&logo=elasticsearch&logoColor=white' },
 ];
 
 const sections = [
 	{
 		eyebrow: '01 · WHY',
-		title: '서로 다른 저장소의 변경 데이터를 연결',
+		title: 'RDS의 목록 필드를 검색 문서 구조로 변환',
 		paragraphs: [
-			'서비스는 RDS, Neo4j, Elasticsearch 등 서로 다른 저장소를 사용했습니다. 저장소별 데이터를 각각 추출해 대량 배치로 맞추기보다, 변경분을 전달하고 목적지 구조에 맞춰 변환하는 공통 흐름이 필요했습니다.',
-			'구체적인 구현 사례는 RDS 변경 데이터를 Elasticsearch 문서로 동기화한 파이프라인입니다.',
+			'서비스는 RDS, Neo4j, Elasticsearch 등 서로 다른 저장소를 사용했습니다. 이 사례에서는 RDS의 제품 데이터를 Kafka를 통해 전달하고, Elasticsearch에서 활용할 구조로 변환했습니다. 입력 데이터의 `product_list`와 `spec_list`는 문자열이었고, 결과에서는 배열 안의 key-value map 구조로 다뤘습니다.',
+			'데이터베이스 연결, 토픽을 통한 전달, 목적지에서 활용할 데이터 구조 변환을 각 단계에 나눠 구성했습니다.',
 		],
 	},
 	{
 		eyebrow: '02 · HOW',
-		title: '수집·변환·적재를 Kafka 파이프라인으로 분리',
+		title: 'RDS에서 Elasticsearch까지 이어지는 데이터 경로',
 		paragraphs: [
-			'Kafka Connect JDBC Source Connector가 RDS 변경 데이터를 수집하고, ksqlDB가 이를 Elasticsearch 문서 구조로 변환합니다. 수집 결과와 변환 결과를 각각 Kafka 토픽에 전달한 뒤 Sink Connector가 Elasticsearch에 적재하도록 단계별 흐름을 구성했습니다.',
+			'JDBC Source Connector는 MariaDB JDBC 드라이버로 AWS RDS에 연결합니다. Kafka 토픽의 JSON 제품 데이터를 ksqlDB 입력 테이블에서 읽고, 지속 실행 CTAS 쿼리로 변환해 결과 토픽에 기록합니다. Elasticsearch Sink Connector는 그 결과 토픽을 구독해 Elasticsearch로 전달합니다.',
 		],
 		flowSteps: [
-			{ label: 'RDS', detail: '원본 데이터' },
-			{ label: 'JDBC Source Connector', detail: '변경분 수집' },
-			{ label: 'Kafka Topic A', detail: '수집 레코드' },
-			{ label: 'ksqlDB', detail: '문서 구조 변환' },
-			{ label: 'Kafka Topic B', detail: '변환 레코드' },
-			{ label: 'Elasticsearch Sink Connector', detail: 'ID 기준 Upsert' },
-			{ label: 'Elasticsearch', detail: '검색 문서' },
+			{ label: 'RDS', detail: '제품 데이터' },
+			{ label: 'JDBC Source Connector', detail: 'MariaDB JDBC 드라이버로 연결' },
+			{ label: 'Kafka · 입력 토픽', detail: 'JSON 제품 데이터' },
+			{ label: 'ksqlDB · 입력 테이블', detail: 'id와 문자열 목록 필드' },
+			{ label: 'ksqlDB · CTAS', detail: '문자열 목록을 배열·맵으로 변환' },
+			{ label: 'Kafka · 결과 토픽', detail: 'Elasticsearch Sink가 구독' },
+			{ label: 'Elasticsearch Sink', detail: 'Long Key · JSON Value' },
+			{ label: 'Elasticsearch', detail: '검색 데이터 저장소' },
 		],
 	},
 	{
 		eyebrow: '03 · WHAT',
-		title: 'RDS 변경 데이터를 Elasticsearch 문서로 연결',
+		title: '문자열 목록을 배열 안의 map 구조로 변환',
 		bullets: [
-			'JDBC Source Connector를 updated_at 컬럼 기준의 주기 조회로 구성해 변경분을 원본 토픽으로 보냈습니다.',
-			'ksqlDB에서 Elasticsearch가 소비하는 JSON·배열 필드 구조를 만들고 변환 결과를 별도 토픽에 기록했습니다.',
-			'Elasticsearch Sink Connector는 기본 키 또는 문서 ID를 문서 식별에 사용해 신규 문서를 만들고 기존 문서를 갱신하도록 구성했습니다.',
+			'ksqlDB 입력 테이블은 `id`를 `BIGINT` 기본 키로 사용하고 `product_list`, `spec_list`를 `STRING`으로 읽습니다. 결과 테이블은 두 목록 필드를 `ARRAY<MAP<STRING, STRING>>`으로 정의합니다. 입력과 결과의 Value Format은 JSON이고 Key Format은 KAFKA입니다.',
+			"지속 실행 `CREATE TABLE AS SELECT ... EMIT CHANGES` 쿼리는 두 목록 필드에서 `REPLACE('},{', '}!{')`로 항목 경계를 표시한 뒤 `SPLIT`하고, `TRANSFORM(..., JSON_RECORDS(...))`를 적용해 배열·맵 구조로 만듭니다.",
+			'Elasticsearch Sink Connector는 ksqlDB 결과 테이블의 출력 토픽을 구독합니다. Key Converter는 `LongConverter`, Value Converter는 `JsonConverter`로 구성했습니다.',
 		],
 	},
 	{
 		eyebrow: '04 · ENGINEERING DECISIONS',
-		title: '원본 수집과 목적지별 변환을 분리',
+		title: '저장소 연동과 데이터 변환의 책임을 분리',
 		paragraphs: [
-			'JDBC Source Connector에는 RDS 변경분 수집을 맡기고, Elasticsearch 문서 가공은 ksqlDB에서 처리했습니다. 수집 토픽과 변환 토픽을 나눠 원본 전달 경로와 목적지별 변환 책임을 분리했습니다.',
-			'레코드 구조는 Avro 스키마로 정의하고, Schema Registry를 ksqlDB와 연결해 스키마 정보를 다루도록 구성했습니다. Kafka Connect 실행 설정은 JSON Converter를 사용해 커넥터 구간의 데이터 표현을 구분했습니다.',
+			'JDBC Source Connector가 RDS에서 데이터를 읽고 Elasticsearch Sink Connector가 결과 토픽을 Elasticsearch로 전달하도록 저장소별 연동 책임을 나눴습니다. Kafka 입력·결과 토픽을 경계로 두어 수집된 레코드와 변환된 레코드의 전달 단계를 구분했습니다.',
+			'ksqlDB의 지속 실행 CTAS 쿼리에서 `product_list`와 `spec_list`의 항목 경계를 `REPLACE`와 `SPLIT`으로 나눈 뒤 `TRANSFORM`과 `JSON_RECORDS`로 배열·맵 구조를 만들었습니다. 문자열에 담긴 목록을 후속 검색 저장소에서 필드별로 다룰 수 있는 형태로 변환하는 방식입니다.',
 		],
 	},
 ];
@@ -58,8 +60,8 @@ const sections = [
 <PortfolioProjectDetail
 	title="Cross-Database Data Synchronization"
 	eyebrow="직접 설계·구축·관리 · Data Engineering"
-	subtitle="RDS 변경 데이터를 Elasticsearch 문서로 전달하는 Kafka 파이프라인"
-	description="Kafka Connect JDBC Source Connector, ksqlDB, Elasticsearch Sink Connector를 연결해 RDS 데이터를 Elasticsearch 문서 구조로 변환·동기화한 경험입니다."
+	subtitle="RDS에서 검색 저장소까지 연결한 Kafka 데이터 파이프라인"
+	description="RDS용 JDBC Source Connector와 ksqlDB의 JSON 구조 변환, Elasticsearch Sink의 결과 토픽 구독을 구성한 이기종 데이터 동기화 사례입니다."
 	stack={stack}
 	stackBadges={stackBadges}
 	sections={sections}
