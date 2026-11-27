@@ -17,7 +17,7 @@ const areas = [
 	},
 	{
 		title: 'Kubernetes / Platform',
-		description: 'Deployment·Service와 Gateway API로 서비스 배포·라우팅을 구성하고, Karpenter와 Prometheus·Loki·Alloy로 노드 운영 및 메트릭·로그 수집을 다룹니다.',
+		description: 'Deployment·Gateway API 배포 경로, Karpenter 노드 정책, Prometheus·Loki·Alloy 관측 구성을 다룹니다.',
 		badges: [
 			{ name: 'Kubernetes', url: 'https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white' },
 			{ name: 'Helm', url: 'https://img.shields.io/badge/Helm-0F1689?style=for-the-badge&logo=helm&logoColor=white' },
@@ -35,7 +35,7 @@ const areas = [
 	},
 	{
 		title: 'Backend / Data Engineering',
-		description: 'Java·Spring과 Python·FastAPI로 API를 구현하고 SQLAlchemy·Redis·Kafka를 데이터 접근, 캐시, 집계·동기화 흐름에 활용합니다.',
+		description: 'Java·Spring과 Python·FastAPI로 API와 데이터 처리 기능을 구현하고, SQLAlchemy·Redis·Kafka를 연결합니다.',
 		badges: [
 			{ name: 'Java', url: 'https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white' },
 			{ name: 'Spring Boot', url: 'https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white' },
@@ -61,7 +61,7 @@ const areas = [
 	},
 	{
 		title: 'Local AI / Vision Extraction',
-		description: 'Python·FFmpeg 입력 전처리, llama.cpp·Qwen 로컬 추론, JSON 결과 검증을 이미지·영상 처리 흐름으로 연결합니다.',
+		description: 'Python·FFmpeg 전처리와 llama.cpp·Qwen 로컬 추론을 연결하고, 응답을 JSON 구조로 다룹니다.',
 		badges: [
 			{ name: 'Python', url: 'https://img.shields.io/badge/Python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54' },
 			{ name: 'llama.cpp', url: 'https://img.shields.io/badge/llama.cpp-3B82F6?style=for-the-badge' },
@@ -102,13 +102,16 @@ const areas = [
 	.section-heading { margin-bottom: 1.25rem; }
 	.eyebrow { margin: 0 0 0.65rem; color: var(--link); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.1em; }
 	.section-heading h2 { margin: 0; }
-	.tech-area-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+	.tech-area-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 1rem; }
 	.tech-area { min-width: 0; padding: 1.25rem; border: 1px solid var(--border); border-radius: 8px; }
 	.tech-area h3 { margin: 0 0 0.65rem; font-size: 1.1rem; color: var(--link); }
 	.tech-area p { margin: 0; color: var(--text); font-size: 1rem; line-height: 1.7; }
 	.tech-badges { margin: 0.9rem 0; }
-	.tech-area nav { display: flex; flex-wrap: wrap; gap: 0.4rem 0.9rem; margin-top: 0.9rem; font-size: 0.95rem; }
-	.tech-area nav a { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+	.tech-area nav { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.5rem 0.9rem; margin-top: 0.9rem; padding-top: 0.8rem; border-top: 1px solid var(--border); font-size: 0.95rem; }
+	.tech-area nav a { overflow-wrap: anywhere; line-height: 1.45; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
 	.tech-area nav a:focus-visible { outline: 3px solid var(--link); outline-offset: 3px; }
-	@media (max-width: 700px) { .tech-area-grid { grid-template-columns: 1fr; } }
+	@media (max-width: 700px) {
+		.tech-area-grid { grid-template-columns: 1fr; }
+		.tech-area nav { grid-template-columns: 1fr; }
+	}
 </style>

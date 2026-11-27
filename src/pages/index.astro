@@ -14,29 +14,29 @@ const representativeExperience = [
 	},
 	{
 		title: 'Kubernetes 플랫폼 운영',
-		body: '애플리케이션 배포와 외부 요청 라우팅, 워크로드에 따른 노드 운영, 메트릭·로그 수집을 맡았습니다. 배포부터 서비스 상태 확인까지 이어지는 플랫폼 운영 흐름을 구성했습니다.',
+		body: 'EKS에서 Deployment·Service·HTTPRoute로 워크로드 배포와 Gateway API 요청 경로를 구성했습니다. Karpenter 노드 풀과 Prometheus·Loki·Alloy 관측 구성을 함께 관리했습니다.',
 		href: '/portfolio/kubernetes-platform-engineering',
 		link: '플랫폼 경험 보기',
 	},
 	{
 		title: '백엔드와 데이터 흐름 구현',
-		body: '도메인별 저장소의 통계를 하나의 API로 집계해 대시보드에서 수집 현황과 추세를 확인하도록 구현했습니다. Kafka 기반 이기종 데이터베이스 동기화 파이프라인도 별도로 설계·구축했습니다.',
+		body: '도메인별 저장소의 통계를 집계하는 API를 구현해 대시보드에서 수집 현황과 추세를 확인하도록 했습니다. Kafka·ksqlDB 파이프라인에서는 제품 목록 필드를 문자열에서 배열·맵 구조로 변환하도록 구성했습니다.',
 		href: '/portfolio',
 		link: '백엔드·데이터 프로젝트 보기',
 	},
 	{
 		title: '로컬 AI 추론 파이프라인',
-		body: '화면 정보를 직접 입력하는 번거로움을 줄이기 위해 로컬 VLM을 실제 입력 처리에 연결했습니다. 이미지·영상에서 필요한 정보를 추출해 구조화된 결과로 전달하는 흐름을 구현했습니다.',
+		body: 'Python·FFmpeg로 영상 프레임을 처리해 Mac과 Linux의 로컬 VLM에 연결했습니다. 모델 응답을 구조화하고, 추출 항목과 입력 프레임을 비교해 결과를 검증했습니다.',
 		href: '/portfolio/linux-qwen-extraction',
 		link: 'Local AI 경험 보기',
 	},
 ];
 
 const engineeringSteps = [
-	{ title: '문제를 구체화합니다', body: '사용자와 운영 맥락을 확인해 해결할 문제와 완료 조건을 정합니다.' },
-	{ title: '구조와 영향 범위를 파악합니다', body: '요청·데이터·인프라의 흐름과 변경이 미치는 범위를 살핍니다.' },
-	{ title: '구현하고 반복 작업을 자동화합니다', body: '서비스와 운영 환경에 맞게 구현하고, 반복되는 작업은 코드와 설정으로 관리합니다.' },
-	{ title: '실행 결과를 검증하고 운영합니다', body: '테스트와 실행 결과를 확인하고 배포 뒤 서비스 상태와 변경 영향을 살핍니다.' },
+	{ title: '문제를 구체화합니다', body: '요청 실패와 운영 맥락을 살펴 재현 조건과 완료 기준을 정합니다.' },
+	{ title: '구조와 영향 범위를 파악합니다', body: 'AWS 리소스 참조, Kubernetes 요청 경로, 데이터 흐름을 따라 변경 지점을 좁힙니다.' },
+	{ title: '구현하고 반복 작업을 자동화합니다', body: '서비스 로직을 구현하고, 반복되는 인프라·서버 설정은 Terraform과 Ansible로 코드화합니다.' },
+	{ title: '실행 결과를 검증하고 운영합니다', body: 'plan·diff와 테스트·실행 결과를 확인하고, 배포 뒤 readiness와 서비스 상태를 살핍니다.' },
 ];
 ---
 
@@ -92,7 +92,7 @@ const engineeringSteps = [
 						</article>
 					))}
 				</div>
-				<p class="engineering-note">시스템 전체를 살피고 서비스 안정성까지 책임지는 태도를 일하는 기준으로 삼습니다. 필요한 곳에는 직접 코드를 쓰고, 테스트와 실행 결과를 바탕으로 판단합니다.</p>
+				<p class="engineering-note">코드 변경이 요청·데이터·인프라 흐름에 미치는 영향을 확인하고, 실행 결과를 근거로 다음 조치를 결정합니다.</p>
 			</section>
 
 			<TechnicalExperience />
