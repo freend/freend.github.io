@@ -45,11 +45,10 @@ const sections = [
 	},
 	{
 		eyebrow: '04 · ENGINEERING DECISIONS',
-		title: '노드 선택·AWS 이벤트 인프라·적용 검토를 다른 관리 단위로 뒀습니다',
+		title: '노드 정책과 AWS 이벤트 전달 구성을 분리했습니다',
 		paragraphs: [
-			'첫 번째는 노드 선택 정책과 AWS별 생성 설정을 분리한 것입니다. NodePool에는 용량 유형·인스턴스 선택·통합 정책이 있고, EC2NodeClass에는 AMI·네트워크 선택과 인스턴스 구성이 있습니다. NodePool이 EC2NodeClass를 참조하며 일부 Deployment의 selector·toleration도 On-Demand 풀의 label·taint와 맞물려 있어, 워크로드 배치 조건과 AWS 인스턴스 설정을 각각 검토할 수 있습니다.',
-			'두 번째는 중단 이벤트 기반과 클러스터 설정을 별도 변경 단위로 둔 것입니다. Terraform은 SQS·EventBridge 및 관련 권한을, Helm values는 Karpenter가 읽을 큐 설정을 담습니다. 이에 따라 클라우드 이벤트 전달 인프라와 클러스터 컨트롤러 설정을 각각 검토할 수 있습니다.',
-			'세 번째는 변경 범위를 통제하는 절차입니다. 운영 문서는 디렉터리 전체가 아니라 배포 대상 파일을 지정하고, 적용 전에 server-side dry-run과 diff를 확인한 뒤 승인된 파일만 적용하도록 정의합니다. 적용 후 rollout·readiness와 Endpoint를 확인하는 단계도 명시해, 검토하지 않은 리소스가 함께 반영될 가능성을 줄입니다.',
+			'On-Demand NodePool은 핵심 API·가용성 워크로드에, Spot NodePool은 일반 서비스·배치·테스트에 사용하도록 구분했습니다. 각 NodePool은 용량 유형·인스턴스 선택·통합 정책을 관리하고, EC2NodeClass는 해당 풀의 AMI·네트워크·인스턴스 설정을 담당해 워크로드 정책과 AWS 노드 생성 설정을 나눕니다.',
+			'Terraform에는 SQS·EventBridge·IAM을, Helm values에는 Karpenter의 `interruptionQueue`를 둡니다. AWS의 중단 이벤트 전달 인프라와 이를 소비하는 Karpenter 설정을 서로 다른 관리 단위로 구성했습니다.',
 		],
 	},
 ];
@@ -58,7 +57,7 @@ const sections = [
 <PortfolioProjectDetail
 	title="Kubernetes Autoscaling"
 	eyebrow="직접 설계·구축·관리 · Node Lifecycle Management"
-	subtitle="Karpenter 노드 관리와 AWS 중단 이벤트 구성을 다룬 Kubernetes 운영 사례"
+	subtitle="Karpenter NodePool·EC2NodeClass와 AWS 중단 이벤트 전달 구성을 코드로 관리한 사례"
 	description="Karpenter NodePool·EC2NodeClass의 노드 선택 및 통합 정책과 Terraform·Helm으로 구성한 AWS 중단 알림 경로를 원본 설정과 작업 기록에 근거해 설명합니다."
 	stack={stack}
 	stackBadges={stackBadges}

@@ -50,8 +50,8 @@ const sections = [
 		eyebrow: '04 · ENGINEERING DECISIONS',
 		title: '저장소 연동과 데이터 변환의 책임을 분리',
 		paragraphs: [
-			'JDBC Source Connector가 RDS에서 데이터를 읽고 Elasticsearch Sink Connector가 결과 토픽을 Elasticsearch로 전달하도록 저장소별 연동 책임을 나눴습니다. Kafka 입력·결과 토픽을 경계로 두어 수집된 레코드와 변환된 레코드의 전달 단계를 구분했습니다.',
-			'ksqlDB의 지속 실행 CTAS 쿼리에서 `product_list`와 `spec_list`의 항목 경계를 `REPLACE`와 `SPLIT`으로 나눈 뒤 `TRANSFORM`과 `JSON_RECORDS`로 배열·맵 구조를 만들었습니다. 문자열에 담긴 목록을 후속 검색 저장소에서 필드별로 다룰 수 있는 형태로 변환하는 방식입니다.',
+			'JDBC Source Connector는 RDS 연동을, Elasticsearch Sink Connector는 결과 토픽을 검색 저장소로 전달하는 일을 맡습니다. Kafka의 입력 토픽과 결과 토픽을 나누어 수집 데이터와 변환 데이터를 구분하고, ksqlDB를 그 사이의 변환 계층으로 뒀습니다.',
+			'제품 데이터의 `product_list`와 `spec_list`는 입력 테이블에서 문자열이고 결과 테이블에서는 배열·맵 구조입니다. ksqlDB에서 이 구조를 변환해 Elasticsearch가 소비할 결과 레코드로 전달하도록 구성했습니다.',
 		],
 	},
 ];

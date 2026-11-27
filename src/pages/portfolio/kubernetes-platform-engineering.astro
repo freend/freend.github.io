@@ -47,7 +47,7 @@ const sections = [
 		title: '변경 이유와 영향 범위를 매니페스트 단위로 검토하도록 했습니다',
 		paragraphs: [
 			'Deployment, Service, HTTPRoute를 나누면 워크로드 실행 설정과 내부 대상 선택, 외부 요청 경로를 각각 검토할 수 있습니다. 실제 API 구성에서도 Pod label → Service selector → HTTPRoute backend와 Gateway parent 연결이 이어져, 변경하는 리소스가 다음 참조 관계와 맞는지 확인할 수 있습니다.',
-			'운영 문서는 디렉터리 전체 적용 대신 대상 파일을 지정하도록 하고, ConfigMap·Secret은 별도 승인 없이 적용하지 않도록 제한합니다. `kubectl diff`로 현재 구성과 적용 예정 구성을 먼저 비교한 뒤 승인된 파일만 반영해 무관한 리소스가 함께 변경될 위험을 줄이고, 적용 후 rollout·readiness·endpoint를 확인하도록 절차를 정의했습니다.',
+			'공용 Gateway와 서비스별 워크로드 매니페스트를 별도 관리 단위로 둔 것은 요청 경로 변경이 애플리케이션 실행 설정에 불필요하게 얽히지 않도록 하기 위해서입니다. 파일 단위로 변경 범위를 좁히고 ConfigMap·Secret을 별도 승인 대상으로 둬, 의도하지 않은 리소스 변경이 함께 반영될 위험을 줄이도록 했습니다.',
 		],
 	},
 ];
