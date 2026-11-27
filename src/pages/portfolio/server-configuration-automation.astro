@@ -14,37 +14,40 @@ const stackBadges = [
 const sections = [
 	{
 		eyebrow: '01 · WHY',
-		title: '여러 클라우드의 서버 설정을 반복 가능하게 관리하기 위해',
+		title: '클라우드별 모니터링 구성을 반복 적용하기 위해',
 		paragraphs: [
-			'AWS와 GCP에서 관리하는 서버의 구성 작업을 일관되게 수행할 필요가 있었습니다. 서버 목록을 수동으로 관리하는 대신 Dynamic Inventory로 대상을 찾고, 공통 운영 작업을 Ansible Playbook으로 관리했습니다.',
+			'AWS EC2에는 CloudWatch Agent, GCP Compute Engine에는 Ops Agent를 설치·설정하고, AWS SSM Agent와 Python 런타임 작업도 별도로 관리했습니다. 인스턴스 목록을 고정해 두기보다 클라우드별 Dynamic Inventory에서 작업 대상을 찾고, 실행할 설정은 Playbook으로 관리하도록 구성했습니다.',
 		],
 	},
 	{
 		eyebrow: '02 · HOW',
-		title: '동적 인벤토리와 Playbook으로 서버 작업을 구성',
+		title: '클라우드별 Inventory와 Playbook으로 설치·설정을 분리',
 		paragraphs: [
-			'AWS·GCP Dynamic Inventory로 작업 대상 서버를 찾고, Ansible Playbook에서 AWS CloudWatch Agent와 GCP Ops Agent의 설치·설정을 자동화했습니다. 두 에이전트는 서버의 모니터링 데이터를 수집하고, Ansible은 대상 탐색과 설치·구성 작업을 담당합니다. 기존 SSM Agent 구성과 Python 환경, IAM 관련 서버 작업도 Playbook에 포함했습니다.',
+			'AWS Inventory는 `amazon.aws.aws_ec2` 플러그인으로 실행 중인 인스턴스를 태그 조건과 함께 필터링하고, 태그 기반 그룹과 접속 변수를 구성합니다. GCP Inventory는 `google.cloud.gcp_compute` 플러그인으로 설정된 프로젝트의 실행 중 인스턴스를 찾고 Application Default Credentials 방식과 접속 변수를 사용합니다.',
+			'AWS CloudWatch Agent Playbook은 지원 OS 조건에 맞춰 패키지를 내려받고 설치한 뒤 Jinja2 설정을 적용하고 에이전트를 시작합니다. 다운로드 명령에는 `creates` 조건이 있으며, 설정 템플릿은 메모리·디스크 지표와 로그 수집을 정의합니다. GCP Ops Agent Playbook은 저장소 설정 스크립트 실행과 패키지 설치 후 설정 템플릿을 배포하며, 템플릿 변경 시 systemd handler가 에이전트를 재시작하도록 연결했습니다.',
+			'SSM Agent 설치·상태 확인과 Python 환경 구성은 별도 Playbook으로 나눴습니다. README에는 Inventory 그래프 확인, 정적 예시 Inventory를 이용한 `--syntax-check`, 실제 적용 전 `--limit`으로 대상을 확인하는 절차가 안내되어 있습니다.',
 		],
-		flow: ['AWS · GCP Dynamic Inventory', '대상 서버 선택', 'Ansible Playbook', '에이전트 · 런타임 · IAM 구성'],
+		flow: ['AWS EC2 · GCP Compute Inventory', '클라우드별 대상 선택', 'Ansible Playbook', 'Agent · 런타임 설정 적용'],
 		cards: [
-			{ title: '운영 에이전트', body: 'AWS CloudWatch Agent와 GCP Ops Agent의 설치·설정을 Playbook으로 적용해 모니터링 데이터 수집을 구성했습니다. SSM Agent 관련 설정도 함께 다뤘습니다.' },
-			{ title: '서버 런타임과 권한', body: 'Python 환경 설정과 IAM 관련 Playbook을 구성해 서버 운영에 필요한 작업을 자동화했습니다.' },
+			{ title: 'AWS · CloudWatch / SSM', body: 'EC2 Inventory에서 대상을 찾고 CloudWatch Agent의 설치·템플릿 적용·시작 절차를 구성했습니다. SSM Agent 설치와 서비스 확인은 별도 Playbook으로 관리했습니다.' },
+			{ title: 'GCP · Ops Agent', body: 'Compute Engine Inventory와 Ops Agent Playbook을 분리하고, 로그 및 호스트 지표 설정을 템플릿으로 관리했습니다.' },
 		],
 	},
 	{
 		eyebrow: '03 · WHAT',
-		title: '멀티클라우드 서버의 공통 구성 작업을 자동화',
+		title: 'Inventory·에이전트 설정·검증 절차를 코드로 관리',
 		bullets: [
-			'AWS·GCP Dynamic Inventory 구성',
-			'CloudWatch·SSM·Ops Agent 설치 Playbook 작성',
-			'Python 런타임과 IAM 관련 서버 구성 작업',
+			'AWS CloudWatch Agent 템플릿에 메모리·디스크 지표 및 로그 수집 설정을 구성하고, GCP Ops Agent 템플릿에는 로그 파이프라인과 `hostmetrics` 기반 지표 수집을 구성했습니다.',
+			'SSM Agent 설치·상태 확인과 Python 런타임 설정을 별도 Playbook으로 관리했습니다. IAM 역할에 관리형 정책을 연결하는 작업도 별도 Playbook에 정의했으며, 권한 정책의 세부사항은 공개 페이지에서 생략했습니다.',
+			'README에는 Inventory 그래프 조회, `--syntax-check`, 검토한 대상에 한정하는 `--limit` 적용 예시가 있습니다. 저장소에서 실제 실행 로그나 적용 결과는 확인되지 않아, 구성 코드와 안내 절차를 구현 결과로 구분했습니다.',
 		],
 	},
 	{
 		eyebrow: '04 · ENGINEERING DECISIONS',
-		title: '클라우드별 대상 탐색과 서버 설정 작업을 분리',
+		title: '대상 선택과 클라우드별 변경 범위를 나눠 관리',
 		paragraphs: [
-			'서버 목록을 고정해 두지 않고 클라우드 Dynamic Inventory로 작업 대상을 찾도록 구성했습니다. Inventory는 대상 선택을, Playbook은 서버에서 수행할 설치·설정 작업을 맡겨 여러 클라우드 환경의 운영 구성을 관리했습니다.',
+			'Inventory와 Playbook은 각각 대상 탐색과 서버 변경을 담당합니다. AWS는 실행 상태·태그 조건과 태그 그룹을 사용하고, GCP는 프로젝트·실행 상태 조건을 사용하도록 구성해 클라우드별 대상 기준을 분리했습니다. README에서 Inventory 그래프와 `--limit`을 적용 전에 확인하도록 안내해, 전체 Inventory와 실제 변경 대상을 구별할 수 있게 했습니다.',
+			'CloudWatch와 Ops Agent는 설치 절차와 설정 형식이 달라 Playbook과 템플릿을 클라우드별로 나눴습니다. CloudWatch 다운로드 명령에는 `creates` 가드를 두고, Ops Agent 설정 템플릿은 변경 시 서비스 재시작 handler를 호출합니다. 이는 개별 작업의 재실행·설정 반영 방식을 정한 것이며 전체 Playbook의 멱등성을 보장한다는 의미는 아닙니다. 저장소에는 적용 절차가 문서화되어 있지만 실제 실행 결과 기록은 포함되어 있지 않습니다.',
 		],
 	},
 ];
@@ -54,7 +57,7 @@ const sections = [
 	title="Server Configuration Automation"
 	eyebrow="직접 설계·구축·관리 · Multi-Cloud Operations"
 	subtitle="Ansible Dynamic Inventory 기반 멀티클라우드 서버 구성 자동화"
-	description="AWS와 GCP 서버를 동적으로 찾아 에이전트 설치와 런타임 설정을 자동화하는 Ansible 구성을 설계하고 관리했습니다."
+	description="AWS EC2와 GCP Compute Engine 대상을 Dynamic Inventory로 찾고, Ansible Playbook과 설정 템플릿으로 모니터링 에이전트와 서버 런타임을 구성한 작업입니다."
 	stack={stack}
 	stackBadges={stackBadges}
 	sections={sections}

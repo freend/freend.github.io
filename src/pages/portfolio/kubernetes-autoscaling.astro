@@ -14,38 +14,42 @@ const stackBadges = [
 const sections = [
 	{
 		eyebrow: '01 · WHY',
-		title: '워크로드 자원 요구와 클라우드 중단 이벤트를 각각 다뤘습니다',
+		title: '워크로드별 노드 선택 기준과 중단 알림 경로를 나눴습니다',
 		paragraphs: [
-			'워크로드가 사용할 노드 자원을 관리하는 일과 클라우드 중단 이벤트에 대응할 기반을 마련하는 일은 서로 다른 운영 관심사였습니다. Karpenter의 노드 설정과 AWS 이벤트 관련 리소스를 각각 구성해 Kubernetes와 클라우드 양쪽의 관리 지점을 다뤘습니다.',
+			'원본 NodePool 설정은 On-Demand와 Spot을 별도 풀로 나눕니다. 설정 주석에서는 On-Demand 풀을 핵심 API·가용성 워크로드, Spot 풀을 일반 서비스·배치·테스트 용도로 구분하고, 각 풀에 다른 인스턴스 선택 조건과 통합 정책을 둡니다. AWS 중단 알림 경로도 Terraform의 EventBridge·SQS와 Karpenter Helm 설정으로 나눠 관리합니다.',
 		],
 	},
 	{
 		eyebrow: '02 · HOW',
-		title: 'Karpenter 노드 설정과 AWS 이벤트 구성을 각 관리 도구에 반영',
+		title: 'NodePool에서 AWS 노드 설정과 중단 알림 경로를 연결했습니다',
 		paragraphs: [
-			'Karpenter Helm values와 Node 관련 설정으로 노드 관리 정책을 구성하고 interruptionQueue 항목을 관리했습니다. 별도로, 노드 중단 이벤트와 관련된 SQS·EventBridge 리소스는 Terraform으로 관리했습니다.',
+			'Karpenter 매니페스트는 두 NodePool을 각각 대응하는 EC2NodeClass에 연결합니다. NodePool에는 노드 선택·통합 정책을, EC2NodeClass에는 AWS별 노드 구성 조건을 둡니다. 중단 알림 경로는 Terraform의 SQS·EventBridge·IAM 리소스와 Helm values의 `settings.interruptionQueue`를 연결하는 구조입니다.',
+			'운영 절차 문서는 클러스터 변경 파일을 먼저 특정하고 server-side dry-run과 `kubectl diff`를 거친 뒤, 명시적으로 승인된 파일만 적용하도록 정의합니다. 적용 후에는 rollout·readiness와 관련 Endpoint를 확인하도록 안내합니다. 이 절차는 문서화된 절차이며, 이 Karpenter 구성을 실제 적용했다는 기록과는 구분했습니다.',
 		],
 		cards: [
-			{ title: '워크로드에 맞춘 노드 관리', body: 'Karpenter Helm values와 Node 관련 설정을 관리하고, 적용 후 노드와 배포 상태를 확인했습니다.' },
-			{ title: '중단 이벤트 관련 구성', body: 'Terraform으로 SQS·EventBridge 관련 리소스를 관리하고 Karpenter Helm values의 interruptionQueue 항목을 설정했습니다.' },
+			{ title: '노드 공급 조건', body: 'NodePool이 용량 유형과 인스턴스 선택 조건을 제한하고, 참조된 EC2NodeClass가 AWS 노드 생성에 필요한 인스턴스 설정을 관리합니다.' },
+			{ title: '중단 메시지 전달', body: 'Terraform의 EventBridge·SQS·IAM 구성과 Helm의 interruptionQueue 설정을 연결해 Karpenter가 사용할 큐 경로를 선언했습니다.' },
 		],
 	},
 	{
 		eyebrow: '03 · WHAT',
-		title: '노드 관리 정책과 중단 이벤트 관련 설정을 마련했습니다',
-		flow: ['워크로드 자원 요구', 'Karpenter 노드 관리 설정', 'Kubernetes 노드 수명주기'],
+		title: '구성 파일과 인프라 작업 기록에서 연결 관계를 확인했습니다',
+		flow: ['NodePool 선택 조건', 'EC2NodeClass 참조', 'AWS 노드 구성 정의'],
 		bullets: [
-			'워크로드 자원 요구에 대응하는 Karpenter Helm values 및 Node 설정 관리',
-			'Terraform 기반 SQS·EventBridge 관련 리소스와 Karpenter interruptionQueue 설정',
-			'Helm·Terraform 변경 적용 이력과 노드·배포 상태 확인',
+			'`nodepool.yaml`에 On-Demand와 Spot NodePool 두 개를 정의했습니다. 두 풀은 아키텍처·용량 유형·가용 영역을 제한하고, 인스턴스 선택 범위와 연결하는 EC2NodeClass를 각각 다르게 지정합니다.',
+			'On-Demand 풀에는 전용 label/taint와 `expireAfter: Never`가 선언되어 있으며, 일부 Deployment 매니페스트에는 이 label을 선택하고 taint를 허용하는 설정이 있습니다. 두 풀 모두 `spec.limits`는 선언하지 않았습니다.',
+			'통합 정책도 다르게 설정했습니다. On-Demand 풀은 빈 노드만 대상으로 하는 `WhenEmpty`, Spot 풀은 빈 노드와 저활용 노드를 대상으로 하는 `WhenEmptyOrUnderutilized`를 사용하며, 두 설정의 `consolidateAfter`는 1분입니다.',
+			'두 EC2NodeClass는 AMI·서브넷·보안 그룹 선택 조건, IAM 역할 및 블록 디바이스 설정을 각각 관리합니다. `values.yaml`에는 interruptionQueue가 선언되어 있고 Terraform은 SQS와 EventBridge 이벤트 전달 리소스 및 권한을 정의합니다.',
+			'Terraform 작업 완료 기록에는 plan/apply 결과가 11개 추가·1개 변경·0개 삭제로 남아 있으며, SQS를 대상으로 한 EventBridge target 4개가 기록되어 있습니다. 이 기록은 AWS 인프라 작업 결과의 근거이며, 클러스터에서 노드가 생성되거나 Karpenter가 이벤트를 실제 처리했다는 증거로 확대하지 않았습니다.',
 		],
 	},
 	{
 		eyebrow: '04 · ENGINEERING DECISIONS',
-		title: '노드 정책과 AWS 이벤트 리소스를 각 계층에서 관리했습니다',
+		title: '노드 선택·AWS 이벤트 인프라·적용 검토를 다른 관리 단위로 뒀습니다',
 		paragraphs: [
-			'노드 정책과 AWS 이벤트 기반을 별도의 변경 단위로 관리했습니다. Karpenter 노드 설정은 Helm으로 적용하고, SQS·EventBridge 관련 리소스는 Terraform으로 관리해 각 계층에서 설정 이력을 확인할 수 있게 했습니다.',
-			'Karpenter의 interruptionQueue 항목은 노드 관리 설정 안에서 함께 다뤘으며, 변경 후에는 노드와 배포 상태를 확인했습니다.',
+			'첫 번째는 노드 선택 정책과 AWS별 생성 설정을 분리한 것입니다. NodePool에는 용량 유형·인스턴스 선택·통합 정책이 있고, EC2NodeClass에는 AMI·네트워크 선택과 인스턴스 구성이 있습니다. NodePool이 EC2NodeClass를 참조하며 일부 Deployment의 selector·toleration도 On-Demand 풀의 label·taint와 맞물려 있어, 워크로드 배치 조건과 AWS 인스턴스 설정을 각각 검토할 수 있습니다.',
+			'두 번째는 중단 이벤트 기반과 클러스터 설정을 별도 변경 단위로 둔 것입니다. Terraform은 SQS·EventBridge 및 관련 권한을, Helm values는 Karpenter가 읽을 큐 설정을 담습니다. 이에 따라 클라우드 이벤트 전달 인프라와 클러스터 컨트롤러 설정을 각각 검토할 수 있습니다.',
+			'세 번째는 변경 범위를 통제하는 절차입니다. 운영 문서는 디렉터리 전체가 아니라 배포 대상 파일을 지정하고, 적용 전에 server-side dry-run과 diff를 확인한 뒤 승인된 파일만 적용하도록 정의합니다. 적용 후 rollout·readiness와 Endpoint를 확인하는 단계도 명시해, 검토하지 않은 리소스가 함께 반영될 가능성을 줄입니다.',
 		],
 	},
 ];
@@ -55,7 +59,7 @@ const sections = [
 	title="Kubernetes Autoscaling"
 	eyebrow="직접 설계·구축·관리 · Node Lifecycle Management"
 	subtitle="Karpenter 노드 관리와 AWS 중단 이벤트 구성을 다룬 Kubernetes 운영 사례"
-	description="워크로드 자원 요구에 맞춘 Karpenter 설정과 중단 이벤트 관련 AWS 리소스를 Helm·Terraform으로 구성하고 적용 상태를 확인했습니다."
+	description="Karpenter NodePool·EC2NodeClass의 노드 선택 및 통합 정책과 Terraform·Helm으로 구성한 AWS 중단 알림 경로를 원본 설정과 작업 기록에 근거해 설명합니다."
 	stack={stack}
 	stackBadges={stackBadges}
 	sections={sections}
