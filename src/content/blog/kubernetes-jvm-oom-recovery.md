@@ -42,30 +42,9 @@ JVM에서 `OutOfMemoryError`가 발생했다고 해서 JVM 프로세스 전체�
 
 당시 Kubernetes에는 Liveness Probe와 Readiness Probe가 모두 설정되어 있었다.
 
-```yaml
-livenessProbe:
-  failureThreshold: 12
-  httpGet:
-    path: /
-    port: 80
-  initialDelaySeconds: 10
-  periodSeconds: 10
-  successThreshold: 1
-  timeoutSeconds: 2
+애플리케이션마다 Probe 설정을 개별적으로 최적화하기보다는 배포 설정의 일관성과 운영 편의성을 고려하여, 충분한 기동 시간을 허용하는 공통 Probe 설정을 적용하고 있었다.
 
-readinessProbe:
-  failureThreshold: 12
-  httpGet:
-    path: /
-    port: 80
-    scheme: HTTP
-  initialDelaySeconds: 10
-  periodSeconds: 10
-  successThreshold: 1
-  timeoutSeconds: 2
-```
-
-두 Probe 모두 `/` 경로를 10초마다 검사하도록 설정되어 있으며, 연속 12회 실패해야 각각의 조치가 이루어지도록 구성되어 있었다.
+두 Probe 모두 `/` 경로를 10초마다 검사하도록 설정되어 있으며, 연속 6회 실패해야 각각의 조치가 이루어지도록 구성되어 있었다.
 
 - Liveness Probe: 컨테이너 재시작
 - Readiness Probe: Pod를 서비스 트래픽 대상에서 제외
